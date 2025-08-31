@@ -1,6 +1,10 @@
 import Sidebar from "../components/sidebar";
 
 export default function Dashboard() {
+  const ClearlocalStorage = () => {
+    localStorage.clear();
+  };
+
   return (
     <div>
       <div className="flex items-center  min-h-screen bg-gray-100">
@@ -11,7 +15,12 @@ export default function Dashboard() {
             <h1 className="text-3xl font-bold text-gray-800 mb-4">
               📊 Dashboard
             </h1>
-            <p className="text-gray-500"> dashboard page</p>
+            <button
+              className="p-4 bg-blue-400 rounded-2xl  hover:bg-blue-900 text-white"
+              onClick={ClearlocalStorage}
+            >
+              Clear localStorage
+            </button>
           </div>
         </div>
       </div>

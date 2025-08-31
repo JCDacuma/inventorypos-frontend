@@ -1,5 +1,7 @@
 import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
+import { useMediaQuery } from "react-responsive";
+
 import {
   LayoutDashboard,
   FileText,
@@ -71,12 +73,30 @@ const menuItems = [
 
 const Sidebar = () => {
   const [openMenu, setOpenMenu] = useState([]);
-  const [showFullSidebar, setShowSideBar] = useState(false);
+  const [showFullSidebar, setShowSideBar] = useState(() => {
+    //Initialize the last current state of sidebar
+    const loadSideBar = JSON.parse(localStorage.getItem("sidebarState"));
+    return loadSideBar !== null ? loadSideBar : true;
+  });
   const location = useLocation();
 
-  //Open sidebar, On process pa
+  //Media Query for sidebar and navbar
+  const isDesktop = useMediaQuery({ minWidth: 668 });
+  const isSmallMobile = useMediaQuery({ maxWidth: 567 });
+
+  //Change sidebar state flag
   const toggleSidebarview = () => {
-    setShowSideBar((prev) => !prev);
+    let state;
+    if (showFullSidebar !== null) {
+      state = showFullSidebar ? false : true;
+      setShowSideBar(state);
+    } else {
+      state = true;
+      setShowSideBar(true);
+    }
+
+    //Save to localStorage
+    localStorage.setItem("sidebarState", JSON.stringify(state));
   };
 
   //forced open if there is a child current selected
@@ -104,95 +124,180 @@ const Sidebar = () => {
     openMenu.includes(menu) || forcedOpenMenus.includes(menu);
 
   return (
-    <div className="w-64 bg-gray-100 h-screen shadow-lg flex flex-col overflow-y-auto">
-      {/* ----  Profile Section ---- */}
-      <div className="p-4 flex flex-col items-center border-b border-gray-300">
-        <div className="relative flex justify-center items-center">
-          <div className="w-16 h-16 rounded-lg bg-gray-300 mb-2" />
-          {showFullSidebar ? (
-            <ChevronRight
-              onClick={toggleSidebarview}
-              className="cursor-pointer absolute left-27 2xl:left-30 w-5 h-5"
-            />
-          ) : (
-            <ChevronLeft
-              onClick={toggleSidebarview}
-              className="cursor-pointer absolute left-27 2xl:left-30 w-5 h-5"
-            />
-          )}
-        </div>
-
-        <h2 className="text-center font-semibold text-sm">
-          COMPANY NAME POINT OF SALES WITH INVENTORY
-        </h2>
-        <p className="text-xs text-gray-600">Logged in User: Full Name</p>
-      </div>
-
-      {/* ---- Links ---- */}
-      <nav className="flex-1 p-3 space-y-2 text-sm">
-        {menuItems.map((item, index) => (
-          <div key={index}>
-            {/* ---- kapag walang dropdown ---- */}
-            {!item.children ? (
-              <Link
-                to={item.path}
-                className={`flex items-center gap-3 p-2 rounded-lg hover:bg-gray-200 cursor-pointer ${
-                  item.path === location.pathname
-                    ? "bg-gray-300 font-medium"
-                    : ""
-                }`}
-              >
-                <item.icon className="w-5 h-5" />
-                {item.title}
-              </Link>
-            ) : (
-              /* ----- kapag may dropdown ---- */
-              <div>
-                <button
-                  onClick={() => toggleMenu(item.title)}
-                  className="flex items-center justify-between w-full p-2 rounded-lg hover:bg-gray-200 cursor-pointer"
-                >
-                  <span className="flex items-center gap-3">
-                    <item.icon className="w-5 h-5" />
-                    {item.title}
-                  </span>
-                  <span>
-                    {isMenuOpen(item.title) ? (
-                      <ChevronDown className="w-4 h-4" />
-                    ) : (
-                      <ChevronRight className="w-4 h-4" />
-                    )}
-                  </span>
-                </button>
-
-                {/*-------- Child Menu ng link na may dropdown ------*/}
-                {isMenuOpen(item.title) && (
-                  <div className="ml-8 mt-1 space-y-1">
-                    {item.children.map((child, i) => {
-                      return (
-                        <Link
-                          key={i}
-                          to={child.path}
-                          className={`block ${
-                            child.path === location.pathname
-                              ? "bg-gray-300 font-medium"
-                              : ""
-                          } items-center justify-between w-full p-2 rounded-lg hover:bg-gray-200`}
-                        >
-                          <span className="flex items-center gap-3">
-                            <child.icon className="w-5 h-5" />
-                            {child.title}
-                          </span>
-                        </Link>
-                      );
-                    })}
-                  </div>
+    <div className={` `}>
+      {isDesktop ? (
+        showFullSidebar ? (
+          <div className="bg-gray-100 h-screen shadow-lg flex flex-col overflow-y-auto w-68">
+            {/* ----  Profile Section ---- */}
+            <div className="p-4 flex flex-col items-center border-b border-gray-300">
+              <div className="relative flex justify-center items-center">
+                <div className="w-16 h-16 rounded-lg bg-gray-300 mb-2" />
+                {showFullSidebar ? (
+                  <ChevronLeft
+                    onClick={toggleSidebarview}
+                    className="cursor-pointer absolute left-36 2xl:left-35 w-5 h-5"
+                  />
+                ) : (
+                  ""
                 )}
               </div>
-            )}
+
+              <h2 className="text-center font-semibold text-base">
+                COMPANY NAME POINT OF SALES WITH INVENTORY
+              </h2>
+              <p className="text-sm text-gray-600">Logged in User: Full Name</p>
+            </div>
+
+            {/* ---- Links ---- */}
+            <nav className="flex-1 p-3 space-y-2 text-sm">
+              {menuItems.map((item, index) => (
+                <div key={index}>
+                  {/* ---- kapag walang dropdown ---- */}
+                  {!item.children ? (
+                    <Link
+                      to={item.path}
+                      className={`flex items-center gap-3 p-2 rounded-lg hover:bg-gray-200 cursor-pointer text-base ${
+                        item.path === location.pathname
+                          ? "bg-gray-300 font-medium"
+                          : ""
+                      }`}
+                    >
+                      <item.icon className="w-5 h-5" />
+                      {item.title}
+                    </Link>
+                  ) : (
+                    /* ----- kapag may dropdown ---- */
+                    <div>
+                      <button
+                        onClick={() => toggleMenu(item.title)}
+                        className="flex items-center justify-between w-full p-2 rounded-lg hover:bg-gray-200 cursor-pointer"
+                      >
+                        <span className="flex items-center gap-3 text-base">
+                          <item.icon className="w-5 h-5" />
+                          {item.title}
+                        </span>
+                        <span>
+                          {isMenuOpen(item.title) ? (
+                            <ChevronDown className="w-4 h-4" />
+                          ) : (
+                            <ChevronRight className="w-4 h-4" />
+                          )}
+                        </span>
+                      </button>
+
+                      {/*-------- Child Menu ng link na may dropdown ------*/}
+                      {isMenuOpen(item.title) && (
+                        <div className="ml-8 mt-1 space-y-1">
+                          {item.children.map((child, i) => {
+                            return (
+                              <Link
+                                key={i}
+                                to={child.path}
+                                className={`block ${
+                                  child.path === location.pathname
+                                    ? "bg-gray-300 font-medium"
+                                    : ""
+                                } items-center justify-between w-full p-2 rounded-lg hover:bg-gray-200 text-base`}
+                              >
+                                <span className="flex items-center gap-3">
+                                  <child.icon className="w-5 h-5" />
+                                  {child.title}
+                                </span>
+                              </Link>
+                            );
+                          })}
+                        </div>
+                      )}
+                    </div>
+                  )}
+                </div>
+              ))}
+            </nav>
           </div>
-        ))}
-      </nav>
+        ) : (
+          <div className="bg-gray-100 h-screen shadow-lg flex flex-col overflow-y-auto w-20">
+            {/* ----  Profile Section ---- */}
+            <div className="p-4 flex flex-col items-center border-b border-gray-300">
+              <div className="relative flex justify-center items-center">
+                <div className="w-11 h-11 rounded-lg bg-gray-300 mb-2" />
+                {showFullSidebar ? (
+                  ""
+                ) : (
+                  <ChevronRight
+                    onClick={toggleSidebarview}
+                    className="cursor-pointer absolute left-11.5 w-4 h-4"
+                  />
+                )}
+              </div>
+            </div>
+
+            {/* ---- Links ---- */}
+            <nav className="flex-1 p-3 space-y-2 text-sm">
+              {menuItems.map((item, index) => (
+                <div key={index}>
+                  {/* ---- kapag walang dropdown ---- */}
+                  {!item.children ? (
+                    <Link
+                      to={item.path}
+                      className={`flex items-center gap-3 rounded-lg hover:bg-gray-200 cursor-pointer p-4 ${
+                        item.path === location.pathname
+                          ? "bg-gray-300 font-medium "
+                          : ""
+                      }`}
+                    >
+                      <item.icon className="w-5 h-5" />
+                    </Link>
+                  ) : (
+                    /* ----- kapag may dropdown ---- */
+                    <div>
+                      <button
+                        onClick={() => toggleMenu(item.title)}
+                        className="flex items-center justify-between w-full p-4 rounded-lg hover:bg-gray-200 cursor-pointer"
+                      >
+                        <span className="flex items-center gap-3">
+                          <item.icon className="w-5 h-5" />
+                        </span>
+                        <span>
+                          {isMenuOpen(item.title) ? (
+                            <ChevronDown className="w-4 h-4" />
+                          ) : (
+                            <ChevronRight className="w-4 h-4" />
+                          )}
+                        </span>
+                      </button>
+
+                      {/*-------- Child Menu ng link na may dropdown ------*/}
+                      {isMenuOpen(item.title) && (
+                        <div className="ml-0 mt-1 space-y-1">
+                          {item.children.map((child, i) => {
+                            return (
+                              <Link
+                                key={i}
+                                to={child.path}
+                                className={`block ${
+                                  child.path === location.pathname
+                                    ? "bg-gray-300 font-medium"
+                                    : ""
+                                } items-center justify-between w-full p-4 rounded-lg hover:bg-gray-200`}
+                              >
+                                <span className="flex items-center gap-3">
+                                  <child.icon className="w-5 h-5" />
+                                </span>
+                              </Link>
+                            );
+                          })}
+                        </div>
+                      )}
+                    </div>
+                  )}
+                </div>
+              ))}
+            </nav>
+          </div>
+        )
+      ) : (
+        ""
+      )}
     </div>
   );
 };
