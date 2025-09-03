@@ -20,6 +20,7 @@ import {
   BanknoteArrowDown,
   Warehouse,
   NotebookTabs,
+  LogOut,
 } from "lucide-react";
 
 /* ----- Links ---- */
@@ -42,7 +43,7 @@ const menuItems = [
     ],
   },
   {
-    title: "Point Of Sale",
+    title: "Point of Sale",
     icon: ShoppingCart,
     path: "/pointOfSale",
   },
@@ -67,22 +68,33 @@ const menuItems = [
     children: [
       { title: "Register Account", icon: UserPlus, path: "/registeraccount" },
       { title: "Config Account", icon: UserRoundPen, path: "/configaccounts" },
+      { title: "Logout", icon: LogOut },
     ],
   },
 ];
 
-const Sidebar = () => {
+const Sidebar = ({ SideBarMobileState }) => {
   const [openMenu, setOpenMenu] = useState([]);
   const [showFullSidebar, setShowSideBar] = useState(() => {
     //Initialize the last current state of sidebar
     const loadSideBar = JSON.parse(localStorage.getItem("sidebarState"));
     return loadSideBar !== null ? loadSideBar : true;
   });
+
+  //Mobile SidebarState
+  const [mobileSidebarState, setMobileSidebar] = useState(false);
+
+  useEffect(() => {
+    setMobileSidebar(SideBarMobileState);
+  }, [SideBarMobileState]);
+
+  //Current Page path
   const location = useLocation();
 
   //Media Query for sidebar and navbar
   const isDesktop = useMediaQuery({ minWidth: 668 });
-  const isSmallMobile = useMediaQuery({ maxWidth: 567 });
+  const isSmallDesktop = useMediaQuery({ maxWidth: 1068 });
+  const isMobile = useMediaQuery({ maxWidth: 667 });
 
   //Change sidebar state flag
   const toggleSidebarview = () => {
@@ -94,10 +106,23 @@ const Sidebar = () => {
       state = true;
       setShowSideBar(true);
     }
-
-    //Save to localStorage
+    //Save State to localStorage
     localStorage.setItem("sidebarState", JSON.stringify(state));
   };
+
+  //Sidebar arrow State
+  function SidebarToggle({ showFullSidebar, toggleSidebarview }) {
+    return (
+      <ChevronLeft
+        onClick={toggleSidebarview}
+        className={`
+        cursor-pointer w-7 h-7 p-1 rounded-4xl bg-violet-400 text-white
+        transform transition-transform duration-500 ease-in-out
+        ${showFullSidebar ? "rotate-0" : "rotate-180"}
+      `}
+      />
+    );
+  }
 
   //forced open if there is a child current selected
   const forcedOpenMenus = menuItems
@@ -124,90 +149,106 @@ const Sidebar = () => {
     openMenu.includes(menu) || forcedOpenMenus.includes(menu);
 
   return (
-    <div className={` `}>
+    <div
+      className={` z-50 ${
+        (showFullSidebar && isSmallDesktop) || (isMobile && !showFullSidebar)
+          ? `absolute`
+          : ``
+      }`}
+    >
       {isDesktop ? (
         showFullSidebar ? (
-          <div className="bg-gray-100 h-screen shadow-lg flex flex-col overflow-y-auto w-68">
-            {/* ----  Profile Section ---- */}
-            <div className="p-4 flex flex-col items-center border-b border-gray-300">
-              <div className="relative flex justify-center items-center">
-                <div className="w-16 h-16 rounded-lg bg-gray-300 mb-2" />
+          <div
+            className={`bg-violet-800 h-screen shadow-lg flex flex-col overflow-y-auto
+    transition-[width] duration-500 ease-in-out z-50
+    ${showFullSidebar ? "w-68" : "w-20"}`}
+          >
+            {/* ---- Links ---- */}
+            <nav className="flex-1 p-3 space-y-2 text-sm mt-18">
+              <div className="  flex  items-center text-white-50 ">
                 {showFullSidebar ? (
-                  <ChevronLeft
-                    onClick={toggleSidebarview}
-                    className="cursor-pointer absolute left-36 2xl:left-35 w-5 h-5"
-                  />
+                  <div className="flex items-center">
+                    <SidebarToggle
+                      showFullSidebar={showFullSidebar}
+                      toggleSidebarview={toggleSidebarview}
+                    />
+                  </div>
                 ) : (
                   ""
                 )}
               </div>
+              <div className="w-full border-b-2 border-violet-500 mt-5 mb-3"></div>
 
-              <h2 className="text-center font-semibold text-base">
-                COMPANY NAME POINT OF SALES WITH INVENTORY
-              </h2>
-              <p className="text-sm text-gray-600">Logged in User: Full Name</p>
-            </div>
-
-            {/* ---- Links ---- */}
-            <nav className="flex-1 p-3 space-y-2 text-sm">
               {menuItems.map((item, index) => (
                 <div key={index}>
                   {/* ---- kapag walang dropdown ---- */}
                   {!item.children ? (
                     <Link
                       to={item.path}
-                      className={`flex items-center gap-3 p-2 rounded-lg hover:bg-gray-200 cursor-pointer text-base ${
+                      className={`group flex items-center gap-2 p-2  rounded-lg cursor-pointer text-base ${
                         item.path === location.pathname
-                          ? "bg-gray-300 font-medium"
-                          : ""
+                          ? "bg-gray-400/70 font-semibold text-white hover:bg-gray-200 hover:text-violet-400 hover:font-bold"
+                          : "font-medium text-white hover:text-violet-400 hover:font-bold hover:bg-gray-200"
                       }`}
                     >
-                      <item.icon className="w-5 h-5" />
-                      {item.title}
+                      <item.icon
+                        className={`w-5 h-5 stroke-2 group-hover:text-violet-400 group-hover:stroke-3 ${
+                          item.path === location.pathname
+                            ? "font-semibold text-white"
+                            : "font-medium text-white "
+                        }`}
+                      />
+                      <span className="ml-1">{item.title}</span>
                     </Link>
                   ) : (
                     /* ----- kapag may dropdown ---- */
                     <div>
                       <button
                         onClick={() => toggleMenu(item.title)}
-                        className="flex items-center justify-between w-full p-2 rounded-lg hover:bg-gray-200 cursor-pointer"
+                        className="group flex items-center justify-between w-full p-2 rounded-lg text-white hover:bg-gray-200 cursor-pointer"
                       >
-                        <span className="flex items-center gap-3 text-base">
-                          <item.icon className="w-5 h-5" />
+                        <span className="flex items-center gap-3 text-base font-medium text-white group-hover:font-bold group-hover:text-violet-400">
+                          <item.icon className="w-5 h-5 text-white group-hover:text-violet-400 group-hover:stroke-3" />
                           {item.title}
                         </span>
-                        <span>
-                          {isMenuOpen(item.title) ? (
-                            <ChevronDown className="w-4 h-4" />
-                          ) : (
-                            <ChevronRight className="w-4 h-4" />
-                          )}
+                        <span
+                          className={`transform transition-transform duration-300 ease-in-out 
+                            ${
+                              isMenuOpen(item.title) ? "rotate-90" : "rotate-0"
+                            }`}
+                        >
+                          <ChevronRight className="w-4 h-4 text-white group-hover:w-5 group-hover:h-5 group-hover:text-violet-400 group-hover:stroke-3" />
                         </span>
                       </button>
 
-                      {/*-------- Child Menu ng link na may dropdown ------*/}
-                      {isMenuOpen(item.title) && (
-                        <div className="ml-8 mt-1 space-y-1">
-                          {item.children.map((child, i) => {
-                            return (
-                              <Link
-                                key={i}
-                                to={child.path}
-                                className={`block ${
-                                  child.path === location.pathname
-                                    ? "bg-gray-300 font-medium"
-                                    : ""
-                                } items-center justify-between w-full p-2 rounded-lg hover:bg-gray-200 text-base`}
-                              >
-                                <span className="flex items-center gap-3">
-                                  <child.icon className="w-5 h-5" />
-                                  {child.title}
-                                </span>
-                              </Link>
-                            );
-                          })}
-                        </div>
-                      )}
+                      {/*-------- Child Menu  ------*/}
+                      <div
+                        className={`ml-8 mt-1 space-y-1 overflow-hidden transition-all duration-500 ease-in-out
+                          ${
+                            isMenuOpen(item.title)
+                              ? "max-h-96 opacity-100"
+                              : "max-h-0 opacity-0"
+                          }
+                        `}
+                      >
+                        {item.children.map((child, i) => (
+                          <Link
+                            key={i}
+                            to={child.path}
+                            className={`flex items-center gap-3 p-2 text-white rounded-lg cursor-pointer text-base ${
+                              child.path === location.pathname
+                                ? "bg-gray-400/70 font-semibold text-white hover:bg-gray-200 hover:text-violet-400 hover:font-bold"
+                                : "font-medium text-white hover:text-violet-400 hover:font-bold hover:bg-gray-200"
+                            }`}
+                          >
+                            <span className="flex items-center gap-3">
+                              <child.icon className="w-5 h-5" />
+                              {child.title}
+                            </span>
+                          </Link>
+                        ))}
+                        <div className="w-full border-b-2 border-violet-500 mt-1"></div>
+                      </div>
                     </div>
                   )}
                 </div>
@@ -215,79 +256,111 @@ const Sidebar = () => {
             </nav>
           </div>
         ) : (
-          <div className="bg-gray-100 h-screen shadow-lg flex flex-col overflow-y-auto w-20">
-            {/* ----  Profile Section ---- */}
-            <div className="p-4 flex flex-col items-center border-b border-gray-300">
-              <div className="relative flex justify-center items-center">
-                <div className="w-11 h-11 rounded-lg bg-gray-300 mb-2" />
+          <div
+            className={`bg-violet-800 h-screen shadow-lg flex flex-col transition-[width] duration-500 ease-in-out z-50
+    ${showFullSidebar ? "w-68" : "w-22"}
+    overflow-y-auto [scrollbar-width:thin] [scrollbar-color:#8b5cf6_transparent]`}
+          >
+            {/* ---- Links ---- */}
+            <nav className={`flex-1 p-3 space-y-2 text-sm mt-18 `}>
+              <div className=" flex ml-4">
                 {showFullSidebar ? (
                   ""
                 ) : (
-                  <ChevronRight
-                    onClick={toggleSidebarview}
-                    className="cursor-pointer absolute left-11.5 w-4 h-4"
-                  />
+                  <div className="flex items-center">
+                    <SidebarToggle
+                      showFullSidebar={showFullSidebar}
+                      toggleSidebarview={toggleSidebarview}
+                    />
+                  </div>
                 )}
               </div>
-            </div>
+              <div className="w-full border-b-2 border-violet-500 mb-6"></div>
 
-            {/* ---- Links ---- */}
-            <nav className="flex-1 p-3 space-y-2 text-sm">
               {menuItems.map((item, index) => (
                 <div key={index}>
                   {/* ---- kapag walang dropdown ---- */}
                   {!item.children ? (
-                    <Link
-                      to={item.path}
-                      className={`flex items-center gap-3 rounded-lg hover:bg-gray-200 cursor-pointer p-4 ${
-                        item.path === location.pathname
-                          ? "bg-gray-300 font-medium "
-                          : ""
-                      }`}
-                    >
-                      <item.icon className="w-5 h-5" />
-                    </Link>
+                    <div className="relative flex group hover:font-bold">
+                      <Link
+                        to={item.path}
+                        className={`group flex items-center gap-3 rounded-lg hover:bg-gray-200  cursor-pointer p-4  ${
+                          item.path === location.pathname
+                            ? "bg-gray-400/70 font-medium "
+                            : ""
+                        }`}
+                      >
+                        <item.icon
+                          className={`w-5 h-5 stroke-2 group-hover:text-violet-400 group-hover:stroke-2 ${
+                            item.path === location.pathname
+                              ? "font-semibold text-white"
+                              : "font-medium text-white "
+                          }`}
+                        />
+                      </Link>
+                      {/* Tooltip (shows on hover) */}
+                      <span className="fixed left-20 ml-2 px-2 py-1 text-xs text-white bg-gray-800 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
+                        {item.title}
+                      </span>
+                    </div>
                   ) : (
                     /* ----- kapag may dropdown ---- */
                     <div>
                       <button
                         onClick={() => toggleMenu(item.title)}
-                        className="flex items-center justify-between w-full p-4 rounded-lg hover:bg-gray-200 cursor-pointer"
+                        className="group flex items-center justify-between w-full p-4 rounded-lg hover:bg-gray-200 hover:font-bold  cursor-pointer"
                       >
                         <span className="flex items-center gap-3">
-                          <item.icon className="w-5 h-5" />
+                          <item.icon className="w-5 h-5 text-white group-hover:text-violet-400 group-hover:stroke-2" />
                         </span>
-                        <span>
-                          {isMenuOpen(item.title) ? (
-                            <ChevronDown className="w-4 h-4" />
-                          ) : (
-                            <ChevronRight className="w-4 h-4" />
-                          )}
+                        <span
+                          className={`transform transition-transform duration-300 ease-in-out 
+                            ${
+                              isMenuOpen(item.title) ? "rotate-90" : "rotate-0"
+                            }`}
+                        >
+                          <ChevronRight className="w-4 h-4 text-white group-hover:w-5 group-hover:h-5 group-hover:text-violet-400 group-hover:stroke-3" />
+                        </span>
+                        {/* Tooltip (shows on hover) */}
+                        <span className="fixed left-20 ml-2 px-2 py-1 text-xs text-white bg-gray-800 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
+                          {item.title}
                         </span>
                       </button>
 
                       {/*-------- Child Menu ng link na may dropdown ------*/}
-                      {isMenuOpen(item.title) && (
-                        <div className="ml-0 mt-1 space-y-1">
+                      {
+                        <div
+                          className={`ml-0 mt-1 space-y-1 overflow-hidden transition-all duration-400 ease-in-out ${
+                            isMenuOpen(item.title)
+                              ? `max-h-90 `
+                              : `max-h-0 capacity-0`
+                          }`}
+                        >
                           {item.children.map((child, i) => {
                             return (
                               <Link
                                 key={i}
                                 to={child.path}
-                                className={`block ${
+                                className={`group block ${
                                   child.path === location.pathname
-                                    ? "bg-gray-300 font-medium"
-                                    : ""
+                                    ? "bg-gray-400/70 font-medium text-white hover:bg-gray-200 hover:text-violet-400 hover:font-bold"
+                                    : "font-medium text-white hover:text-violet-400 hover:font-bold hover:bg-gray-200"
                                 } items-center justify-between w-full p-4 rounded-lg hover:bg-gray-200`}
                               >
+                                {/* Tooltip (shows on hover) */}
+                                <span className="fixed left-20 ml-2 px-2 py-1 text-xs text-white bg-gray-800 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
+                                  {child.title}
+                                </span>
                                 <span className="flex items-center gap-3">
                                   <child.icon className="w-5 h-5" />
                                 </span>
+                                {/* Tooltip (shows on hover) */}
                               </Link>
                             );
                           })}
+                          <div className="w-1/1 border-b-2 border-violet-500 mt-1"></div>
                         </div>
-                      )}
+                      }
                     </div>
                   )}
                 </div>
@@ -295,6 +368,97 @@ const Sidebar = () => {
             </nav>
           </div>
         )
+      ) : (
+        ""
+      )}
+
+      {/* ------- Mobile Sidebar ------- */}
+
+      {isMobile && mobileSidebarState ? (
+        <div
+          className={`bg-violet-800 h-screen shadow-lg flex flex-col overflow-y-auto
+    transition-[width] duration-500 ease-in-out z-50 w-70 `}
+        >
+          {/* ---- Links ---- */}
+          <nav className="flex-1 p-3 space-y-2 text-sm mt-13">
+            <div className="w-full border-b-2 border-violet-500 mt-5 mb-3"></div>
+
+            {menuItems.map((item, index) => (
+              <div key={index}>
+                {/* ---- kapag walang dropdown ---- */}
+                {!item.children ? (
+                  <Link
+                    to={item.path}
+                    className={`group flex items-center gap-2 p-2  rounded-lg cursor-pointer text-base ${
+                      item.path === location.pathname
+                        ? "bg-gray-400/70 font-semibold text-white hover:bg-gray-200 hover:text-violet-400 hover:font-bold"
+                        : "font-medium text-white hover:text-violet-400 hover:font-bold hover:bg-gray-200"
+                    }`}
+                  >
+                    <item.icon
+                      className={`w-5 h-5 stroke-2 group-hover:text-violet-400 group-hover:stroke-3 ${
+                        item.path === location.pathname
+                          ? "font-semibold text-white"
+                          : "font-medium text-white "
+                      }`}
+                    />
+                    <span className="ml-1">{item.title}</span>
+                  </Link>
+                ) : (
+                  /* ----- kapag may dropdown ---- */
+                  <div>
+                    <button
+                      onClick={() => toggleMenu(item.title)}
+                      className="group flex items-center justify-between w-full p-2 rounded-lg text-white hover:bg-gray-200 cursor-pointer"
+                    >
+                      <span className="flex items-center gap-3 text-base font-medium text-white group-hover:font-bold group-hover:text-violet-400">
+                        <item.icon className="w-5 h-5 text-white group-hover:text-violet-400 group-hover:stroke-3" />
+                        {item.title}
+                      </span>
+                      <span
+                        className={`transform transition-transform duration-300 ease-in-out 
+                            ${
+                              isMenuOpen(item.title) ? "rotate-90" : "rotate-0"
+                            }`}
+                      >
+                        <ChevronRight className="w-4 h-4 text-white group-hover:w-5 group-hover:h-5 group-hover:text-violet-400 group-hover:stroke-3" />
+                      </span>
+                    </button>
+
+                    {/*-------- Child Menu  ------*/}
+                    <div
+                      className={`ml-8 mt-1 space-y-1 overflow-hidden transition-all duration-500 ease-in-out
+                          ${
+                            isMenuOpen(item.title)
+                              ? "max-h-96 opacity-100"
+                              : "max-h-0 opacity-0"
+                          }
+                        `}
+                    >
+                      {item.children.map((child, i) => (
+                        <Link
+                          key={i}
+                          to={child.path}
+                          className={`flex items-center gap-3 p-2 text-white rounded-lg cursor-pointer text-base ${
+                            child.path === location.pathname
+                              ? "bg-gray-400/70 font-semibold text-white hover:bg-gray-200 hover:text-violet-400 hover:font-bold"
+                              : "font-medium text-white hover:text-violet-400 hover:font-bold hover:bg-gray-200"
+                          }`}
+                        >
+                          <span className="flex items-center gap-3">
+                            <child.icon className="w-5 h-5" />
+                            {child.title}
+                          </span>
+                        </Link>
+                      ))}
+                      <div className="w-full border-b-2 border-violet-500 mt-1"></div>
+                    </div>
+                  </div>
+                )}
+              </div>
+            ))}
+          </nav>
+        </div>
       ) : (
         ""
       )}
