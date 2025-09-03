@@ -1,45 +1,84 @@
-export default function MobileTable() {
-  return (
-    <div className="flex flex-col gap-3 md:hidden">
-      <div className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
-        <div className="flex items-center justify-between">
-          <h2 className="text-base font-semibold text-slate-900">row1 col1</h2>
-          <span className="rounded-full bg-green-100 px-2 py-0.5 text-xs font-medium text-green-700">
-            success
-          </span>
-        </div>
-        <p className="mt-1 text-sm text-slate-700">row1 col2</p>
-        <div className="mt-2 flex flex-wrap gap-2 text-sm">
-          <div className="flex-1 min-w-[120px]">
-            <dt className="text-slate-500">Column3</dt>
-            <dd className="font-medium text-slate-800">row1 col3</dd>
-          </div>
-          <div className="flex-1 min-w-[120px]">
-            <dt className="text-slate-500">Column5</dt>
-            <dd className="font-medium text-slate-800">row1 col5</dd>
-          </div>
-        </div>
-      </div>
+import Searchbar from "./Searchbar";
+import { useMediaQuery } from "react-responsive";
+import { ChevronsRight } from "lucide-react";
 
-      <div className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
-        <div className="flex items-center justify-between">
-          <h2 className="text-base font-semibold text-slate-900">row2 col1</h2>
-          <span className="rounded-full bg-amber-100 px-2 py-0.5 text-xs font-medium text-amber-700">
-            pending
-          </span>
-        </div>
-        <p className="mt-1 text-sm text-slate-700">row2 col2</p>
-        <div className="mt-2 flex flex-wrap gap-2 text-sm">
-          <div className="flex-1 min-w-[120px]">
-            <dt className="text-slate-500">Column3</dt>
-            <dd className="font-medium text-slate-800">row2 col3</dd>
+export default function MobileTable({ columns = [], data = [] }) {
+  const isMobile = useMediaQuery({ maxWidth: 768 });
+
+  return (
+    <>
+      {isMobile ? (
+        <div className="flex flex-col gap-2 h-1/1  ">
+          <div className="h-1/1 flex px-2 flex-col overflow-auto gap-5">
+            <header className="mb-1 flex mt-8 flex-col gap-3 sm:flex-row sm:items-end sm:justify-end">
+              {/* export buttons here */}
+              <Searchbar />
+            </header>
+            {data.length > 0 ? (
+              data.map((row, i) => (
+                <div
+                  className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm"
+                  key={i}
+                >
+                  {columns.map((col) => (
+                    <div
+                      className="flex items-center flex-inline"
+                      key={col.key}
+                    >
+                      <h2 className="text-base font-semibold text-slate-900 me-2">
+                        {col.label}:
+                      </h2>
+                      <p className="mt-1 text-sm text-slate-700">
+                        {" "}
+                        {row[col.key]}
+                      </p>
+                    </div>
+                  ))}
+                </div>
+              ))
+            ) : (
+              <div className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
+                <p className="text-center text-slate-500">No data found</p>
+              </div>
+            )}
           </div>
-          <div className="flex-1 min-w-[120px]">
-            <dt className="text-slate-500">Column5</dt>
-            <dd className="font-medium text-slate-800">row2 col5</dd>
+          <div className="flex items-center justify-center mb-2 h-10 w-full rounded-b-lg ">
+            <div className="flex items-center   justify-center gap-3">
+              <button className="flex text-violet-500 ">
+                <ChevronsRight className="rotate-180 cursor-pointer" />
+                <span className="cursor-pointer">Prev</span>
+              </button>
+              <div className="flex gap-1 cursor-pointer">
+                <div className="flex justify-center items-center w-5 h-5 rounded-[0.3rem] bg-violet-400 p-3 text-white ">
+                  <p>1</p>
+                </div>
+                <div className="flex cursor-pointer justify-center items-center w-5 h-5 rounded-[0.3rem] bg-violet-400 p-3 text-white ">
+                  <p>2</p>
+                </div>
+                <div className="flex cursor-pointer justify-center items-center w-5 h-5 rounded-[0.3rem] bg-violet-400 p-3 text-white ">
+                  <p>3</p>
+                </div>
+                <div className="flex cursor-pointer justify-center items-center w-5 h-5 rounded-[0.3rem] bg-violet-700 p-3 text-white ">
+                  <p>4</p>
+                </div>
+                <div className="flex cursor-pointer justify-center items-center w-5 h-5 rounded-[0.3rem] bg-violet-400 p-3 text-white ">
+                  <p>5</p>
+                </div>
+                <div className="flex cursor-pointer justify-center items-center w-5 h-5 rounded-[0.3rem] bg-violet-400 p-3 text-white ">
+                  <p>6</p>
+                </div>
+              </div>
+
+              <button className="flex cursor-pointer text-violet-500 ">
+                <span className="cursor-pointer">Next</span>
+                <ChevronsRight className="cursor-pointer" />
+              </button>
+            </div>
           </div>
         </div>
-      </div>
-    </div>
+      ) : (
+        ""
+      )}
+    </>
   );
 }

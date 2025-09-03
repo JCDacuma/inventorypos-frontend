@@ -1,6 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import "./style/index.css";
 
 {
@@ -25,6 +25,9 @@ ReactDOM.createRoot(document.getElementById("root")).render(
       <Routes>
         {/* First Page to show */}
         <Route path="/" element={<Home />}></Route>
+
+        {/* Wrong path */}
+        <Route path="*" element={<Navigate to="/" />}></Route>
 
         {/* Link Page */}
         <Route path="/dashboard" element={<Dashboard />}></Route>
