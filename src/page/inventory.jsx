@@ -3,126 +3,236 @@ import Sidebar from "../components/sidebar";
 import Navbar from "../components/navbar.jsx";
 import Table from "../components/Table";
 import MobileTable from "../components/MobileTable";
-
 import { useMediaQuery } from "react-responsive";
-import { Warehouse } from "lucide-react";
+import { motion } from "framer-motion";
+import { SquarePen, PackagePlus, PackageMinus, Replace } from "lucide-react";
 
+//Functionality Action buttons
 export default function Inventory() {
+  const Actions = ({ items }) => (
+    <div className="flex justify-center items-center gap-4 ">
+      <motion.button
+        onClick={() => HandleStockIn(items)}
+        animate={{ scale: [1, 1.1, 1] }}
+        transition={{
+          duration: 2,
+          repeat: Infinity,
+          ease: "easeInOut",
+        }}
+        className="group bg-gray-200 p-2 shadow-lg rounded-[0.3rem] cursor-pointer hover:bg-gray-400"
+      >
+        <PackagePlus className="text-violet-500 h-5 w-5 stroke-[0.15rem] group-hover:text-violet-800 cursor-pointer" />
+      </motion.button>
+
+      <motion.button
+        onClick={() => HandleStockOut(items)}
+        animate={{ scale: [1, 1.1, 1] }}
+        transition={{
+          duration: 2,
+          repeat: Infinity,
+          ease: "easeInOut",
+        }}
+        className="group bg-gray-200 p-2 shadow-lg rounded-[0.3rem] cursor-pointer hover:bg-gray-400"
+      >
+        <PackageMinus className="text-violet-500 h-5 w-5 stroke-[0.15rem] group-hover:text-violet-800 cursor-pointer" />
+      </motion.button>
+
+      <motion.button
+        onClick={() => HandleEditAction(items)}
+        animate={{ scale: [1, 1.1, 1] }}
+        transition={{
+          duration: 2,
+          repeat: Infinity,
+          ease: "easeInOut",
+        }}
+        className="group bg-gray-200 p-2 shadow-lg rounded-[0.3rem] hover:bg-gray-400"
+      >
+        <SquarePen className="text-violet-500 h-5 w-5 stroke-[0.15rem] group-hover:text-violet-800 cursor-pointer" />
+      </motion.button>
+      <motion.button
+        onClick={() => HandleTransfer(items)}
+        animate={{ scale: [1, 1.1, 1] }}
+        transition={{
+          duration: 2,
+          repeat: Infinity,
+          ease: "easeInOut",
+        }}
+        className="group bg-gray-200 p-2 shadow-lg rounded-[0.3rem] hover:bg-gray-400 cursor-pointer"
+      >
+        <Replace className="text-violet-500 h-5 w-5 stroke-[0.15rem] group-hover:text-violet-800 cursor-pointer" />
+      </motion.button>
+    </div>
+  );
+
+  //view
+  const HandleStockIn = (items) => {
+    alert(`addStock ${items}`);
+  };
+
+  //view
+  const HandleStockOut = (items) => {
+    alert(`RemoveStock ${items}`);
+  };
+
+  //view
+  const HandleEditAction = (items) => {
+    alert(`Edit ${items}`);
+  };
+
+  const HandleTransfer = (items) => {
+    alert(`transfer ${items}`);
+  };
+
   //Sample column
   const columns = [
     { key: "item", label: "Item" },
     { key: "sku", label: "SKU" },
-    { key: "quantity", label: "Quantity" },
-    { key: "price", label: "Price" },
-    { key: "category", label: "Category" },
+    { key: "Category", label: "Category" },
+    { key: "Location", label: "Location" },
+    { key: "CurrentStock", label: "Current Stock" },
+    { key: "Unit", label: "Unit" },
+    { key: "MinStock", label: "Min Stock" },
+    { key: "LastMovement", label: "Last Movement" },
+    { key: "Status", label: "Status" },
+    { key: "Action", label: "Action" },
   ];
 
   //Sample fetch from database
   const data = [
     {
-      item: "Apple iPhone 14",
-      sku: "IP14-256BLK",
-      quantity: 15,
-      price: "$799",
-      category: "Electronics",
+      item: "Laptop - Dell Inspiron 15",
+      sku: "DL-INS-15-001",
+      Category: "Electronics",
+      Location: "Warehouse A - Rack 3",
+      CurrentStock: 12,
+      Unit: "pcs",
+      MinStock: 5,
+      LastMovement: "2025-08-28",
+      Status: "In Stock",
+      Action: <Actions items="Laptop - Dell Inspiron 15" />,
     },
     {
-      item: "Samsung Galaxy S23",
-      sku: "SGS23-128WHT",
-      quantity: 10,
-      price: "$699",
-      category: "Electronics",
+      item: "Wireless Mouse - Logitech M185",
+      sku: "LG-M185-002",
+      Category: "Electronics",
+      Location: "Warehouse B - Shelf 2",
+      CurrentStock: 45,
+      Unit: "pcs",
+      MinStock: 20,
+      LastMovement: "2025-08-30",
+      Status: "In Stock",
+      Action: <Actions items="Wireless Mouse - Logitech M185" />,
     },
     {
-      item: "Sony WH-1000XM5",
-      sku: "SONYXM5-BLK",
-      quantity: 8,
-      price: "$349",
-      category: "Audio",
+      item: "Smartphone - iPhone 14",
+      sku: "AP-IP14-006",
+      Category: "Electronics",
+      Location: "Warehouse A - Rack 8",
+      CurrentStock: 8,
+      Unit: "pcs",
+      MinStock: 5,
+      LastMovement: "2025-08-31",
+      Status: "In Stock",
+      Action: <Actions items="Smartphone - iPhone 14" />,
+    },
+
+    {
+      item: "Rice - 5kg Bag",
+      sku: "GR-RICE-5KG",
+      Category: "Grocery",
+      Location: "Aisle 1 - Shelf 2",
+      CurrentStock: 120,
+      Unit: "kg",
+      MinStock: 50,
+      LastMovement: "2025-08-30",
+      Status: "In Stock",
+      Action: <Actions items="Rice - 5kg Bag" />,
     },
     {
-      item: "Logitech MX Master 3S",
-      sku: "LOGIMX3S-GRY",
-      quantity: 20,
-      price: "$99",
-      category: "Accessories",
+      item: "Cooking Oil - 1L Bottle",
+      sku: "GR-OIL-1L",
+      Category: "Grocery",
+      Location: "Aisle 3 - Shelf 1",
+      CurrentStock: 80,
+      Unit: "liters",
+      MinStock: 30,
+      LastMovement: "2025-08-29",
+      Status: "In Stock",
+      Action: <Actions items="Cooking Oil - 1L Bottle" />,
     },
     {
-      item: "Apple MacBook Air M2",
-      sku: "MBAIR-M2-13",
-      quantity: 5,
-      price: "$1199",
-      category: "Computers",
+      item: "Bananas",
+      sku: "GR-BANANA-001",
+      Category: "Grocery",
+      Location: "Aisle 2 - Shelf 5",
+      CurrentStock: 200,
+      Unit: "kg",
+      MinStock: 100,
+      LastMovement: "2025-08-31",
+      Status: "In Stock",
+      Action: <Actions items="Bananas" />,
+    },
+
+    {
+      item: "Office Chair - Ergonomic",
+      sku: "CH-ERGO-010",
+      Category: "Furniture",
+      Location: "Warehouse D - Zone 1",
+      CurrentStock: 3,
+      Unit: "pcs",
+      MinStock: 2,
+      LastMovement: "2025-08-27",
+      Status: "In Stock",
+      Action: <Actions items="Office Chair - Ergonomic" />,
     },
     {
-      item: "Dell XPS 13",
-      sku: "DELLXPS13-9310",
-      quantity: 7,
-      price: "$999",
-      category: "Computers",
+      item: "Dining Table - 6 Seater",
+      sku: "TB-DINE-006",
+      Category: "Furniture",
+      Location: "Warehouse F - Row 4",
+      CurrentStock: 1,
+      Unit: "pcs",
+      MinStock: 2,
+      LastMovement: "2025-08-25",
+      Status: "Low Stock",
+      Action: <Actions items="Dining Table - 6 Seater" />,
+    },
+
+    {
+      item: "T-Shirt - Cotton (Large)",
+      sku: "CL-TSHIRT-L",
+      Category: "Clothing",
+      Location: "Section C - Rack 1",
+      CurrentStock: 50,
+      Unit: "pcs",
+      MinStock: 20,
+      LastMovement: "2025-08-29",
+      Status: "In Stock",
+      Action: <Actions items="T-Shirt - Cotton (Large)" />,
     },
     {
-      item: "Bose QuietComfort 45",
-      sku: "BOSEQC45-BLK",
-      quantity: 12,
-      price: "$329",
-      category: "Audio",
+      item: "Jeans - Blue Denim",
+      sku: "CL-JEANS-32",
+      Category: "Clothing",
+      Location: "Section C - Rack 2",
+      CurrentStock: 15,
+      Unit: "pcs",
+      MinStock: 10,
+      LastMovement: "2025-08-28",
+      Status: "In Stock",
+      Action: <Actions items="Jeans - Blue Denim" />,
     },
     {
-      item: "Google Pixel 7",
-      sku: "PIXEL7-128BLK",
-      quantity: 9,
-      price: "$599",
-      category: "Electronics",
-    },
-    {
-      item: "Anker PowerCore 10000",
-      sku: "ANKERPC-10000",
-      quantity: 30,
-      price: "$25",
-      category: "Accessories",
-    },
-    {
-      item: "HP Envy 15",
-      sku: "HPENVY15-2023",
-      quantity: 4,
-      price: "$1099",
-      category: "Computers",
-    },
-    {
-      item: "JBL Flip 6",
-      sku: "JBLFLIP6-BLU",
-      quantity: 18,
-      price: "$129",
-      category: "Audio",
-    },
-    {
-      item: "Apple AirPods Pro 2",
-      sku: "AIRPODSPRO2",
-      quantity: 25,
-      price: "$249",
-      category: "Audio",
-    },
-    {
-      item: "Samsung T7 SSD 1TB",
-      sku: "SAMT7-1TB",
-      quantity: 14,
-      price: "$119",
-      category: "Accessories",
-    },
-    {
-      item: "Microsoft Surface Pro 9",
-      sku: "SURFPRO9-256",
-      quantity: 6,
-      price: "$1299",
-      category: "Computers",
-    },
-    {
-      item: "Canon EOS M50 Mark II",
-      sku: "CANONM50M2",
-      quantity: 3,
-      price: "$699",
-      category: "Electronics",
+      item: "Jacket - Winter Coat",
+      sku: "CL-JACKET-WT",
+      Category: "Clothing",
+      Location: "Section D - Shelf 3",
+      CurrentStock: 5,
+      Unit: "pcs",
+      MinStock: 8,
+      LastMovement: "2025-08-27",
+      Status: "Low Stock",
+      Action: <Actions items="Jacket - Winter Coat" />,
     },
   ];
 
@@ -145,7 +255,9 @@ export default function Inventory() {
       />
       <Sidebar SideBarMobileState={MobileSideBar} />
 
-      <main className={`flex-1 px-0    ${IsSmallMobile ? `mt-15` : `mt-15`}`}>
+      <main
+        className={`flex-1 px-0  w-100   ${IsSmallMobile ? `mt-15` : `mt-15`}`}
+      >
         <div
           className={`rounded-2xl w-full h-1/1 ${
             IsSmallMobile ? `p-1` : `p-3`

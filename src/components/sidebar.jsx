@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { useMediaQuery } from "react-responsive";
-
+import Hamburger from "hamburger-react";
 import {
   LayoutDashboard,
   FileText,
@@ -110,16 +110,16 @@ const Sidebar = ({ SideBarMobileState }) => {
     localStorage.setItem("sidebarState", JSON.stringify(state));
   };
 
-  //Sidebar arrow State
+  // Sidebar arrow State
   function SidebarToggle({ showFullSidebar, toggleSidebarview }) {
     return (
       <ChevronLeft
         onClick={toggleSidebarview}
-        className={`
-        cursor-pointer w-7 h-7 p-1 rounded-4xl bg-violet-400 text-white
-        transform transition-transform duration-500 ease-in-out
-        ${showFullSidebar ? "rotate-0" : "rotate-180"}
-      `}
+        style={{
+          transform: `rotate(${showFullSidebar ? 0 : 180}deg)`,
+          transition: "transform 1s ease-in-out",
+        }}
+        className="cursor-pointer w-7 h-7 p-1 rounded-full bg-violet-400 text-white"
       />
     );
   }
@@ -154,7 +154,7 @@ const Sidebar = ({ SideBarMobileState }) => {
         (showFullSidebar && isSmallDesktop) || (isMobile && !showFullSidebar)
           ? `absolute`
           : ``
-      }`}
+      } `}
     >
       {isDesktop ? (
         showFullSidebar ? (
@@ -374,10 +374,11 @@ const Sidebar = ({ SideBarMobileState }) => {
 
       {/* ------- Mobile Sidebar ------- */}
 
-      {isMobile && mobileSidebarState ? (
+      {isMobile && (
         <div
-          className={`bg-violet-800 h-screen shadow-lg flex flex-col overflow-y-auto
-    transition-[width] duration-500 ease-in-out z-50 w-70 `}
+          className={`fixed top-0 left-0 h-screen w-68 bg-violet-800 shadow-lg flex flex-col overflow-y-auto
+    transition-transform duration-500 ease-in-out z-50
+    ${mobileSidebarState ? "translate-x-0" : "-translate-x-full"}`}
         >
           {/* ---- Links ---- */}
           <nav className="flex-1 p-3 space-y-2 text-sm mt-13">
@@ -459,8 +460,6 @@ const Sidebar = ({ SideBarMobileState }) => {
             ))}
           </nav>
         </div>
-      ) : (
-        ""
       )}
     </div>
   );
