@@ -110,20 +110,6 @@ const Sidebar = ({ SideBarMobileState }) => {
     localStorage.setItem("sidebarState", JSON.stringify(state));
   };
 
-  // Sidebar arrow State
-  function SidebarToggle({ showFullSidebar, toggleSidebarview }) {
-    return (
-      <ChevronLeft
-        onClick={toggleSidebarview}
-        style={{
-          transform: `rotate(${showFullSidebar ? 0 : 180}deg)`,
-          transition: "transform 1s ease-in-out",
-        }}
-        className="cursor-pointer w-7 h-7 p-1 rounded-full bg-violet-400 text-white"
-      />
-    );
-  }
-
   //forced open if there is a child current selected
   const forcedOpenMenus = menuItems
     .filter(
@@ -157,6 +143,24 @@ const Sidebar = ({ SideBarMobileState }) => {
       } `}
     >
       {isDesktop ? (
+        <div
+          className={`absolute flex items-baseline justify-baseline pl-[1rem] pt-4 border-b-2 border-violet-500  top-15  z-100 text-white bg-violet-800 transition-[width] duration-500 ease-in-out  ${
+            showFullSidebar ? `w-67 h-20` : `w-21 h-17`
+          }`}
+        >
+          <Hamburger
+            size={24}
+            duration={0.3}
+            easing="ease-in"
+            toggled={showFullSidebar}
+            toggle={toggleSidebarview}
+          />
+        </div>
+      ) : (
+        ""
+      )}
+
+      {isDesktop ? (
         showFullSidebar ? (
           <div
             className={`bg-violet-800 h-screen shadow-lg flex flex-col overflow-y-auto
@@ -166,18 +170,9 @@ const Sidebar = ({ SideBarMobileState }) => {
             {/* ---- Links ---- */}
             <nav className="flex-1 p-3 space-y-2 text-sm mt-18">
               <div className="  flex  items-center text-white-50 ">
-                {showFullSidebar ? (
-                  <div className="flex items-center">
-                    <SidebarToggle
-                      showFullSidebar={showFullSidebar}
-                      toggleSidebarview={toggleSidebarview}
-                    />
-                  </div>
-                ) : (
-                  ""
-                )}
+                <div className="flex items-center h-10"></div>
               </div>
-              <div className="w-full border-b-2 border-violet-500 mt-5 mb-3"></div>
+              <div className="w-full  mt-5 mb-3"></div>
 
               {menuItems.map((item, index) => (
                 <div key={index}>
@@ -267,15 +262,9 @@ const Sidebar = ({ SideBarMobileState }) => {
                 {showFullSidebar ? (
                   ""
                 ) : (
-                  <div className="flex items-center">
-                    <SidebarToggle
-                      showFullSidebar={showFullSidebar}
-                      toggleSidebarview={toggleSidebarview}
-                    />
-                  </div>
+                  <div className="flex items-center h-10"></div>
                 )}
               </div>
-              <div className="w-full border-b-2 border-violet-500 mb-6"></div>
 
               {menuItems.map((item, index) => (
                 <div key={index}>
