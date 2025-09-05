@@ -17,6 +17,29 @@ export default function RegisterAccount() {
 
   const IsSmallMobile = useMediaQuery({ maxWidth: 768 });
 
+  const [formData, setFormData] = useState({
+    firstname: "",
+    lastname: "",
+    email: "",
+    password: ""
+  });
+
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handleRegister = async () => {
+    try {
+      const response = await api.post("/register", formData);
+      console.log("Registered successfully:", response.data);
+      alert("Registration successful!");
+    } catch (error) {
+      console.error("Error registering:", error);
+      alert("Registration failed!");
+    }
+  };
+
+
   return (
     <div className="w-1/1 h-screen flex">
       <Navbar
@@ -38,17 +61,53 @@ export default function RegisterAccount() {
           <Status type="error" />
           <Status type="warning" />
           <Status type="success" />
-          
 
-          <div className="flex flex-col sm:flex-row gap-4 p-10">
+
+          <div className="flex flex-col sm:flex-row gap-4">
             <div className="flex-1 flex flex-col">
               <label className="mb-1 text-sm font-medium text-slate-700 ms-2">First Name</label>
-              <Input type="text" placeholder="Enter first name" />
+              <Input type="text" placeholder="Enter first name"
+                value={formData.firstname}
+                onChange={handleChange}
+              />
             </div>
 
             <div className="flex-1 flex flex-col">
               <label className="mb-1 text-sm font-medium text-slate-700 ms-2">Last Name</label>
-              <Input type="text" placeholder="Enter last name" />
+              <Input type="text" placeholder="Enter last name"
+                value={formData.lastname}
+                onChange={handleChange}
+              />
+            </div>
+          </div>
+
+          <div className="flex flex-col sm:flex-row gap-4">
+            <div className="flex-1 flex flex-col">
+              <label className="mb-1 text-sm font-medium text-slate-700 ms-2">Email</label>
+              <Input type="email" placeholder="Enter last name"
+                value={formData.email}
+                onChange={handleChange}
+              />
+            </div>
+
+            <div className="flex-1 flex flex-col">
+              <label className="mb-1 text-sm font-medium text-slate-700 ms-2">Password</label>
+              <Input type="password" placeholder="Enter last name"
+                value={formData.password}
+                onChange={handleChange}
+              />
+            </div>
+          </div>
+          <div className="flex flex-col sm:flex-row gap-4">
+            <div className="flex-1 flex flex-col justify-center">
+              <button
+                onClick={handleRegister}
+                className="bg-emerald-600 w-50 text-white py-2 px-4 
+             rounded-md hover:bg-emerald-700 transition mt-6"
+              >
+                Register
+              </button>
+
             </div>
           </div>
 
