@@ -15,7 +15,7 @@ export default function Inventory() {
         onClick={() => HandleStockIn(items)}
         animate={{ scale: [1, 1.1, 1] }}
         transition={{
-          duration: 2,
+          duration: 2.5,
           repeat: Infinity,
           ease: "easeInOut",
         }}
@@ -45,7 +45,7 @@ export default function Inventory() {
           repeat: Infinity,
           ease: "easeInOut",
         }}
-        className="group bg-gray-200 p-2 shadow-lg rounded-[0.3rem] hover:bg-gray-400"
+        className="group bg-gray-200 p-2 shadow-lg rounded-[0.3rem] cursor-pointer hover:bg-gray-400"
       >
         <SquarePen className="text-violet-500 h-5 w-5 stroke-[0.15rem] group-hover:text-violet-800 cursor-pointer" />
       </motion.button>
@@ -83,6 +83,35 @@ export default function Inventory() {
     alert(`transfer ${items}`);
   };
 
+  //For Status
+  const StatusDisplay = ({ status }) => {
+    switch (status) {
+      case "In Stock":
+        return (
+          <div className="flex justify-center items-center gap-1">
+            <p>In Stock</p>
+            <div className="h-2 w-2 rounded-4xl bg-green-600 mb-2"></div>
+          </div>
+        );
+      case "Low Stock":
+        return (
+          <div className="flex justify-center items-center gap-1">
+            <p>Low Stock</p>
+            <div className="h-2 w-2 rounded-4xl bg-amber-500 mb-2"></div>
+          </div>
+        );
+      case "Out of Stock":
+        return (
+          <div className="flex justify-center items-center gap-1">
+            <p>Out of Stock</p>
+            <div className="h-2 w-2 rounded-4xl bg-red-500 mb-2"></div>
+          </div>
+        );
+      default:
+        return <p></p>;
+    }
+  };
+
   //Sample column
   const columns = [
     { key: "item", label: "Item" },
@@ -108,7 +137,7 @@ export default function Inventory() {
       Unit: "pcs",
       MinStock: 5,
       LastMovement: "2025-08-28",
-      Status: "In Stock",
+      Status: <StatusDisplay status="In Stock" />,
       Action: <Actions items="Laptop - Dell Inspiron 15" />,
     },
     {
@@ -120,7 +149,7 @@ export default function Inventory() {
       Unit: "pcs",
       MinStock: 20,
       LastMovement: "2025-08-30",
-      Status: "In Stock",
+      Status: <StatusDisplay status="In Stock" />,
       Action: <Actions items="Wireless Mouse - Logitech M185" />,
     },
     {
@@ -132,7 +161,7 @@ export default function Inventory() {
       Unit: "pcs",
       MinStock: 5,
       LastMovement: "2025-08-31",
-      Status: "In Stock",
+      Status: <StatusDisplay status="In Stock" />,
       Action: <Actions items="Smartphone - iPhone 14" />,
     },
 
@@ -145,7 +174,7 @@ export default function Inventory() {
       Unit: "kg",
       MinStock: 50,
       LastMovement: "2025-08-30",
-      Status: "In Stock",
+      Status: <StatusDisplay status="In Stock" />,
       Action: <Actions items="Rice - 5kg Bag" />,
     },
     {
@@ -157,7 +186,7 @@ export default function Inventory() {
       Unit: "liters",
       MinStock: 30,
       LastMovement: "2025-08-29",
-      Status: "In Stock",
+      Status: <StatusDisplay status="In Stock" />,
       Action: <Actions items="Cooking Oil - 1L Bottle" />,
     },
     {
@@ -169,7 +198,7 @@ export default function Inventory() {
       Unit: "kg",
       MinStock: 100,
       LastMovement: "2025-08-31",
-      Status: "In Stock",
+      Status: <StatusDisplay status="In Stock" />,
       Action: <Actions items="Bananas" />,
     },
 
@@ -178,11 +207,11 @@ export default function Inventory() {
       sku: "CH-ERGO-010",
       Category: "Furniture",
       Location: "Warehouse D - Zone 1",
-      CurrentStock: 3,
+      CurrentStock: 0,
       Unit: "pcs",
       MinStock: 2,
       LastMovement: "2025-08-27",
-      Status: "In Stock",
+      Status: <StatusDisplay status="Out of Stock" />,
       Action: <Actions items="Office Chair - Ergonomic" />,
     },
     {
@@ -194,7 +223,7 @@ export default function Inventory() {
       Unit: "pcs",
       MinStock: 2,
       LastMovement: "2025-08-25",
-      Status: "Low Stock",
+      Status: <StatusDisplay status="Low Stock" />,
       Action: <Actions items="Dining Table - 6 Seater" />,
     },
 
@@ -207,7 +236,7 @@ export default function Inventory() {
       Unit: "pcs",
       MinStock: 20,
       LastMovement: "2025-08-29",
-      Status: "In Stock",
+      Status: <StatusDisplay status="In Stock" />,
       Action: <Actions items="T-Shirt - Cotton (Large)" />,
     },
     {
@@ -219,7 +248,7 @@ export default function Inventory() {
       Unit: "pcs",
       MinStock: 10,
       LastMovement: "2025-08-28",
-      Status: "In Stock",
+      Status: <StatusDisplay status="In Stock" />,
       Action: <Actions items="Jeans - Blue Denim" />,
     },
     {
@@ -231,7 +260,7 @@ export default function Inventory() {
       Unit: "pcs",
       MinStock: 8,
       LastMovement: "2025-08-27",
-      Status: "Low Stock",
+      Status: <StatusDisplay status="Low Stock" />,
       Action: <Actions items="Jacket - Winter Coat" />,
     },
   ];
