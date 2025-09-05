@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { icons, Menu, X, ChevronLeft, ChevronRight } from "lucide-react";
 import { Link } from "react-router-dom";
+import Hamburger from "hamburger-react";
 import { useMediaQuery } from "react-responsive";
 
 export default function Navbar({ page, mobileSideBarState, setSideBarMobile }) {
@@ -51,7 +52,14 @@ export default function Navbar({ page, mobileSideBarState, setSideBarMobile }) {
               onClick={() => setIsOpen(!isOpen)}
               className="text-white hover:text-violet-200 focus:outline-none mr-2"
             >
-              {isOpen ? <X size={28} /> : <Menu size={28} />}
+              {
+                <Hamburger
+                  size={24}
+                  duration={0.3}
+                  easing="ease-in"
+                  toggled={isOpen}
+                />
+              }
             </button>
           </div>
         </div>

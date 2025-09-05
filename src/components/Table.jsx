@@ -1,27 +1,33 @@
 import Searchbar from "./Searchbar";
 import { useMediaQuery } from "react-responsive";
 import { ChevronsRight } from "lucide-react";
+import ExportButton from "../components/export_buttons";
 
 export default function DesktopTable({ columns = [], data = [] }) {
   const isDesktop = useMediaQuery({ minWidth: 768 });
+  const isSmallDesktop = useMediaQuery({ maxWidth: 1168 });
 
   return (
     <>
       {isDesktop ? (
-        <div className="  flex-column h-1/1 m-0 md:block  rounded-2xl pb-27  bg-white shadow-md p-5 ">
+        <div className="  flex-column h-1/1 m-0 md:block   rounded-2xl pb-27  bg-white shadow-md p-5 ">
           <header className="  mb-6  flex flex-row gap-3 sm:flex-row sm:items-end sm:justify-end ">
-            {/* export buttons here */}
+            <ExportButton />
             <Searchbar />
           </header>
 
-          <div className="h-1/1 overflow-auto z-29">
-            <table className="w-full table-auto text-sm ">
-              <thead className="border-collapse sticky top-0 bg-violet-400  text-white z-10">
+          <div className="h-1/1 w-1/1 overflow-y-auto z-29">
+            <table
+              className={`border-collapse  ${
+                isSmallDesktop ? `w-screen` : `w-1/1`
+              } table-auto text-sm`}
+            >
+              <thead className="sticky top-0 bg-violet-400 text-white z-20">
                 <tr>
                   {columns.map((col) => (
                     <th
                       key={col.key}
-                      className="px-4 py-3 text-center font-semibold "
+                      className="px-4 py-3 text-center font-semibold bg-violet-400"
                     >
                       {col.label}
                     </th>
