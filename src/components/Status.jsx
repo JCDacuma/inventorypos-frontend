@@ -1,6 +1,6 @@
 import { Info, CheckCircle2, AlertTriangle, AlertCircle } from "lucide-react";
 
-export default function Status({ type = "info", message = "Message here"}) {
+export default function Status({ type = "info", message = "Message here", style = ""}) {
   let icon, classes;
 
   switch (type) {
@@ -23,7 +23,8 @@ export default function Status({ type = "info", message = "Message here"}) {
   }
 
   return (
-    <div
+    <div className={`flex items-center justify-center ${style}`}>
+      <div
       className={`m-3
         w-full max-w-4xl rounded-2xl border border-white/20 bg-white/10 backdrop-blur-md shadow-lg ring-1 p-4 ${classes} 
       `
@@ -37,6 +38,7 @@ export default function Status({ type = "info", message = "Message here"}) {
           )}
         </div>
       </div>
+    </div>
     </div>
   );
 }
