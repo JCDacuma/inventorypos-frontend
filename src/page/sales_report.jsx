@@ -1,11 +1,9 @@
 import { useState } from "react";
-import Sidebar from "../components/sidebar";
-import Navbar from "../components/navbar.jsx";
 import Table from "../components/Table";
 import MobileTable from "../components/MobileTable";
 
-import { useMediaQuery } from "react-responsive";
 import { Warehouse } from "lucide-react";
+import { Layout, MainWrapper } from "../components/Layout";
 export default function SalesReport() {
   //Sample column
   const columns = [
@@ -141,33 +139,12 @@ export default function SalesReport() {
     },
   ];
 
-  const IsSmallMobile = useMediaQuery({ maxWidth: 768 });
-  const currentWebPage = "Sales Report";
-
-  const [MobileSideBar, setMobileSideBar] = useState(null);
-
-  const HandleMobileSideBar = (state) => {
-    setMobileSideBar(state);
-  };
-
   return (
-    <div className="w-1/1 h-screen flex">
-      <Navbar
-        page={currentWebPage}
-        setSideBarMobile={HandleMobileSideBar}
-        mobileSideBarState={MobileSideBar}
-      />
-      <Sidebar SideBarMobileState={MobileSideBar} />
-      <main className={`flex-1 px-0    ${IsSmallMobile ? `mt-15` : `mt-15`}`}>
-        <div
-          className={`rounded-2xl w-full h-1/1 ${
-            IsSmallMobile ? `p-1` : `p-3`
-          }`}
-        >
+    <Layout currentWebPage="Sales Report">
+      <MainWrapper>
           <MobileTable columns={columns} data={data} />
           <Table columns={columns} data={data} />
-        </div>
-      </main>
-    </div>
+      </MainWrapper>
+    </Layout>
   );
 }

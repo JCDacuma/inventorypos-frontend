@@ -1,9 +1,7 @@
 import { useState } from "react";
-import Sidebar from "../components/sidebar";
-import Navbar from "../components/navbar.jsx";
+import { Layout, MainWrapper } from "../components/Layout";
 import Table from "../components/Table";
 import MobileTable from "../components/MobileTable";
-import { useMediaQuery } from "react-responsive";
 import { motion } from "framer-motion";
 import { SquarePen, PackagePlus, PackageMinus, Replace } from "lucide-react";
 
@@ -236,37 +234,12 @@ export default function Inventory() {
     },
   ];
 
-  const IsSmallMobile = useMediaQuery({ maxWidth: 768 });
-
-  //Navigation & Sidebar State
-  const currentWebPage = "Inventory";
-  const [MobileSideBar, setMobileSideBar] = useState(null);
-
-  const HandleMobileSideBar = (state) => {
-    setMobileSideBar(state);
-  };
-
   return (
-    <div className="w-1/1 h-screen flex">
-      <Navbar
-        page={currentWebPage}
-        setSideBarMobile={HandleMobileSideBar}
-        mobileSideBarState={MobileSideBar}
-      />
-      <Sidebar SideBarMobileState={MobileSideBar} />
-
-      <main
-        className={`flex-1 px-0  w-100   ${IsSmallMobile ? `mt-15` : `mt-15`}`}
-      >
-        <div
-          className={`rounded-2xl w-full h-1/1 ${
-            IsSmallMobile ? `p-1` : `p-3`
-          }`}
-        >
+    <Layout currentWebPage="Inventory">
+        <MainWrapper>
           <MobileTable columns={columns} data={data} />
           <Table columns={columns} data={data} />
-        </div>
-      </main>
-    </div>
+        </ MainWrapper> 
+    </Layout>
   );
 }
