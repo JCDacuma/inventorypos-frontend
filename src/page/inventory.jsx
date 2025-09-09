@@ -1,11 +1,31 @@
 import { useState } from "react";
-import Sidebar from "../components/sidebar";
-import Navbar from "../components/navbar.jsx";
+import { Link } from "react-router-dom";
+
+// Page Layout component
+import {
+  Layout,
+  MainWrapper,
+  ButtonLayout,
+  ControlLayout,
+} from "../components/Layout";
+import { useMediaQuery } from "react-responsive";
+import ExportButton from "../components/export_buttons";
+import Searchbar from "../components/Searchbar.jsx";
+
+//Table Layout component
 import Table from "../components/Table";
 import MobileTable from "../components/MobileTable";
-import { useMediaQuery } from "react-responsive";
+
+//Animation
 import { motion } from "framer-motion";
-import { SquarePen, PackagePlus, PackageMinus, Replace } from "lucide-react";
+
+//Icons
+import {
+  SquarePen,
+  PackagePlus,
+  PackageMinus,
+  PackageOpen,
+} from "lucide-react";
 
 //Functionality Action buttons
 export default function Inventory() {
@@ -49,18 +69,20 @@ export default function Inventory() {
       >
         <SquarePen className="text-violet-500 h-5 w-5 stroke-[0.15rem] group-hover:text-violet-800 cursor-pointer" />
       </motion.button>
-      <motion.button
-        onClick={() => HandleTransfer(items)}
-        animate={{ scale: [1, 1.1, 1] }}
-        transition={{
-          duration: 2,
-          repeat: Infinity,
-          ease: "easeInOut",
-        }}
-        className="group bg-gray-200 p-2 shadow-lg rounded-[0.3rem] hover:bg-gray-400 cursor-pointer"
-      >
-        <Replace className="text-violet-500 h-5 w-5 stroke-[0.15rem] group-hover:text-violet-800 cursor-pointer" />
-      </motion.button>
+      <Link to={"/batch_inventory"}>
+        <motion.button
+          onClick={() => HandleShowBatch(items)}
+          animate={{ scale: [1, 1.1, 1] }}
+          transition={{
+            duration: 2,
+            repeat: Infinity,
+            ease: "easeInOut",
+          }}
+          className="group bg-gray-200 p-2 shadow-lg rounded-[0.3rem] cursor-pointer hover:bg-gray-400"
+        >
+          <PackageOpen className="text-violet-500 h-5 w-5 stroke-[0.15rem] group-hover:text-violet-800 cursor-pointer" />
+        </motion.button>
+      </Link>
     </div>
   );
 
@@ -79,9 +101,7 @@ export default function Inventory() {
     alert(`Edit ${items}`);
   };
 
-  const HandleTransfer = (items) => {
-    alert(`transfer ${items}`);
-  };
+  const HandleShowBatch = (items) => {};
 
   //For Status
   const StatusDisplay = ({ status }) => {
@@ -117,10 +137,9 @@ export default function Inventory() {
     { key: "item", label: "Item" },
     { key: "sku", label: "SKU" },
     { key: "Category", label: "Category" },
-    { key: "Location", label: "Location" },
     { key: "CurrentStock", label: "Current Stock" },
     { key: "Unit", label: "Unit" },
-    { key: "MinStock", label: "Min Stock" },
+    { key: "MinStock", label: "Reorder Level" },
     { key: "LastMovement", label: "Last Movement" },
     { key: "Status", label: "Status" },
     { key: "Action", label: "Action" },
@@ -132,7 +151,7 @@ export default function Inventory() {
       item: "Laptop - Dell Inspiron 15",
       sku: "DL-INS-15-001",
       Category: "Electronics",
-      Location: "Warehouse A - Rack 3",
+
       CurrentStock: 12,
       Unit: "pcs",
       MinStock: 5,
@@ -144,7 +163,7 @@ export default function Inventory() {
       item: "Wireless Mouse - Logitech M185",
       sku: "LG-M185-002",
       Category: "Electronics",
-      Location: "Warehouse B - Shelf 2",
+
       CurrentStock: 45,
       Unit: "pcs",
       MinStock: 20,
@@ -156,7 +175,7 @@ export default function Inventory() {
       item: "Smartphone - iPhone 14",
       sku: "AP-IP14-006",
       Category: "Electronics",
-      Location: "Warehouse A - Rack 8",
+
       CurrentStock: 8,
       Unit: "pcs",
       MinStock: 5,
@@ -169,7 +188,7 @@ export default function Inventory() {
       item: "Rice - 5kg Bag",
       sku: "GR-RICE-5KG",
       Category: "Grocery",
-      Location: "Aisle 1 - Shelf 2",
+
       CurrentStock: 120,
       Unit: "kg",
       MinStock: 50,
@@ -181,7 +200,7 @@ export default function Inventory() {
       item: "Cooking Oil - 1L Bottle",
       sku: "GR-OIL-1L",
       Category: "Grocery",
-      Location: "Aisle 3 - Shelf 1",
+
       CurrentStock: 80,
       Unit: "liters",
       MinStock: 30,
@@ -193,7 +212,7 @@ export default function Inventory() {
       item: "Bananas",
       sku: "GR-BANANA-001",
       Category: "Grocery",
-      Location: "Aisle 2 - Shelf 5",
+
       CurrentStock: 200,
       Unit: "kg",
       MinStock: 100,
@@ -206,7 +225,7 @@ export default function Inventory() {
       item: "Office Chair - Ergonomic",
       sku: "CH-ERGO-010",
       Category: "Furniture",
-      Location: "Warehouse D - Zone 1",
+
       CurrentStock: 0,
       Unit: "pcs",
       MinStock: 2,
@@ -218,7 +237,7 @@ export default function Inventory() {
       item: "Dining Table - 6 Seater",
       sku: "TB-DINE-006",
       Category: "Furniture",
-      Location: "Warehouse F - Row 4",
+
       CurrentStock: 1,
       Unit: "pcs",
       MinStock: 2,
@@ -231,7 +250,7 @@ export default function Inventory() {
       item: "T-Shirt - Cotton (Large)",
       sku: "CL-TSHIRT-L",
       Category: "Clothing",
-      Location: "Section C - Rack 1",
+
       CurrentStock: 50,
       Unit: "pcs",
       MinStock: 20,
@@ -243,7 +262,7 @@ export default function Inventory() {
       item: "Jeans - Blue Denim",
       sku: "CL-JEANS-32",
       Category: "Clothing",
-      Location: "Section C - Rack 2",
+
       CurrentStock: 15,
       Unit: "pcs",
       MinStock: 10,
@@ -255,7 +274,7 @@ export default function Inventory() {
       item: "Jacket - Winter Coat",
       sku: "CL-JACKET-WT",
       Category: "Clothing",
-      Location: "Section D - Shelf 3",
+
       CurrentStock: 5,
       Unit: "pcs",
       MinStock: 8,
@@ -265,37 +284,35 @@ export default function Inventory() {
     },
   ];
 
-  const IsSmallMobile = useMediaQuery({ maxWidth: 768 });
-
-  //Navigation & Sidebar State
-  const currentWebPage = "Inventory";
-  const [MobileSideBar, setMobileSideBar] = useState(null);
-
-  const HandleMobileSideBar = (state) => {
-    setMobileSideBar(state);
-  };
+  const isSmallMobile = useMediaQuery({ maxWidth: 375 });
 
   return (
-    <div className="w-1/1 h-screen flex">
-      <Navbar
-        page={currentWebPage}
-        setSideBarMobile={HandleMobileSideBar}
-        mobileSideBarState={MobileSideBar}
-      />
-      <Sidebar SideBarMobileState={MobileSideBar} />
-
-      <main
-        className={`flex-1 px-0  w-100   ${IsSmallMobile ? `mt-15` : `mt-15`}`}
-      >
+    <Layout currentWebPage="Inventory">
+      <MainWrapper>
         <div
-          className={`rounded-2xl w-full h-1/1 ${
-            IsSmallMobile ? `p-1` : `p-3`
+          className={`flex-column h-full m-0 md:block rounded-2xl pb-27 bg-white shadow-md py-5  ${
+            isSmallMobile ? `px-1` : `px-5`
           }`}
         >
+          {/* Control Section */}
+          <ControlLayout>
+            <ButtonLayout>
+              <div className="flex gap-3 justify-between w-1/1">
+                <div className="flex justify-center align-middle items-center">
+                  {/* Page Button */}
+                </div>
+                {/* Exportation button */}
+                <ExportButton />
+              </div>
+            </ButtonLayout>
+            <Searchbar />
+          </ControlLayout>
+
+          {/* Table Section */}
           <MobileTable columns={columns} data={data} />
           <Table columns={columns} data={data} />
         </div>
-      </main>
-    </div>
+      </MainWrapper>
+    </Layout>
   );
 }

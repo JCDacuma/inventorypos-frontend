@@ -1,7 +1,5 @@
-import Searchbar from "./Searchbar";
 import { useMediaQuery } from "react-responsive";
 import { ChevronsRight } from "lucide-react";
-import ExportButton from "../components/export_buttons";
 
 export default function DesktopTable({ columns = [], data = [] }) {
   const isDesktop = useMediaQuery({ minWidth: 768 });
@@ -10,13 +8,8 @@ export default function DesktopTable({ columns = [], data = [] }) {
   return (
     <>
       {isDesktop ? (
-        <div className="  flex-column h-1/1 m-0 md:block   rounded-2xl pb-27  bg-white shadow-md p-5 ">
-          <header className="  mb-6  flex flex-row gap-3 sm:flex-row sm:items-end sm:justify-end ">
-            <ExportButton />
-            <Searchbar />
-          </header>
-
-          <div className="h-1/1 w-1/1 overflow-y-auto z-29">
+        <div className="h-1/1 ">
+          <div className="h-1/1 w-1/1 overflow-y-auto z-29 rounded-t-[0.3rem]">
             <table
               className={`border-collapse  ${
                 isSmallDesktop ? `w-screen` : `w-1/1`

@@ -10,6 +10,7 @@ import Home from "./page/home.jsx";
 import Dashboard from "./page/dashboard.jsx";
 import InventoryReport from "./page/inventory_report.jsx";
 import Inventory from "./page/inventory.jsx";
+import BatchInventory from "./page/batch_inv.jsx";
 import ProductOrders from "./page/product_orders.jsx";
 import RegisterAccount from "./page/register_acc.jsx";
 import SalesReport from "./page/sales_report.jsx";
@@ -33,6 +34,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
         <Route path="/dashboard" element={<Dashboard />}></Route>
         <Route path="/inventoryreport" element={<InventoryReport />}></Route>
         <Route path="/inventory" element={<Inventory />}></Route>
+        <Route path="/batch_inventory" element={<BatchInventory />}></Route>
         <Route path="/productorders" element={<ProductOrders />}></Route>
         <Route path="/registeraccount" element={<RegisterAccount />}></Route>
         <Route path="/salesreport" element={<SalesReport />}></Route>

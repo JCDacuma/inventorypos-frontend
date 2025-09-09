@@ -3,46 +3,44 @@ import { useMediaQuery } from "react-responsive";
 import { ChevronsRight } from "lucide-react";
 
 export default function MobileTable({ columns = [], data = [] }) {
-  const isMobile = useMediaQuery({ maxWidth: 768 });
+  const isMobile = useMediaQuery({ maxWidth: 767 });
 
   return (
     <>
       {isMobile ? (
-        <div className="flex flex-col gap-2 h-1/1  ">
-          <div className="h-1/1 flex px-2 flex-col overflow-auto gap-5">
-            <header className="mb-1 flex mt-8 flex-col gap-3 sm:flex-row sm:items-end sm:justify-end">
-              {/* export buttons here */}
-              <Searchbar />
-            </header>
-            {data.length > 0 ? (
-              data.map((row, i) => (
-                <div
-                  className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm"
-                  key={i}
-                >
-                  {columns.map((col) => (
-                    <div
-                      className="flex items-center flex-inline"
-                      key={col.key}
-                    >
-                      <h2 className="text-base font-semibold text-slate-900 me-2">
-                        {col.label}:
-                      </h2>
-                      <p className="mt-1 text-sm text-slate-700">
-                        {" "}
-                        {row[col.key]}
-                      </p>
-                    </div>
-                  ))}
+        <>
+          <div className="flex flex-col gap-2 h-full mb-0 ">
+            <div className="h-full flex flex-col px-3  overflow-auto gap-2">
+              {data.length > 0 ? (
+                data.map((row, i) => (
+                  <div
+                    className="rounded-2xl border border-slate-200 p-4 bg-white shadow-sm"
+                    key={i}
+                  >
+                    {columns.map((col) => (
+                      <div
+                        className="flex items-center flex-inline"
+                        key={col.key}
+                      >
+                        <h2 className="text-base font-semibold text-slate-900 me-2">
+                          {col.label}:
+                        </h2>
+                        <p className="mt-1 text-sm text-slate-700">
+                          {" "}
+                          {row[col.key]}
+                        </p>
+                      </div>
+                    ))}
+                  </div>
+                ))
+              ) : (
+                <div className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
+                  <p className="text-center text-slate-500">No data found</p>
                 </div>
-              ))
-            ) : (
-              <div className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
-                <p className="text-center text-slate-500">No data found</p>
-              </div>
-            )}
+              )}
+            </div>
           </div>
-          <div className="flex items-center justify-center mb-2 h-10 w-full rounded-b-lg ">
+          <div className="flex items-center justify-center h-10 w-full rounded-b-lg ">
             <div className="flex items-center   justify-center gap-3">
               <button className="flex text-violet-500 ">
                 <ChevronsRight className="rotate-180 cursor-pointer" />
@@ -75,7 +73,7 @@ export default function MobileTable({ columns = [], data = [] }) {
               </button>
             </div>
           </div>
-        </div>
+        </>
       ) : (
         ""
       )}
