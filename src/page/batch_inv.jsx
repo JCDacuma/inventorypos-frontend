@@ -34,7 +34,6 @@ export default function BatchInventory() {
 
   //Item Selected
   const [selectedID, setSelectedID] = useState([]);
-  console.log(selectedID);
 
   //Action button functionality
   const ActionBatch = () => (
@@ -108,6 +107,7 @@ export default function BatchInventory() {
   const batchData = [
     // Batches for Laptop (id: 1)
     {
+      id: 1,
       BatchNo: "LAP-2025-1009-001",
       Expiry: "2027-12-31",
       Location: "Warehouse A",
@@ -118,6 +118,7 @@ export default function BatchInventory() {
       itemId: 1,
     },
     {
+      id: 2,
       BatchNo: "LAP-2025-1009-002",
       Expiry: "2026-06-30",
       Location: "Warehouse B",
@@ -130,6 +131,7 @@ export default function BatchInventory() {
 
     // Batches for Wireless Mouse (id: 2)
     {
+      id: 3,
       BatchNo: "MOU-2025-1009-001",
       Expiry: "2028-01-01",
       Location: "Warehouse A",
@@ -140,6 +142,7 @@ export default function BatchInventory() {
       itemId: 2,
     },
     {
+      id: 4,
       BatchNo: "MOU-2025-1009-002",
       Expiry: "2027-05-15",
       Location: "Warehouse C",
@@ -152,6 +155,7 @@ export default function BatchInventory() {
 
     // Batches for Smartphone - iPhone 14 (id: 3)
     {
+      id: 5,
       BatchNo: "IPH-2025-1009-001",
       Expiry: "2028-12-31",
       Location: "Warehouse A",
@@ -162,6 +166,7 @@ export default function BatchInventory() {
       itemId: 3,
     },
     {
+      id: 6,
       BatchNo: "IPH-2025-1009-002",
       Expiry: "2029-06-30",
       Location: "Warehouse B",
@@ -174,6 +179,7 @@ export default function BatchInventory() {
 
     // Batches for Rice - 5kg Bag (id: 4)
     {
+      id: 7,
       BatchNo: "RICE-2025-1009-01",
       Expiry: "2026-02-15",
       Location: "Warehouse Grain-1",
@@ -184,6 +190,7 @@ export default function BatchInventory() {
       itemId: 4,
     },
     {
+      id: 8,
       BatchNo: "RICE-2025-1009-02",
       Expiry: "2026-04-10",
       Location: "Warehouse Grain-2",
@@ -196,6 +203,7 @@ export default function BatchInventory() {
 
     // Batches for Cooking Oil - 1L Bottle (id: 5)
     {
+      id: 9,
       BatchNo: "OIL-2025-1009-01",
       Expiry: "2026-09-01",
       Location: "Warehouse C",
@@ -206,6 +214,7 @@ export default function BatchInventory() {
       itemId: 5,
     },
     {
+      id: 10,
       BatchNo: "OIL-2025-1009-02",
       Expiry: "2026-11-15",
       Location: "Warehouse D",
@@ -218,6 +227,7 @@ export default function BatchInventory() {
 
     // Batches for Bananas (id: 6)
     {
+      id: 11,
       BatchNo: "BAN-2025-1009-01",
       Expiry: "2025-09-15",
       Location: "Cold Storage A",
@@ -228,6 +238,7 @@ export default function BatchInventory() {
       itemId: 6,
     },
     {
+      id: 12,
       BatchNo: "BAN-2025-1009-02",
       Expiry: "2025-09-20",
       Location: "Cold Storage B",
@@ -240,6 +251,7 @@ export default function BatchInventory() {
 
     // Batches for Office Chair - Ergonomic (id: 7)
     {
+      id: 13,
       BatchNo: "CHAIR-2025-1009-01",
       Expiry: "2030-12-31",
       Location: "Warehouse Furniture-1",
@@ -250,6 +262,7 @@ export default function BatchInventory() {
       itemId: 7,
     },
     {
+      id: 14,
       BatchNo: "CHAIR-2025-1009-02",
       Expiry: "2031-06-30",
       Location: "Warehouse Furniture-2",
@@ -262,6 +275,7 @@ export default function BatchInventory() {
 
     // Batches for Dining Table - 6 Seater (id: 8)
     {
+      id: 15,
       BatchNo: "TABLE-2025-1009-01",
       Expiry: "2032-12-31",
       Location: "Warehouse Furniture-1",
@@ -272,6 +286,7 @@ export default function BatchInventory() {
       itemId: 8,
     },
     {
+      id: 16,
       BatchNo: "TABLE-2025-1009-02",
       Expiry: "2033-05-30",
       Location: "Warehouse Furniture-2",
@@ -284,6 +299,7 @@ export default function BatchInventory() {
 
     // Batches for T-Shirt - Cotton (Large) (id: 9)
     {
+      id: 17,
       BatchNo: "TSHIRT-2025-1009-01",
       Expiry: "2027-12-31",
       Location: "Warehouse Clothing-1",
@@ -294,6 +310,7 @@ export default function BatchInventory() {
       itemId: 9,
     },
     {
+      id: 18,
       BatchNo: "TSHIRT-2025-1009-02",
       Expiry: "2028-06-30",
       Location: "Warehouse Clothing-2",
@@ -306,6 +323,7 @@ export default function BatchInventory() {
 
     // Batches for Jeans - Blue Denim (id: 10)
     {
+      id: 19,
       BatchNo: "JEANS-2025-1009-01",
       Expiry: "2029-12-31",
       Location: "Warehouse Clothing-1",
@@ -316,6 +334,7 @@ export default function BatchInventory() {
       itemId: 10,
     },
     {
+      id: 20,
       BatchNo: "JEANS-2025-1009-02",
       Expiry: "2030-06-30",
       Location: "Warehouse Clothing-2",
@@ -328,6 +347,7 @@ export default function BatchInventory() {
 
     // Batches for Jacket - Winter Coat (id: 11)
     {
+      id: 21,
       BatchNo: "JACKET-2025-1009-01",
       Expiry: "2029-12-31",
       Location: "Warehouse Clothing-1",
@@ -338,6 +358,7 @@ export default function BatchInventory() {
       itemId: 11,
     },
     {
+      id: 22,
       BatchNo: "JACKET-2025-1009-02",
       Expiry: "2030-05-30",
       Location: "Warehouse Clothing-2",

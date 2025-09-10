@@ -32,7 +32,7 @@ import {
 export default function Inventory() {
   //Selected Id
   const [selectedID, setSelectedID] = useState([]);
-  console.log(selectedID);
+
   const Actions = ({ items, id }) => (
     <div className="flex justify-center items-center gap-4 ">
       <motion.button

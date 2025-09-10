@@ -176,7 +176,7 @@ const Sidebar = ({ SideBarMobileState }) => {
 
               {menuItems.map((item, index) => (
                 <div key={index}>
-                  {/* ---- kapag walang dropdown ---- */}
+                  {/* ---- If no dropdown ---- */}
                   {!item.children ? (
                     <Link
                       to={item.path}
@@ -196,7 +196,7 @@ const Sidebar = ({ SideBarMobileState }) => {
                       <span className="ml-1">{item.title}</span>
                     </Link>
                   ) : (
-                    /* ----- kapag may dropdown ---- */
+                    /* ----- If there is a dropdown ---- */
                     <div>
                       <button
                         onClick={() => toggleMenu(item.title)}
@@ -253,11 +253,11 @@ const Sidebar = ({ SideBarMobileState }) => {
         ) : (
           <div
             className={`bg-violet-800 h-screen shadow-lg flex flex-col transition-[width] duration-500 ease-in-out z-50
-    ${showFullSidebar ? "w-68" : "w-22"}
+    ${showFullSidebar ? "w-68" : "w-24"}
     overflow-y-auto [scrollbar-width:thin] [scrollbar-color:#8b5cf6_transparent]`}
           >
             {/* ---- Links ---- */}
-            <nav className={`flex-1 p-3 space-y-2 text-sm mt-18 `}>
+            <nav className={`flex-1 py-4 px-4   text-sm mt-18 `}>
               <div className=" flex ml-4">
                 {showFullSidebar ? (
                   ""
@@ -268,7 +268,7 @@ const Sidebar = ({ SideBarMobileState }) => {
 
               {menuItems.map((item, index) => (
                 <div key={index}>
-                  {/* ---- kapag walang dropdown ---- */}
+                  {/* ---- If there is  no dropdown ---- */}
                   {!item.children ? (
                     <div className="relative flex group hover:font-bold">
                       <Link
@@ -288,7 +288,7 @@ const Sidebar = ({ SideBarMobileState }) => {
                         />
                       </Link>
                       {/* Tooltip (shows on hover) */}
-                      <span className="fixed mt-11 mr-5 px-2 py-1 text-xs text-white bg-gray-800 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
+                      <span className="fixed mt-3 ml-15 px-2 py-1 text-xs text-white bg-gray-800 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap  pointer-events-none">
                         {item.title}
                       </span>
                     </div>
@@ -297,7 +297,7 @@ const Sidebar = ({ SideBarMobileState }) => {
                     <div>
                       <button
                         onClick={() => toggleMenu(item.title)}
-                        className="group flex items-center justify-between w-full p-4 rounded-lg hover:bg-gray-200 hover:font-bold  cursor-pointer"
+                        className="group  flex items-center justify-between w-full p-4 rounded-lg hover:bg-gray-200 hover:font-bold  cursor-pointer"
                       >
                         <span className="flex items-center gap-3">
                           <item.icon className="w-5 h-5 text-white group-hover:text-violet-400 group-hover:stroke-2" />
@@ -310,16 +310,16 @@ const Sidebar = ({ SideBarMobileState }) => {
                         >
                           <ChevronRight className="w-4 h-4 text-white group-hover:w-5 group-hover:h-5 group-hover:text-violet-400 group-hover:stroke-3" />
                         </span>
-                        {/* Tooltip (shows on hover) */}
-                        <span className="fixed mt-14 mr-8 px-2 py-1 text-xs text-white bg-gray-800 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
+                        {/* Tooltip */}
+                        <span className="fixed  ml-12 px-2 py-1 text-xs text-white bg-gray-800 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none">
                           {item.title}
                         </span>
                       </button>
 
-                      {/*-------- Child Menu ng link na may dropdown ------*/}
+                      {/*-------- Child Menu with the link dropdown------*/}
                       {
                         <div
-                          className={`ml-0 mt-1 space-y-1 overflow-hidden transition-all duration-400 ease-in-out ${
+                          className={` mt-1 space-y-1 overflow-hidden transition-all duration-400 ease-in-out ${
                             isMenuOpen(item.title)
                               ? `max-h-90 `
                               : `max-h-0 capacity-0`
@@ -336,14 +336,13 @@ const Sidebar = ({ SideBarMobileState }) => {
                                     : "font-medium text-white hover:text-violet-400 hover:font-bold hover:bg-gray-200"
                                 } items-center justify-between w-full p-4 rounded-lg hover:bg-gray-200`}
                               >
-                                {/* Tooltip (shows on hover) */}
-                                <span className="fixed mt-7 mr-8 px-2 py-1 text-xs text-white bg-gray-800 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
+                                {/* Tooltip */}
+                                <span className="fixed  ml-9 px-2 py-1 text-xs text-white bg-gray-800 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none">
                                   {child.title}
                                 </span>
                                 <span className="flex items-center gap-3">
                                   <child.icon className="w-5 h-5" />
                                 </span>
-                                {/* Tooltip (shows on hover) */}
                               </Link>
                             );
                           })}
