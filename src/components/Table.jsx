@@ -1,9 +1,52 @@
 import { useMediaQuery } from "react-responsive";
-import { ChevronsRight } from "lucide-react";
+import { ChevronsRight, Check } from "lucide-react";
+import { useState, useEffect } from "react";
 
-export default function DesktopTable({ columns = [], data = [] }) {
+export default function DesktopTable({
+  columns = [],
+  data = [],
+  setSelectedId,
+}) {
   const isDesktop = useMediaQuery({ minWidth: 768 });
   const isSmallDesktop = useMediaQuery({ maxWidth: 1168 });
+
+  //Selected Id
+  const [isChecked, setIsChecked] = useState([]);
+  const [isAllChecked, setAllChecked] = useState(false);
+
+  //Passing Id
+  useEffect(() => {
+    if (columns.some((col) => col.key === "Select")) {
+      setSelectedId(isChecked);
+    }
+  }, [isChecked, setSelectedId]);
+
+  //Select all checkbox state--------------------------
+  const HandleAllSelect = () => {
+    isAllChecked ? setAllChecked(false) : setAllChecked(true);
+  };
+
+  //Pass all id if select all checked------------------
+  useEffect(() => {
+    isAllChecked ? setIsChecked(data.map((row) => row.id)) : setIsChecked([]);
+  }, [isAllChecked]);
+
+  //Disabble select all------------------
+  useEffect(() => {
+    if (isChecked.length === 0) {
+      setAllChecked(false);
+    }
+  }, [isChecked]);
+
+  //ManualCheckBox State -----------------------------
+  const HandleSelectItem = (id) => {
+    setIsChecked((prev) =>
+      prev.includes(id) ? prev.filter((data) => data !== id) : [...prev, id]
+    );
+    if (isChecked.length <= 0) {
+      setAllChecked(false);
+    }
+  };
 
   return (
     <>
@@ -15,6 +58,7 @@ export default function DesktopTable({ columns = [], data = [] }) {
                 isSmallDesktop ? `w-screen` : `w-1/1`
               } table-auto text-sm`}
             >
+              {/* Table Header */}
               <thead className="sticky top-0 bg-violet-400 text-white z-20">
                 <tr>
                   {columns.map((col) => (
@@ -22,19 +66,81 @@ export default function DesktopTable({ columns = [], data = [] }) {
                       key={col.key}
                       className="px-4 py-3 text-center font-semibold bg-violet-400"
                     >
-                      {col.label}
+                      {col.key === "Select" ? (
+                        <div className="inline-flex items-center">
+                          <label className="flex items-center cursor-pointer relative">
+                            <input
+                              type="checkbox"
+                              className="peer h-5 w-5 cursor-pointer transition-all appearance-none rounded shadow hover:shadow-md border border-slate-300 checked:bg-purple-600 checked:border-purple-600"
+                              id="check7"
+                              checked={isAllChecked}
+                              onChange={HandleAllSelect}
+                            />
+                            <span class="absolute text-white opacity-0 peer-checked:opacity-100 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+                              <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                className="h-3.5 w-3.5"
+                                viewBox="0 0 20 20"
+                                fill="currentColor"
+                                stroke="currentColor"
+                                strokeWidth="1"
+                              >
+                                <path
+                                  fillRule="evenodd"
+                                  clipRule="evenodd"
+                                  d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                                />
+                              </svg>
+                            </span>
+                          </label>
+                        </div>
+                      ) : (
+                        col.label
+                      )}
                     </th>
                   ))}
                 </tr>
               </thead>
 
+              {/* Table Body */}
               <tbody>
                 {data.length > 0 ? (
                   data.map((row, i) => (
                     <tr key={i} className="odd:bg-white even:bg-violet-100">
                       {columns.map((col) => (
                         <td key={col.key} className="px-4 py-4 text-center">
-                          {row[col.key]}
+                          {/* If it's the Select column, render a checkbox */}
+                          {col.key === "Select" ? (
+                            <div className="inline-flex items-center">
+                              <label className="flex items-center cursor-pointer relative">
+                                <input
+                                  type="checkbox"
+                                  checked={isChecked.includes(row.id)}
+                                  className="peer h-5 w-5 cursor-pointer transition-all appearance-none rounded shadow hover:shadow-md border border-slate-300 checked:bg-purple-600 checked:border-purple-600"
+                                  id="check7"
+                                  onChange={() => HandleSelectItem(row.id)}
+                                />
+                                <span class="absolute text-white opacity-0 peer-checked:opacity-100 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+                                  <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    className="h-3.5 w-3.5"
+                                    viewBox="0 0 20 20"
+                                    fill="currentColor"
+                                    stroke="currentColor"
+                                    strokeWidth="1"
+                                  >
+                                    <path
+                                      fillRule="evenodd"
+                                      clipRule="evenodd"
+                                      d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                                    />
+                                  </svg>
+                                </span>
+                              </label>
+                            </div>
+                          ) : (
+                            row[col.key]
+                          )}
                         </td>
                       ))}
                     </tr>

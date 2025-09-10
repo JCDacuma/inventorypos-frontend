@@ -78,7 +78,7 @@ const Sidebar = ({ SideBarMobileState }) => {
   const [showFullSidebar, setShowSideBar] = useState(() => {
     //Initialize the last current state of sidebar
     const loadSideBar = JSON.parse(localStorage.getItem("sidebarState"));
-    return loadSideBar !== null ? loadSideBar : true;
+    return loadSideBar !== null ? loadSideBar : false;
   });
 
   //Mobile SidebarState
@@ -275,7 +275,7 @@ const Sidebar = ({ SideBarMobileState }) => {
                         to={item.path}
                         className={`group flex items-center gap-3 rounded-lg hover:bg-gray-200  cursor-pointer p-4  ${
                           item.path === location.pathname
-                            ? "bg-gray-400/70 font-medium "
+                            ? "bg-gray-400/70 font-medium"
                             : ""
                         }`}
                       >
@@ -288,7 +288,7 @@ const Sidebar = ({ SideBarMobileState }) => {
                         />
                       </Link>
                       {/* Tooltip (shows on hover) */}
-                      <span className="fixed left-20 ml-2 px-2 py-1 text-xs text-white bg-gray-800 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
+                      <span className="fixed mt-11 mr-5 px-2 py-1 text-xs text-white bg-gray-800 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
                         {item.title}
                       </span>
                     </div>
@@ -311,7 +311,7 @@ const Sidebar = ({ SideBarMobileState }) => {
                           <ChevronRight className="w-4 h-4 text-white group-hover:w-5 group-hover:h-5 group-hover:text-violet-400 group-hover:stroke-3" />
                         </span>
                         {/* Tooltip (shows on hover) */}
-                        <span className="fixed left-20 ml-2 px-2 py-1 text-xs text-white bg-gray-800 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
+                        <span className="fixed mt-14 mr-8 px-2 py-1 text-xs text-white bg-gray-800 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
                           {item.title}
                         </span>
                       </button>
@@ -337,7 +337,7 @@ const Sidebar = ({ SideBarMobileState }) => {
                                 } items-center justify-between w-full p-4 rounded-lg hover:bg-gray-200`}
                               >
                                 {/* Tooltip (shows on hover) */}
-                                <span className="fixed left-20 ml-2 px-2 py-1 text-xs text-white bg-gray-800 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
+                                <span className="fixed mt-7 mr-8 px-2 py-1 text-xs text-white bg-gray-800 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
                                   {child.title}
                                 </span>
                                 <span className="flex items-center gap-3">

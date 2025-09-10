@@ -34,7 +34,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
         <Route path="/dashboard" element={<Dashboard />}></Route>
         <Route path="/inventoryreport" element={<InventoryReport />}></Route>
         <Route path="/inventory" element={<Inventory />}></Route>
-        <Route path="/batch_inventory" element={<BatchInventory />}></Route>
+        <Route path="/batch_inventory/:id" element={<BatchInventory />}></Route>
         <Route path="/productorders" element={<ProductOrders />}></Route>
         <Route path="/registeraccount" element={<RegisterAccount />}></Route>
         <Route path="/salesreport" element={<SalesReport />}></Route>
