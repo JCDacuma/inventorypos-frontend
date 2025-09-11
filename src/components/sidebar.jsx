@@ -38,28 +38,33 @@ const menuItems = [
       {
         title: "Inventory Report",
         icon: NotebookTabs,
-        path: "/inventoryreport",
+        path: "/inventory-report",
       },
     ],
   },
   {
     title: "Point of Sale",
     icon: ShoppingCart,
-    path: "/pointOfSale",
+    path: "/point-of-sale",
   },
   {
     title: "Product",
     icon: Package,
     children: [
-      { title: "Manage Product", icon: Boxes, path: "/productmanagement" },
+      {
+        title: "Manage Product",
+        icon: Boxes,
+        path: "/product-management",
+        secondPath: "/promo-management",
+      },
       {
         title: "Inventory",
         icon: Warehouse,
         path: "/inventory",
-        secondPath: "/batch_inventory",
+        secondPath: "/batch-inventory",
       },
       { title: "Suppliers", icon: ClipboardList, path: "/suppliers" },
-      { title: "Orders", icon: Truck, path: "/productorders" },
+      { title: "Orders", icon: Truck, path: "/product-orders" },
     ],
   },
   {
@@ -71,8 +76,8 @@ const menuItems = [
     title: "Config Account",
     icon: Users,
     children: [
-      { title: "Register Account", icon: UserPlus, path: "/registeraccount" },
-      { title: "Config Account", icon: UserRoundPen, path: "/configaccounts" },
+      { title: "Register Account", icon: UserPlus, path: "/register-account" },
+      { title: "Config Account", icon: UserRoundPen, path: "/config-accounts" },
       { title: "Logout", icon: LogOut },
     ],
   },

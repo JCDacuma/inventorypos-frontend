@@ -77,7 +77,7 @@ export default function Inventory() {
       >
         <SquarePen className="text-violet-500 h-5 w-5 stroke-[0.15rem] group-hover:text-violet-800 cursor-pointer" />
       </motion.button>
-      <Link to={`/batch_inventory/${id}`}>
+      <Link to={`/batch-inventory/${id}`}>
         <motion.button
           animate={{ scale: [1, 1.07, 1] }}
           transition={{

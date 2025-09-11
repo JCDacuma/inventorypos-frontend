@@ -421,7 +421,11 @@ export default function BatchInventory() {
             <Searchbar />
           </ControlLayout>
           {/* Table Section */}
-          <MobileTable columns={columns} data={filteredData} />
+          <MobileTable
+            columns={columns}
+            data={filteredData}
+            setSelectedId={setSelectedID}
+          />
           <Table
             columns={columns}
             data={filteredData}
