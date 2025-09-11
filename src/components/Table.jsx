@@ -1,5 +1,5 @@
 import { useMediaQuery } from "react-responsive";
-import { ChevronsRight, Check } from "lucide-react";
+import { ChevronsRight } from "lucide-react";
 import { useState, useEffect } from "react";
 
 export default function DesktopTable({

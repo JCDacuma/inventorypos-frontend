@@ -11,13 +11,14 @@ import {
 import { useMediaQuery } from "react-responsive";
 import ExportButton from "../components/export_buttons";
 import Searchbar from "../components/Searchbar.jsx";
+import BatchControl from "../components/ModalContol.jsx";
 
 //Table Layout component
 import Table from "../components/Table";
 import MobileTable from "../components/MobileTable";
 
 //Animation
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 
 //Icons
 import {
@@ -26,6 +27,8 @@ import {
   PackageMinus,
   SquarePen,
   ReplaceAll,
+  Trash2,
+  Blocks,
 } from "lucide-react";
 
 export default function BatchInventory() {
@@ -34,6 +37,7 @@ export default function BatchInventory() {
 
   //Item Selected
   const [selectedID, setSelectedID] = useState([]);
+  const openBatchContol = selectedID.length > 0; //Batch Contol Modal State
 
   //Action button functionality
   const ActionBatch = () => (
@@ -401,8 +405,17 @@ export default function BatchInventory() {
                 <div className="flex justify-center align-middle items-center">
                   {/* Page Button */}
                 </div>
-                {/* Exportation button */}
-                <ExportButton />
+                <div className="flex justify-center items-center gap-3">
+                  <motion.button
+                    whileTap={{ scale: 0.9, backgroundColor: "#6d00c5" }}
+                    whileHover={{ scale: 1.05, backgroundColor: "#3c2350" }}
+                    className="bg-violet-400 text-white flex text-sm py-2 px-4 rounded-3xl cursor-pointer"
+                  >
+                    <Blocks className={"h-5 w-5 "} />
+                    Add Stock
+                  </motion.button>
+                  <ExportButton />
+                </div>
               </div>
             </ButtonLayout>
             <Searchbar />
@@ -416,6 +429,36 @@ export default function BatchInventory() {
           />
         </div>
       </MainWrapper>
+
+      {/* Batch Contol */}
+      <AnimatePresence>
+        {openBatchContol ? (
+          <BatchControl Count={selectedID.length}>
+            <button
+              className={`bg-violet-500 flex gap-1 text-white py-2 px-6 rounded-2xl cursor-pointer ${
+                isSmallMobile ? `text-sm` : `text-md`
+              }`}
+            >
+              <SquarePen
+                className={` ${isSmallMobile ? `h-5 w-5` : `h-6 w-6`} `}
+              />
+              Edit
+            </button>
+            <button
+              className={`bg-[#910B0B]/[0.69] flex gap-1 text-white   py-2 px-4 rounded-2xl cursor-pointer ${
+                isSmallMobile ? `text-sm` : `text-md`
+              }`}
+            >
+              <Trash2
+                className={` ${isSmallMobile ? `h-5 w-5` : `h-6 w-6`} `}
+              />
+              Remove
+            </button>
+          </BatchControl>
+        ) : (
+          ""
+        )}
+      </AnimatePresence>
     </Layout>
   );
 }

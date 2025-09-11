@@ -69,7 +69,7 @@ export const ButtonLayout = ({ children }) => {
   const isXSmallMobile = useMediaQuery({ maxWidth: 500 });
   return (
     <div
-      className={`flex gap-3 justify-end ${
+      className={`flex gap-3 justify-end pr-1 ${
         isXSmallMobile
           ? `w-1/5` /* device 400 and below */
           : isSmallDesktop

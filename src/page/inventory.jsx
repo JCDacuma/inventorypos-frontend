@@ -35,6 +35,8 @@ export default function Inventory() {
   const [selectedID, setSelectedID] = useState([]);
   const openBatchContol = selectedID.length > 0; //Batch Contol Modal State
 
+  const isSmallMobile = useMediaQuery({ maxWidth: 375 });
+
   const Actions = ({ items, id }) => (
     <div className="flex justify-center items-center gap-4 ">
       <motion.button
@@ -298,8 +300,6 @@ export default function Inventory() {
     },
   ];
 
-  const isSmallMobile = useMediaQuery({ maxWidth: 375 });
-
   const EditBatch = () => {
     alert("clicked edit batch");
   };
@@ -338,7 +338,7 @@ export default function Inventory() {
         {openBatchContol ? (
           <BatchControl Count={selectedID.length}>
             <button
-              className={`bg-violet-500 flex gap-1 text-white py-2 px-6 rounded-2xl cursor-pointer ${
+              className={`bg-violet-500 flex gap-1 text-white py-2 px-6 rounded-2xl cursor-pointer shadow-md shadow-gray-500 ${
                 isSmallMobile ? `text-sm` : `text-md`
               }`}
             >
@@ -348,7 +348,7 @@ export default function Inventory() {
               Edit
             </button>
             <button
-              className={`bg-[#910B0B]/[0.69] flex gap-1 text-white   py-2 px-4 rounded-2xl cursor-pointer ${
+              className={`bg-[#910B0B]/[0.69] flex gap-1 text-white   py-2 px-4 rounded-2xl cursor-pointer shadow-md shadow-gray-500 ${
                 isSmallMobile ? `text-sm` : `text-md`
               }`}
             >
