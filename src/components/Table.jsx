@@ -51,7 +51,7 @@ export default function DesktopTable({
   return (
     <>
       {isDesktop ? (
-        <div className="h-1/1 ">
+        <div className="h-1/1">
           <div className="h-1/1 w-1/1 overflow-y-auto z-29 rounded-t-[0.3rem]">
             <table
               className={`border-collapse  ${
@@ -76,7 +76,7 @@ export default function DesktopTable({
                               checked={isAllChecked}
                               onChange={HandleAllSelect}
                             />
-                            <span class="absolute text-white opacity-0 peer-checked:opacity-100 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+                            <span className="absolute text-white opacity-0 peer-checked:opacity-100 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
                               <svg
                                 xmlns="http://www.w3.org/2000/svg"
                                 className="h-3.5 w-3.5"
@@ -112,15 +112,15 @@ export default function DesktopTable({
                           {/* If it's the Select column, render a checkbox */}
                           {col.key === "Select" ? (
                             <div className="inline-flex items-center">
-                              <label className="flex items-center cursor-pointer relative">
+                              <label className="flex items-center cursor-pointer relative z-4">
                                 <input
                                   type="checkbox"
-                                  checked={isChecked.includes(row.id)}
                                   className="peer h-5 w-5 cursor-pointer transition-all appearance-none rounded shadow hover:shadow-md border border-slate-300 checked:bg-purple-600 checked:border-purple-600"
                                   id="check7"
+                                  checked={isChecked.includes(row.id)}
                                   onChange={() => HandleSelectItem(row.id)}
                                 />
-                                <span class="absolute text-white opacity-0 peer-checked:opacity-100 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+                                <span className="absolute text-white opacity-0 peer-checked:opacity-100 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
                                   <svg
                                     xmlns="http://www.w3.org/2000/svg"
                                     className="h-3.5 w-3.5"

@@ -52,7 +52,12 @@ const menuItems = [
     icon: Package,
     children: [
       { title: "Manage Product", icon: Boxes, path: "/productmanagement" },
-      { title: "Inventory", icon: Warehouse, path: "/inventory" },
+      {
+        title: "Inventory",
+        icon: Warehouse,
+        path: "/inventory",
+        secondPath: "/batch_inventory",
+      },
       { title: "Suppliers", icon: ClipboardList, path: "/suppliers" },
       { title: "Orders", icon: Truck, path: "/productorders" },
     ],
@@ -88,8 +93,9 @@ const Sidebar = ({ SideBarMobileState }) => {
     setMobileSidebar(SideBarMobileState);
   }, [SideBarMobileState]);
 
-  //Current Page path
+  //Current Page location path
   const location = useLocation();
+  const secondLocation = "/" + location.pathname.split("/")[1];
 
   //Media Query for sidebar and navbar
   const isDesktop = useMediaQuery({ minWidth: 668 });
@@ -115,8 +121,13 @@ const Sidebar = ({ SideBarMobileState }) => {
     .filter(
       (item) =>
         item.children &&
-        item.children.some((child) => child.path === location.pathname)
+        item.children.some(
+          (child) =>
+            child.path === location.pathname ||
+            child.secondPath === secondLocation
+        )
     )
+
     .map((item) => item.title);
 
   // manual opening of dropdown
@@ -145,7 +156,7 @@ const Sidebar = ({ SideBarMobileState }) => {
       {isDesktop ? (
         <div
           className={`absolute flex items-baseline justify-baseline pl-[1rem] pt-4 border-b-2 border-violet-500  top-15  z-100 text-white bg-violet-800 transition-[width] duration-500 ease-in-out  ${
-            showFullSidebar ? `w-67 h-20` : `w-21 h-17`
+            showFullSidebar ? `w-62 h-20` : `w-23 h-17`
           }`}
         >
           <Hamburger
@@ -163,9 +174,9 @@ const Sidebar = ({ SideBarMobileState }) => {
       {isDesktop ? (
         showFullSidebar ? (
           <div
-            className={`bg-violet-800 h-screen shadow-lg flex flex-col overflow-y-auto
+            className={`bg-violet-800 h-screen shadow-lg flex flex-col  overflow-y-auto
     transition-[width] duration-500 ease-in-out z-50
-    ${showFullSidebar ? "w-68" : "w-20"}`}
+    ${showFullSidebar ? "w-64" : "w-20"}`}
           >
             {/* ---- Links ---- */}
             <nav className="flex-1 p-3 space-y-2 text-sm mt-18">
@@ -181,7 +192,8 @@ const Sidebar = ({ SideBarMobileState }) => {
                     <Link
                       to={item.path}
                       className={`group flex items-center gap-2 p-2  rounded-lg cursor-pointer text-base ${
-                        item.path === location.pathname
+                        item.path === location.pathname ||
+                        item.secondPath === secondLocation
                           ? "bg-gray-400/70 font-semibold text-white hover:bg-gray-200 hover:text-violet-400 hover:font-bold"
                           : "font-medium text-white hover:text-violet-400 hover:font-bold hover:bg-gray-200"
                       }`}
@@ -231,7 +243,8 @@ const Sidebar = ({ SideBarMobileState }) => {
                             key={i}
                             to={child.path}
                             className={`flex items-center gap-3 p-2 text-white rounded-lg cursor-pointer text-base ${
-                              child.path === location.pathname
+                              child.path === location.pathname ||
+                              child.secondPath === secondLocation
                                 ? "bg-gray-400/70 font-semibold text-white hover:bg-gray-200 hover:text-violet-400 hover:font-bold"
                                 : "font-medium text-white hover:text-violet-400 hover:font-bold hover:bg-gray-200"
                             }`}
@@ -254,7 +267,7 @@ const Sidebar = ({ SideBarMobileState }) => {
           <div
             className={`bg-violet-800 h-screen shadow-lg flex flex-col transition-[width] duration-500 ease-in-out z-50
     ${showFullSidebar ? "w-68" : "w-24"}
-    overflow-y-auto [scrollbar-width:thin] [scrollbar-color:#8b5cf6_transparent]`}
+    overflow-y-auto overflow-x-visible [scrollbar-width:thin] [scrollbar-color:#8b5cf6_transparent]`}
           >
             {/* ---- Links ---- */}
             <nav className={`flex-1 py-4 px-4   text-sm mt-18 `}>
@@ -270,11 +283,12 @@ const Sidebar = ({ SideBarMobileState }) => {
                 <div key={index}>
                   {/* ---- If there is  no dropdown ---- */}
                   {!item.children ? (
-                    <div className="relative flex group hover:font-bold">
+                    <div className=" flex group mt-1 hover:font-bold">
                       <Link
                         to={item.path}
                         className={`group flex items-center gap-3 rounded-lg hover:bg-gray-200  cursor-pointer p-4  ${
-                          item.path === location.pathname
+                          item.path === location.pathname ||
+                          item.secondPath === secondLocation
                             ? "bg-gray-400/70 font-medium"
                             : ""
                         }`}
@@ -288,7 +302,7 @@ const Sidebar = ({ SideBarMobileState }) => {
                         />
                       </Link>
                       {/* Tooltip (shows on hover) */}
-                      <span className="fixed mt-3 ml-15 px-2 py-1 text-xs text-white bg-gray-800 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap  pointer-events-none">
+                      <span className="absolute top-20 left-26 px-2 py-1 text-sm text-white bg-gray-800 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap  pointer-events-none">
                         {item.title}
                       </span>
                     </div>
@@ -297,7 +311,7 @@ const Sidebar = ({ SideBarMobileState }) => {
                     <div>
                       <button
                         onClick={() => toggleMenu(item.title)}
-                        className="group  flex items-center justify-between w-full p-4 rounded-lg hover:bg-gray-200 hover:font-bold  cursor-pointer"
+                        className="group  flex items-center justify-between w-full p-4 rounded-lg hover:bg-gray-200 hover:font-bold  cursor-pointer mt-2"
                       >
                         <span className="flex items-center gap-3">
                           <item.icon className="w-5 h-5 text-white group-hover:text-violet-400 group-hover:stroke-2" />
@@ -311,7 +325,7 @@ const Sidebar = ({ SideBarMobileState }) => {
                           <ChevronRight className="w-4 h-4 text-white group-hover:w-5 group-hover:h-5 group-hover:text-violet-400 group-hover:stroke-3" />
                         </span>
                         {/* Tooltip */}
-                        <span className="fixed  ml-12 px-2 py-1 text-xs text-white bg-gray-800 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none">
+                        <span className="absolute top-20 left-26 px-2 py-1 text-sm text-white bg-gray-800 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none">
                           {item.title}
                         </span>
                       </button>
@@ -331,13 +345,14 @@ const Sidebar = ({ SideBarMobileState }) => {
                                 key={i}
                                 to={child.path}
                                 className={`group block ${
-                                  child.path === location.pathname
+                                  child.path === location.pathname ||
+                                  child.secondPath === secondLocation
                                     ? "bg-gray-400/70 font-medium text-white hover:bg-gray-200 hover:text-violet-400 hover:font-bold"
                                     : "font-medium text-white hover:text-violet-400 hover:font-bold hover:bg-gray-200"
                                 } items-center justify-between w-full p-4 rounded-lg hover:bg-gray-200`}
                               >
                                 {/* Tooltip */}
-                                <span className="fixed  ml-9 px-2 py-1 text-xs text-white bg-gray-800 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none">
+                                <span className="absolute top-20 left-26  px-2 py-1 text-sm text-white bg-gray-800 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none">
                                   {child.title}
                                 </span>
                                 <span className="flex items-center gap-3">
@@ -365,7 +380,7 @@ const Sidebar = ({ SideBarMobileState }) => {
       {isMobile && (
         <div
           className={`fixed top-0 left-0 h-screen w-68 bg-violet-800 shadow-lg flex flex-col overflow-y-auto
-    transition-transform duration-500 ease-in-out z-50
+    transition-transform duration-500 ease-in-out z-50 
     ${mobileSidebarState ? "translate-x-0" : "-translate-x-full"}`}
         >
           {/* ---- Links ---- */}

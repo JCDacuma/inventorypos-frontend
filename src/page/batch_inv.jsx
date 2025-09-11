@@ -377,7 +377,7 @@ export default function BatchInventory() {
   );
 
   return (
-    <Layout currentWebPage="Stock By Batch">
+    <Layout currentWebPage="Stock by batch">
       <MainWrapper>
         <div
           className={`flex-column h-full m-0 md:block rounded-2xl pb-27 bg-white shadow-md py-5  ${

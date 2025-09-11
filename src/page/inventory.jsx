@@ -11,13 +11,14 @@ import {
 import { useMediaQuery } from "react-responsive";
 import ExportButton from "../components/export_buttons";
 import Searchbar from "../components/Searchbar.jsx";
+import BatchControl from "../components/ModalContol.jsx";
 
 //Table Layout component
 import Table from "../components/Table";
 import MobileTable from "../components/MobileTable";
 
 //Animation
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 
 //Icons
 import {
@@ -25,13 +26,14 @@ import {
   PackagePlus,
   PackageMinus,
   PackageOpen,
-  Undo2,
+  Trash2,
 } from "lucide-react";
 
 //Functionality Action buttons
 export default function Inventory() {
   //Selected Id
   const [selectedID, setSelectedID] = useState([]);
+  const openBatchContol = selectedID.length > 0; //Batch Contol Modal State
 
   const Actions = ({ items, id }) => (
     <div className="flex justify-center items-center gap-4 ">
@@ -298,11 +300,14 @@ export default function Inventory() {
 
   const isSmallMobile = useMediaQuery({ maxWidth: 375 });
 
+  const EditBatch = () => {
+    alert("clicked edit batch");
+  };
   return (
     <Layout currentWebPage="Inventory">
       <MainWrapper>
         <div
-          className={`flex-column h-full m-0 md:block rounded-2xl pb-27 bg-white shadow-md py-5  ${
+          className={` relative flex-column h-full m-0 md:block rounded-2xl pb-27 bg-white shadow-md py-5  ${
             isSmallMobile ? `px-1` : `px-5`
           }`}
         >
@@ -310,9 +315,7 @@ export default function Inventory() {
           <ControlLayout>
             <ButtonLayout>
               <div className="flex gap-3 justify-between w-1/1">
-                <div className="flex justify-center align-middle items-center">
-                  {/* Page Button */}
-                </div>
+                <div className="flex justify-center align-middle items-center"></div>
                 {/* Exportation button */}
                 <ExportButton />
               </div>
@@ -329,6 +332,36 @@ export default function Inventory() {
           <Table columns={columns} data={data} setSelectedId={setSelectedID} />
         </div>
       </MainWrapper>
+
+      {/* Batch Contol */}
+      <AnimatePresence>
+        {openBatchContol ? (
+          <BatchControl Count={selectedID.length}>
+            <button
+              className={`bg-violet-500 flex gap-1 text-white py-2 px-6 rounded-2xl cursor-pointer ${
+                isSmallMobile ? `text-sm` : `text-md`
+              }`}
+            >
+              <SquarePen
+                className={` ${isSmallMobile ? `h-5 w-5` : `h-6 w-6`} `}
+              />
+              Edit
+            </button>
+            <button
+              className={`bg-[#910B0B]/[0.69] flex gap-1 text-white   py-2 px-4 rounded-2xl cursor-pointer ${
+                isSmallMobile ? `text-sm` : `text-md`
+              }`}
+            >
+              <Trash2
+                className={` ${isSmallMobile ? `h-5 w-5` : `h-6 w-6`} `}
+              />
+              Remove
+            </button>
+          </BatchControl>
+        ) : (
+          ""
+        )}
+      </AnimatePresence>
     </Layout>
   );
 }
