@@ -17,12 +17,12 @@ import { BatchControl } from "../Layouts/ModalContol.jsx";
 import Table from "../components/Table";
 import MobileTable from "../components/MobileTable";
 import { PromoStatus } from "../components/Status.jsx";
-
+import { Action } from "../components/buttons.jsx";
 //Animation
 import { motion, AnimatePresence } from "framer-motion";
 
 //Icons
-import { SquarePen, Trash2, Undo2 } from "lucide-react";
+import { SquarePen, Trash2, Undo2, Eye, Tag } from "lucide-react";
 
 export default function PromoManagement() {
   //Selected Id
@@ -32,6 +32,18 @@ export default function PromoManagement() {
   const openBatchContol = selectedID.length > 0;
 
   const isSmallMobile = useMediaQuery({ maxWidth: 375 });
+
+  const HandleEdit = (id, items) => {
+    alert(`edit ${items} id: ${id}`);
+  };
+
+  const HandleViewProduct = (id, items) => {
+    alert(`view ${items} id: ${id}`);
+  };
+
+  const HandleRemove = (id, items) => {
+    alert(`remove ${items} id: ${id}`);
+  };
 
   const columns = [
     { key: "Select", label: "" },
@@ -51,7 +63,27 @@ export default function PromoManagement() {
       datestart: "2025-09-01",
       enddate: "2025-09-15",
       status: <PromoStatus status="Active" />,
-      action: "Edit",
+      Action: (
+        <Action
+          buttons={[
+            {
+              onClick: () => HandleEdit("Back-to-School Sale", 1),
+              icon: SquarePen,
+              iconSize: `h-4 w-4`,
+            },
+            {
+              onClick: () => HandleViewProduct("Back-to-School Sale", 1),
+              icon: Eye,
+              iconSize: `h-4 w-4`,
+            },
+            {
+              onClick: () => HandleRemove("Back-to-School Sale", 1),
+              icon: Trash2,
+              iconSize: `h-4 w-4`,
+            },
+          ]}
+        />
+      ),
     },
     {
       id: 2,
@@ -60,7 +92,27 @@ export default function PromoManagement() {
       datestart: "2025-12-01",
       enddate: "2025-12-31",
       status: <PromoStatus status="Upcoming" />,
-      action: "Edit",
+      Action: (
+        <Action
+          buttons={[
+            {
+              onClick: () => HandleEdit("Holiday Mega Sale", 2),
+              icon: SquarePen,
+              iconSize: `h-4 w-4`,
+            },
+            {
+              onClick: () => HandleViewProduct("Holiday Mega Sale", 2),
+              icon: Eye,
+              iconSize: `h-4 w-4`,
+            },
+            {
+              onClick: () => HandleRemove("Holiday Mega Sale", 2),
+              icon: Trash2,
+              iconSize: `h-4 w-4`,
+            },
+          ]}
+        />
+      ),
     },
     {
       id: 3,
@@ -69,7 +121,27 @@ export default function PromoManagement() {
       datestart: "2025-09-07",
       enddate: "2025-09-08",
       status: <PromoStatus status="Inactive" />,
-      action: "Edit",
+      Action: (
+        <Action
+          buttons={[
+            {
+              onClick: () => HandleEdit("Weekend Flash Deal", 3),
+              icon: SquarePen,
+              iconSize: `h-4 w-4`,
+            },
+            {
+              onClick: () => HandleViewProduct("Weekend Flash Deal", 3),
+              icon: Eye,
+              iconSize: `h-4 w-4`,
+            },
+            {
+              onClick: () => HandleRemove("Weekend Flash Deal", 3),
+              icon: Trash2,
+              iconSize: `h-4 w-4`,
+            },
+          ]}
+        />
+      ),
     },
     {
       id: 4,
@@ -78,7 +150,27 @@ export default function PromoManagement() {
       datestart: "2025-09-10",
       enddate: "2025-09-20",
       status: <PromoStatus status="Active" />,
-      action: "Edit",
+      Action: (
+        <Action
+          buttons={[
+            {
+              onClick: () => HandleEdit("Buy 1 Get 1 Free", 4),
+              icon: SquarePen,
+              iconSize: `h-4 w-4`,
+            },
+            {
+              onClick: () => HandleViewProduct("Buy 1 Get 1 Free", 4),
+              icon: Eye,
+              iconSize: `h-4 w-4`,
+            },
+            {
+              onClick: () => HandleRemove("Buy 1 Get 1 Free", 4),
+              icon: Trash2,
+              iconSize: `h-4 w-4`,
+            },
+          ]}
+        />
+      ),
     },
     {
       id: 5,
@@ -87,7 +179,27 @@ export default function PromoManagement() {
       datestart: "2025-06-01",
       enddate: "2025-06-30",
       status: <PromoStatus status="Ended" />,
-      action: "Edit",
+      Action: (
+        <Action
+          buttons={[
+            {
+              onClick: () => HandleEdit("Summer Clearance", 5),
+              icon: SquarePen,
+              iconSize: `h-4 w-4`,
+            },
+            {
+              onClick: () => HandleViewProduct("Summer Clearance", 5),
+              icon: Eye,
+              iconSize: `h-4 w-4`,
+            },
+            {
+              onClick: () => HandleRemove("Summer Clearance", 5),
+              icon: Trash2,
+              iconSize: `h-4 w-4`,
+            },
+          ]}
+        />
+      ),
     },
   ];
 
@@ -113,9 +225,18 @@ export default function PromoManagement() {
                     <Undo2 /> Back
                   </motion.button>
                 </Link>
-                <div className="flex justify-center align-middle items-center"></div>
-                {/* Exportation button */}
-                <ExportButton />
+                <div className="flex justify-center gap-2 align-middle items-center">
+                  <motion.button
+                    whileTap={{ scale: 0.9, backgroundColor: "#6d00c5" }}
+                    whileHover={{ scale: 1.05, backgroundColor: "#3c2350" }}
+                    className="bg-violet-400 text-white flex text-sm py-2 px-4 rounded-3xl cursor-pointer"
+                  >
+                    <Tag className={"h-5 w-5 "} />
+                    Add Promo
+                  </motion.button>
+                  {/* Exportation button */}
+                  <ExportButton />
+                </div>
               </div>
             </ButtonLayout>
             <Searchbar />

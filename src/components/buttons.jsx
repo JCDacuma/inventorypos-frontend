@@ -3,15 +3,6 @@ import { Link } from "react-router-dom";
 //Animation
 import { motion } from "framer-motion";
 
-//Icons
-import {
-  SquarePen,
-  PackagePlus,
-  PackageMinus,
-  PackageOpen,
-  Trash2,
-} from "lucide-react";
-
 import { BsFileEarmarkPdf, BsFileEarmarkExcel } from "react-icons/bs";
 
 //Export buttons
@@ -56,7 +47,9 @@ export function Action({ buttons = [] }) {
             className="group bg-gray-200 p-2 shadow-lg rounded-[0.3rem] cursor-pointer hover:bg-gray-400"
           >
             {btn.icon && (
-              <btn.icon className="text-violet-500 h-5 w-5 stroke-[0.15rem] group-hover:text-violet-800 cursor-pointer" />
+              <btn.icon
+                className={`text-violet-500 ${btn.iconSize} stroke-[0.15rem] group-hover:text-violet-800 cursor-pointer`}
+              />
             )}
           </motion.button>
         );

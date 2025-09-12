@@ -86,16 +86,23 @@ export default function Inventory() {
             {
               onClick: () => HandleStockIn("Laptop - Dell Inspiron 15", 1),
               icon: PackagePlus,
+              iconSize: `h-[1.2rem] w-[1.2rem]`,
             },
             {
               onClick: () => HandleStockOut("Laptop - Dell Inspiron 15", 1),
               icon: PackageMinus,
+              iconSize: `h-[1.2rem] w-[1.2rem]`,
             },
             {
               onClick: () => HandleEditAction("Laptop - Dell Inspiron 15", 1),
               icon: SquarePen,
+              iconSize: `h-[1.2rem] w-[1.2rem]`,
             },
-            { to: "/batch-inventory/1", icon: PackageOpen },
+            {
+              to: "/batch-inventory/1",
+              icon: PackageOpen,
+              iconSize: `h-[1.2rem] w-[1.2rem]`,
+            },
           ]}
         />
       ),
@@ -116,18 +123,25 @@ export default function Inventory() {
             {
               onClick: () => HandleStockIn("Wireless Mouse - Logitech M185", 2),
               icon: PackagePlus,
+              iconSize: `h-[1.2rem] w-[1.2rem]`,
             },
             {
               onClick: () =>
                 HandleStockOut("Wireless Mouse - Logitech M185", 2),
               icon: PackageMinus,
+              iconSize: `h-[1.2rem] w-[1.2rem]`,
             },
             {
               onClick: () =>
                 HandleEditAction("Wireless Mouse - Logitech M185", 2),
               icon: SquarePen,
+              iconSize: `h-[1.2rem] w-[1.2rem]`,
             },
-            { to: "/batch-inventory/2", icon: PackageOpen },
+            {
+              to: "/batch-inventory/2",
+              icon: PackageOpen,
+              iconSize: `h-[1.2rem] w-[1.2rem]`,
+            },
           ]}
         />
       ),
@@ -148,16 +162,23 @@ export default function Inventory() {
             {
               onClick: () => HandleStockIn("Smartphone - iPhone 14", 3),
               icon: PackagePlus,
+              iconSize: `h-[1.2rem] w-[1.2rem]`,
             },
             {
               onClick: () => HandleStockOut("Smartphone - iPhone 14", 3),
               icon: PackageMinus,
+              iconSize: `h-[1.2rem] w-[1.2rem]`,
             },
             {
               onClick: () => HandleEditAction("Smartphone - iPhone 14", 3),
               icon: SquarePen,
+              iconSize: `h-[1.2rem] w-[1.2rem]`,
             },
-            { to: "/batch-inventory/3", icon: PackageOpen },
+            {
+              to: "/batch-inventory/3",
+              icon: PackageOpen,
+              iconSize: `h-[1.2rem] w-[1.2rem]`,
+            },
           ]}
         />
       ),
@@ -178,16 +199,23 @@ export default function Inventory() {
             {
               onClick: () => HandleStockIn("Rice - 5kg Bag", 4),
               icon: PackagePlus,
+              iconSize: `h-[1.2rem] w-[1.2rem]`,
             },
             {
               onClick: () => HandleStockOut("Rice - 5kg Bag", 4),
               icon: PackageMinus,
+              iconSize: `h-[1.2rem] w-[1.2rem]`,
             },
             {
               onClick: () => HandleEditAction("Rice - 5kg Bag", 4),
               icon: SquarePen,
+              iconSize: `h-[1.2rem] w-[1.2rem]`,
             },
-            { to: "/batch-inventory/4", icon: PackageOpen },
+            {
+              to: "/batch-inventory/4",
+              icon: PackageOpen,
+              iconSize: `h-[1.2rem] w-[1.2rem]`,
+            },
           ]}
         />
       ),
@@ -208,16 +236,23 @@ export default function Inventory() {
             {
               onClick: () => HandleStockIn("Cooking Oil - 1L Bottle", 5),
               icon: PackagePlus,
+              iconSize: `h-[1.2rem] w-[1.2rem]`,
             },
             {
               onClick: () => HandleStockOut("Cooking Oil - 1L Bottle", 5),
               icon: PackageMinus,
+              iconSize: `h-[1.2rem] w-[1.2rem]`,
             },
             {
               onClick: () => HandleEditAction("Cooking Oil - 1L Bottle", 5),
               icon: SquarePen,
+              iconSize: `h-[1.2rem] w-[1.2rem]`,
             },
-            { to: "/batch-inventory/5", icon: PackageOpen },
+            {
+              to: "/batch-inventory/5",
+              icon: PackageOpen,
+              iconSize: `h-[1.2rem] w-[1.2rem]`,
+            },
           ]}
         />
       ),
@@ -235,10 +270,26 @@ export default function Inventory() {
       Action: (
         <Action
           buttons={[
-            { onClick: () => HandleStockIn("Bananas", 6), icon: PackagePlus },
-            { onClick: () => HandleStockOut("Bananas", 6), icon: PackageMinus },
-            { onClick: () => HandleEditAction("Bananas", 6), icon: SquarePen },
-            { to: "/batch-inventory/6", icon: PackageOpen },
+            {
+              onClick: () => HandleStockIn("Bananas", 6),
+              icon: PackagePlus,
+              iconSize: `h-[1.2rem] w-[1.2rem]`,
+            },
+            {
+              onClick: () => HandleStockOut("Bananas", 6),
+              icon: PackageMinus,
+              iconSize: `h-[1.2rem] w-[1.2rem]`,
+            },
+            {
+              onClick: () => HandleEditAction("Bananas", 6),
+              icon: SquarePen,
+              iconSize: `h-[1.2rem] w-[1.2rem]`,
+            },
+            {
+              to: "/batch-inventory/6",
+              icon: PackageOpen,
+              iconSize: `h-[1.2rem] w-[1.2rem]`,
+            },
           ]}
         />
       ),
@@ -259,16 +310,23 @@ export default function Inventory() {
             {
               onClick: () => HandleStockIn("Office Chair - Ergonomic", 7),
               icon: PackagePlus,
+              iconSize: `h-[1.2rem] w-[1.2rem]`,
             },
             {
               onClick: () => HandleStockOut("Office Chair - Ergonomic", 7),
               icon: PackageMinus,
+              iconSize: `h-[1.2rem] w-[1.2rem]`,
             },
             {
               onClick: () => HandleEditAction("Office Chair - Ergonomic", 7),
               icon: SquarePen,
+              iconSize: `h-[1.2rem] w-[1.2rem]`,
             },
-            { to: "/batch-inventory/7", icon: PackageOpen },
+            {
+              to: "/batch-inventory/7",
+              icon: PackageOpen,
+              iconSize: `h-[1.2rem] w-[1.2rem]`,
+            },
           ]}
         />
       ),
@@ -289,16 +347,23 @@ export default function Inventory() {
             {
               onClick: () => HandleStockIn("Dining Table - 6 Seater", 8),
               icon: PackagePlus,
+              iconSize: `h-[1.2rem] w-[1.2rem]`,
             },
             {
               onClick: () => HandleStockOut("Dining Table - 6 Seater", 8),
               icon: PackageMinus,
+              iconSize: `h-[1.2rem] w-[1.2rem]`,
             },
             {
               onClick: () => HandleEditAction("Dining Table - 6 Seater", 8),
               icon: SquarePen,
+              iconSize: `h-[1.2rem] w-[1.2rem]`,
             },
-            { to: "/batch-inventory/8", icon: PackageOpen },
+            {
+              to: "/batch-inventory/8",
+              icon: PackageOpen,
+              iconSize: `h-[1.2rem] w-[1.2rem]`,
+            },
           ]}
         />
       ),
@@ -319,16 +384,23 @@ export default function Inventory() {
             {
               onClick: () => HandleStockIn("T-Shirt - Cotton (Large)", 9),
               icon: PackagePlus,
+              iconSize: `h-[1.2rem] w-[1.2rem]`,
             },
             {
               onClick: () => HandleStockOut("T-Shirt - Cotton (Large)", 9),
               icon: PackageMinus,
+              iconSize: `h-[1.2rem] w-[1.2rem]`,
             },
             {
               onClick: () => HandleEditAction("T-Shirt - Cotton (Large)", 9),
               icon: SquarePen,
+              iconSize: `h-[1.2rem] w-[1.2rem]`,
             },
-            { to: "/batch-inventory/9", icon: PackageOpen },
+            {
+              to: "/batch-inventory/9",
+              icon: PackageOpen,
+              iconSize: `h-[1.2rem] w-[1.2rem]`,
+            },
           ]}
         />
       ),
@@ -349,16 +421,23 @@ export default function Inventory() {
             {
               onClick: () => HandleStockIn("Jeans - Blue Denim", 10),
               icon: PackagePlus,
+              iconSize: `h-[1.2rem] w-[1.2rem]`,
             },
             {
               onClick: () => HandleStockOut("Jeans - Blue Denim", 10),
               icon: PackageMinus,
+              iconSize: `h-[1.2rem] w-[1.2rem]`,
             },
             {
               onClick: () => HandleEditAction("Jeans - Blue Denim", 10),
               icon: SquarePen,
+              iconSize: `h-[1.2rem] w-[1.2rem]`,
             },
-            { to: "/batch-inventory/10", icon: PackageOpen },
+            {
+              to: "/batch-inventory/10",
+              icon: PackageOpen,
+              iconSize: `h-[1.2rem] w-[1.2rem]`,
+            },
           ]}
         />
       ),
@@ -379,16 +458,23 @@ export default function Inventory() {
             {
               onClick: () => HandleStockIn("Jacket - Winter Coat", 11),
               icon: PackagePlus,
+              iconSize: `h-[1.2rem] w-[1.2rem]`,
             },
             {
               onClick: () => HandleStockOut("Jacket - Winter Coat", 11),
               icon: PackageMinus,
+              iconSize: `h-[1.2rem] w-[1.2rem]`,
             },
             {
               onClick: () => HandleEditAction("Jacket - Winter Coat", 11),
               icon: SquarePen,
+              iconSize: `h-[1.2rem] w-[1.2rem]`,
             },
-            { to: "/batch-inventory/11", icon: PackageOpen },
+            {
+              to: "/batch-inventory/11",
+              icon: PackageOpen,
+              iconSize: `h-[1.2rem] w-[1.2rem]`,
+            },
           ]}
         />
       ),

@@ -167,3 +167,60 @@ export function BatchStockStatus({ status }) {
       return <p></p>;
   }
 }
+
+//Order Management status
+export function OrderManagementStatus({ status }) {
+  switch (status) {
+    case "Pending":
+      return (
+        <div className="flex justify-center items-center gap-1">
+          <p className="text-yellow-600 font-semibold">Pending</p>
+          <div className="h-3 w-3 rounded-full bg-yellow-500 shadow-md"></div>
+        </div>
+      );
+    case "Ordered":
+      return (
+        <div className="flex justify-center items-center gap-1">
+          <p className="text-blue-600 font-semibold">Ordered</p>
+          <div className="h-3 w-3 rounded-full bg-blue-500 shadow-md"></div>
+        </div>
+      );
+    case "In Transit":
+      return (
+        <div className="flex justify-center items-center gap-1">
+          <p className="text-indigo-600 font-semibold">In Transit</p>
+          <div className="h-3 w-3 rounded-full bg-indigo-500 shadow-md"></div>
+        </div>
+      );
+    case "Partially Received":
+      return (
+        <div className="flex justify-center items-center gap-1">
+          <p className="text-orange-600 font-semibold">Partially Received</p>
+          <div className="h-3 w-3 rounded-full bg-orange-500 shadow-md"></div>
+        </div>
+      );
+    case "Received":
+      return (
+        <div className="flex justify-center items-center gap-1">
+          <p className="text-green-600 font-semibold">Received</p>
+          <div className="h-3 w-3 rounded-full bg-green-500 shadow-md"></div>
+        </div>
+      );
+    case "Cancelled":
+      return (
+        <div className="flex justify-center items-center gap-1">
+          <p className="text-red-600 font-semibold">Cancelled</p>
+          <div className="h-3 w-3 rounded-full bg-red-500 shadow-md"></div>
+        </div>
+      );
+    case "Returned":
+      return (
+        <div className="flex justify-center items-center gap-1">
+          <p className="text-gray-700 font-semibold">Returned</p>
+          <div className="h-3 w-3 rounded-full bg-gray-600 shadow-md"></div>
+        </div>
+      );
+    default:
+      return <p></p>;
+  }
+}

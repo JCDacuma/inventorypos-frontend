@@ -52,6 +52,7 @@ export default function ProductManagement() {
   ];
 
   // Sample fetch from database
+  // Sample fetch from database
   const data = [
     {
       id: 1,
@@ -65,10 +66,12 @@ export default function ProductManagement() {
             {
               onClick: () => HandleEdit("Laptop - Dell Inspiron 15", 1),
               icon: SquarePen,
+              iconSize: "h-[1.2rem] w-[1.2rem]",
             },
             {
               onClick: () => HandleRemove("Laptop - Dell Inspiron 15", 1),
               icon: Trash2,
+              iconSize: "h-[1.2rem] w-[1.2rem]",
             },
           ]}
         />
@@ -86,10 +89,12 @@ export default function ProductManagement() {
             {
               onClick: () => HandleEdit("Wireless Mouse - Logitech M185", 2),
               icon: SquarePen,
+              iconSize: "h-[1.2rem] w-[1.2rem]",
             },
             {
               onClick: () => HandleRemove("Wireless Mouse - Logitech M185", 2),
               icon: Trash2,
+              iconSize: "h-[1.2rem] w-[1.2rem]",
             },
           ]}
         />
@@ -107,10 +112,12 @@ export default function ProductManagement() {
             {
               onClick: () => HandleEdit("Smartphone - iPhone 14", 3),
               icon: SquarePen,
+              iconSize: "h-[1.2rem] w-[1.2rem]",
             },
             {
               onClick: () => HandleRemove("Smartphone - iPhone 14", 3),
               icon: Trash2,
+              iconSize: "h-[1.2rem] w-[1.2rem]",
             },
           ]}
         />
@@ -128,10 +135,12 @@ export default function ProductManagement() {
             {
               onClick: () => HandleEdit("Rice - 5kg Bag", 4),
               icon: SquarePen,
+              iconSize: "h-[1.2rem] w-[1.2rem]",
             },
             {
               onClick: () => HandleRemove("Rice - 5kg Bag", 4),
               icon: Trash2,
+              iconSize: "h-[1.2rem] w-[1.2rem]",
             },
           ]}
         />
@@ -149,10 +158,12 @@ export default function ProductManagement() {
             {
               onClick: () => HandleEdit("Cooking Oil - 1L Bottle", 5),
               icon: SquarePen,
+              iconSize: "h-[1.2rem] w-[1.2rem]",
             },
             {
               onClick: () => HandleRemove("Cooking Oil - 1L Bottle", 5),
               icon: Trash2,
+              iconSize: "h-[1.2rem] w-[1.2rem]",
             },
           ]}
         />
@@ -170,10 +181,12 @@ export default function ProductManagement() {
             {
               onClick: () => HandleEdit("Bananas (1kg)", 6),
               icon: SquarePen,
+              iconSize: "h-[1.2rem] w-[1.2rem]",
             },
             {
               onClick: () => HandleRemove("Bananas (1kg)", 6),
               icon: Trash2,
+              iconSize: "h-[1.2rem] w-[1.2rem]",
             },
           ]}
         />
@@ -191,10 +204,12 @@ export default function ProductManagement() {
             {
               onClick: () => HandleEdit("Office Chair - Ergonomic", 7),
               icon: SquarePen,
+              iconSize: "h-[1.2rem] w-[1.2rem]",
             },
             {
               onClick: () => HandleRemove("Office Chair - Ergonomic", 7),
               icon: Trash2,
+              iconSize: "h-[1.2rem] w-[1.2rem]",
             },
           ]}
         />
@@ -212,10 +227,12 @@ export default function ProductManagement() {
             {
               onClick: () => HandleEdit("Dining Table - 6 Seater", 8),
               icon: SquarePen,
+              iconSize: "h-[1.2rem] w-[1.2rem]",
             },
             {
               onClick: () => HandleRemove("Dining Table - 6 Seater", 8),
               icon: Trash2,
+              iconSize: "h-[1.2rem] w-[1.2rem]",
             },
           ]}
         />
@@ -233,10 +250,12 @@ export default function ProductManagement() {
             {
               onClick: () => HandleEdit("T-Shirt - Cotton (Large)", 9),
               icon: SquarePen,
+              iconSize: "h-[1.2rem] w-[1.2rem]",
             },
             {
               onClick: () => HandleRemove("T-Shirt - Cotton (Large)", 9),
               icon: Trash2,
+              iconSize: "h-[1.2rem] w-[1.2rem]",
             },
           ]}
         />
@@ -254,10 +273,12 @@ export default function ProductManagement() {
             {
               onClick: () => HandleEdit("Jeans - Blue Denim", 10),
               icon: SquarePen,
+              iconSize: "h-[1.2rem] w-[1.2rem]",
             },
             {
               onClick: () => HandleRemove("Jeans - Blue Denim", 10),
               icon: Trash2,
+              iconSize: "h-[1.2rem] w-[1.2rem]",
             },
           ]}
         />
@@ -275,10 +296,12 @@ export default function ProductManagement() {
             {
               onClick: () => HandleEdit("Jacket - Winter Coat", 11),
               icon: SquarePen,
+              iconSize: "h-[1.2rem] w-[1.2rem]",
             },
             {
               onClick: () => HandleRemove("Jacket - Winter Coat", 11),
               icon: Trash2,
+              iconSize: "h-[1.2rem] w-[1.2rem]",
             },
           ]}
         />

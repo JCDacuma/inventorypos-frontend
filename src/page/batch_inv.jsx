@@ -85,18 +85,22 @@ export default function BatchInventory() {
             {
               onClick: () => HandleStockIn("LAP-2025-1009-001", 1),
               icon: PackagePlus,
+              iconSize: "h-[1.2rem] w-[1.2rem]",
             },
             {
               onClick: () => HandleStockOut("LAP-2025-1009-001", 1),
               icon: PackageMinus,
+              iconSize: "h-[1.2rem] w-[1.2rem]",
             },
             {
               onClick: () => HandleEdit("LAP-2025-1009-001", 1),
               icon: SquarePen,
+              iconSize: "h-[1.2rem] w-[1.2rem]",
             },
             {
               onClick: () => HandleTransfer("LAP-2025-1009-001", 1),
               icon: ReplaceAll,
+              iconSize: "h-[1.2rem] w-[1.2rem]",
             },
           ]}
         />
@@ -117,18 +121,22 @@ export default function BatchInventory() {
             {
               onClick: () => HandleStockIn("LAP-2025-1009-002", 2),
               icon: PackagePlus,
+              iconSize: "h-[1.2rem] w-[1.2rem]",
             },
             {
               onClick: () => HandleStockOut("LAP-2025-1009-002", 2),
               icon: PackageMinus,
+              iconSize: "h-[1.2rem] w-[1.2rem]",
             },
             {
               onClick: () => HandleEdit("LAP-2025-1009-002", 2),
               icon: SquarePen,
+              iconSize: "h-[1.2rem] w-[1.2rem]",
             },
             {
               onClick: () => HandleTransfer("LAP-2025-1009-002", 2),
               icon: ReplaceAll,
+              iconSize: "h-[1.2rem] w-[1.2rem]",
             },
           ]}
         />
@@ -151,18 +159,22 @@ export default function BatchInventory() {
             {
               onClick: () => HandleStockIn("MOU-2025-1009-001", 3),
               icon: PackagePlus,
+              iconSize: "h-[1.2rem] w-[1.2rem]",
             },
             {
               onClick: () => HandleStockOut("MOU-2025-1009-001", 3),
               icon: PackageMinus,
+              iconSize: "h-[1.2rem] w-[1.2rem]",
             },
             {
               onClick: () => HandleEdit("MOU-2025-1009-001", 3),
               icon: SquarePen,
+              iconSize: "h-[1.2rem] w-[1.2rem]",
             },
             {
               onClick: () => HandleTransfer("MOU-2025-1009-001", 3),
               icon: ReplaceAll,
+              iconSize: "h-[1.2rem] w-[1.2rem]",
             },
           ]}
         />
@@ -183,18 +195,22 @@ export default function BatchInventory() {
             {
               onClick: () => HandleStockIn("MOU-2025-1009-002", 4),
               icon: PackagePlus,
+              iconSize: "h-[1.2rem] w-[1.2rem]",
             },
             {
               onClick: () => HandleStockOut("MOU-2025-1009-002", 4),
               icon: PackageMinus,
+              iconSize: "h-[1.2rem] w-[1.2rem]",
             },
             {
               onClick: () => HandleEdit("MOU-2025-1009-002", 4),
               icon: SquarePen,
+              iconSize: "h-[1.2rem] w-[1.2rem]",
             },
             {
               onClick: () => HandleTransfer("MOU-2025-1009-002", 4),
               icon: ReplaceAll,
+              iconSize: "h-[1.2rem] w-[1.2rem]",
             },
           ]}
         />
@@ -217,18 +233,22 @@ export default function BatchInventory() {
             {
               onClick: () => HandleStockIn("IPH-2025-1009-001", 5),
               icon: PackagePlus,
+              iconSize: "h-[1.2rem] w-[1.2rem]",
             },
             {
               onClick: () => HandleStockOut("IPH-2025-1009-001", 5),
               icon: PackageMinus,
+              iconSize: "h-[1.2rem] w-[1.2rem]",
             },
             {
               onClick: () => HandleEdit("IPH-2025-1009-001", 5),
               icon: SquarePen,
+              iconSize: "h-[1.2rem] w-[1.2rem]",
             },
             {
               onClick: () => HandleTransfer("IPH-2025-1009-001", 5),
               icon: ReplaceAll,
+              iconSize: "h-[1.2rem] w-[1.2rem]",
             },
           ]}
         />
@@ -249,18 +269,22 @@ export default function BatchInventory() {
             {
               onClick: () => HandleStockIn("IPH-2025-1009-002", 6),
               icon: PackagePlus,
+              iconSize: "h-[1.2rem] w-[1.2rem]",
             },
             {
               onClick: () => HandleStockOut("IPH-2025-1009-002", 6),
               icon: PackageMinus,
+              iconSize: "h-[1.2rem] w-[1.2rem]",
             },
             {
               onClick: () => HandleEdit("IPH-2025-1009-002", 6),
               icon: SquarePen,
+              iconSize: "h-[1.2rem] w-[1.2rem]",
             },
             {
               onClick: () => HandleTransfer("IPH-2025-1009-002", 6),
               icon: ReplaceAll,
+              iconSize: "h-[1.2rem] w-[1.2rem]",
             },
           ]}
         />
@@ -283,18 +307,22 @@ export default function BatchInventory() {
             {
               onClick: () => HandleStockIn("RICE-2025-1009-01", 7),
               icon: PackagePlus,
+              iconSize: "h-[1.2rem] w-[1.2rem]",
             },
             {
               onClick: () => HandleStockOut("RICE-2025-1009-01", 7),
               icon: PackageMinus,
+              iconSize: "h-[1.2rem] w-[1.2rem]",
             },
             {
               onClick: () => HandleEdit("RICE-2025-1009-01", 7),
               icon: SquarePen,
+              iconSize: "h-[1.2rem] w-[1.2rem]",
             },
             {
               onClick: () => HandleTransfer("RICE-2025-1009-01", 7),
               icon: ReplaceAll,
+              iconSize: "h-[1.2rem] w-[1.2rem]",
             },
           ]}
         />
@@ -315,18 +343,22 @@ export default function BatchInventory() {
             {
               onClick: () => HandleStockIn("RICE-2025-1009-02", 8),
               icon: PackagePlus,
+              iconSize: "h-[1.2rem] w-[1.2rem]",
             },
             {
               onClick: () => HandleStockOut("RICE-2025-1009-02", 8),
               icon: PackageMinus,
+              iconSize: "h-[1.2rem] w-[1.2rem]",
             },
             {
               onClick: () => HandleEdit("RICE-2025-1009-02", 8),
               icon: SquarePen,
+              iconSize: "h-[1.2rem] w-[1.2rem]",
             },
             {
               onClick: () => HandleTransfer("RICE-2025-1009-02", 8),
               icon: ReplaceAll,
+              iconSize: "h-[1.2rem] w-[1.2rem]",
             },
           ]}
         />
@@ -349,18 +381,22 @@ export default function BatchInventory() {
             {
               onClick: () => HandleStockIn("MILK-2025-1009-01", 9),
               icon: PackagePlus,
+              iconSize: "h-[1.2rem] w-[1.2rem]",
             },
             {
               onClick: () => HandleStockOut("MILK-2025-1009-01", 9),
               icon: PackageMinus,
+              iconSize: "h-[1.2rem] w-[1.2rem]",
             },
             {
               onClick: () => HandleEdit("MILK-2025-1009-01", 9),
               icon: SquarePen,
+              iconSize: "h-[1.2rem] w-[1.2rem]",
             },
             {
               onClick: () => HandleTransfer("MILK-2025-1009-01", 9),
               icon: ReplaceAll,
+              iconSize: "h-[1.2rem] w-[1.2rem]",
             },
           ]}
         />
@@ -381,18 +417,22 @@ export default function BatchInventory() {
             {
               onClick: () => HandleStockIn("MILK-2025-1009-02", 10),
               icon: PackagePlus,
+              iconSize: "h-[1.2rem] w-[1.2rem]",
             },
             {
               onClick: () => HandleStockOut("MILK-2025-1009-02", 10),
               icon: PackageMinus,
+              iconSize: "h-[1.2rem] w-[1.2rem]",
             },
             {
               onClick: () => HandleEdit("MILK-2025-1009-02", 10),
               icon: SquarePen,
+              iconSize: "h-[1.2rem] w-[1.2rem]",
             },
             {
               onClick: () => HandleTransfer("MILK-2025-1009-02", 10),
               icon: ReplaceAll,
+              iconSize: "h-[1.2rem] w-[1.2rem]",
             },
           ]}
         />
@@ -415,18 +455,22 @@ export default function BatchInventory() {
             {
               onClick: () => HandleStockIn("BREAD-2025-1009-01", 11),
               icon: PackagePlus,
+              iconSize: "h-[1.2rem] w-[1.2rem]",
             },
             {
               onClick: () => HandleStockOut("BREAD-2025-1009-01", 11),
               icon: PackageMinus,
+              iconSize: "h-[1.2rem] w-[1.2rem]",
             },
             {
               onClick: () => HandleEdit("BREAD-2025-1009-01", 11),
               icon: SquarePen,
+              iconSize: "h-[1.2rem] w-[1.2rem]",
             },
             {
               onClick: () => HandleTransfer("BREAD-2025-1009-01", 11),
               icon: ReplaceAll,
+              iconSize: "h-[1.2rem] w-[1.2rem]",
             },
           ]}
         />
@@ -447,18 +491,22 @@ export default function BatchInventory() {
             {
               onClick: () => HandleStockIn("BREAD-2025-1009-02", 12),
               icon: PackagePlus,
+              iconSize: "h-[1.2rem] w-[1.2rem]",
             },
             {
               onClick: () => HandleStockOut("BREAD-2025-1009-02", 12),
               icon: PackageMinus,
+              iconSize: "h-[1.2rem] w-[1.2rem]",
             },
             {
               onClick: () => HandleEdit("BREAD-2025-1009-02", 12),
               icon: SquarePen,
+              iconSize: "h-[1.2rem] w-[1.2rem]",
             },
             {
               onClick: () => HandleTransfer("BREAD-2025-1009-02", 12),
               icon: ReplaceAll,
+              iconSize: "h-[1.2rem] w-[1.2rem]",
             },
           ]}
         />
@@ -481,18 +529,22 @@ export default function BatchInventory() {
             {
               onClick: () => HandleStockIn("CHAIR-2025-1009-01", 13),
               icon: PackagePlus,
+              iconSize: "h-[1.2rem] w-[1.2rem]",
             },
             {
               onClick: () => HandleStockOut("CHAIR-2025-1009-01", 13),
               icon: PackageMinus,
+              iconSize: "h-[1.2rem] w-[1.2rem]",
             },
             {
               onClick: () => HandleEdit("CHAIR-2025-1009-01", 13),
               icon: SquarePen,
+              iconSize: "h-[1.2rem] w-[1.2rem]",
             },
             {
               onClick: () => HandleTransfer("CHAIR-2025-1009-01", 13),
               icon: ReplaceAll,
+              iconSize: "h-[1.2rem] w-[1.2rem]",
             },
           ]}
         />
@@ -513,18 +565,22 @@ export default function BatchInventory() {
             {
               onClick: () => HandleStockIn("CHAIR-2025-1009-02", 14),
               icon: PackagePlus,
+              iconSize: "h-[1.2rem] w-[1.2rem]",
             },
             {
               onClick: () => HandleStockOut("CHAIR-2025-1009-02", 14),
               icon: PackageMinus,
+              iconSize: "h-[1.2rem] w-[1.2rem]",
             },
             {
               onClick: () => HandleEdit("CHAIR-2025-1009-02", 14),
               icon: SquarePen,
+              iconSize: "h-[1.2rem] w-[1.2rem]",
             },
             {
               onClick: () => HandleTransfer("CHAIR-2025-1009-02", 14),
               icon: ReplaceAll,
+              iconSize: "h-[1.2rem] w-[1.2rem]",
             },
           ]}
         />
@@ -547,18 +603,22 @@ export default function BatchInventory() {
             {
               onClick: () => HandleStockIn("TABLE-2025-1009-01", 15),
               icon: PackagePlus,
+              iconSize: "h-[1.2rem] w-[1.2rem]",
             },
             {
               onClick: () => HandleStockOut("TABLE-2025-1009-01", 15),
               icon: PackageMinus,
+              iconSize: "h-[1.2rem] w-[1.2rem]",
             },
             {
               onClick: () => HandleEdit("TABLE-2025-1009-01", 15),
               icon: SquarePen,
+              iconSize: "h-[1.2rem] w-[1.2rem]",
             },
             {
               onClick: () => HandleTransfer("TABLE-2025-1009-01", 15),
               icon: ReplaceAll,
+              iconSize: "h-[1.2rem] w-[1.2rem]",
             },
           ]}
         />
@@ -579,18 +639,22 @@ export default function BatchInventory() {
             {
               onClick: () => HandleStockIn("TABLE-2025-1009-02", 16),
               icon: PackagePlus,
+              iconSize: "h-[1.2rem] w-[1.2rem]",
             },
             {
               onClick: () => HandleStockOut("TABLE-2025-1009-02", 16),
               icon: PackageMinus,
+              iconSize: "h-[1.2rem] w-[1.2rem]",
             },
             {
               onClick: () => HandleEdit("TABLE-2025-1009-02", 16),
               icon: SquarePen,
+              iconSize: "h-[1.2rem] w-[1.2rem]",
             },
             {
               onClick: () => HandleTransfer("TABLE-2025-1009-02", 16),
               icon: ReplaceAll,
+              iconSize: "h-[1.2rem] w-[1.2rem]",
             },
           ]}
         />
@@ -613,18 +677,22 @@ export default function BatchInventory() {
             {
               onClick: () => HandleStockIn("TSHIRT-2025-1009-01", 17),
               icon: PackagePlus,
+              iconSize: "h-[1.2rem] w-[1.2rem]",
             },
             {
               onClick: () => HandleStockOut("TSHIRT-2025-1009-01", 17),
               icon: PackageMinus,
+              iconSize: "h-[1.2rem] w-[1.2rem]",
             },
             {
               onClick: () => HandleEdit("TSHIRT-2025-1009-01", 17),
               icon: SquarePen,
+              iconSize: "h-[1.2rem] w-[1.2rem]",
             },
             {
               onClick: () => HandleTransfer("TSHIRT-2025-1009-01", 17),
               icon: ReplaceAll,
+              iconSize: "h-[1.2rem] w-[1.2rem]",
             },
           ]}
         />
@@ -645,18 +713,22 @@ export default function BatchInventory() {
             {
               onClick: () => HandleStockIn("TSHIRT-2025-1009-02", 18),
               icon: PackagePlus,
+              iconSize: "h-[1.2rem] w-[1.2rem]",
             },
             {
               onClick: () => HandleStockOut("TSHIRT-2025-1009-02", 18),
               icon: PackageMinus,
+              iconSize: "h-[1.2rem] w-[1.2rem]",
             },
             {
               onClick: () => HandleEdit("TSHIRT-2025-1009-02", 18),
               icon: SquarePen,
+              iconSize: "h-[1.2rem] w-[1.2rem]",
             },
             {
               onClick: () => HandleTransfer("TSHIRT-2025-1009-02", 18),
               icon: ReplaceAll,
+              iconSize: "h-[1.2rem] w-[1.2rem]",
             },
           ]}
         />
@@ -679,18 +751,22 @@ export default function BatchInventory() {
             {
               onClick: () => HandleStockIn("JEANS-2025-1009-01", 19),
               icon: PackagePlus,
+              iconSize: "h-[1.2rem] w-[1.2rem]",
             },
             {
               onClick: () => HandleStockOut("JEANS-2025-1009-01", 19),
               icon: PackageMinus,
+              iconSize: "h-[1.2rem] w-[1.2rem]",
             },
             {
               onClick: () => HandleEdit("JEANS-2025-1009-01", 19),
               icon: SquarePen,
+              iconSize: "h-[1.2rem] w-[1.2rem]",
             },
             {
               onClick: () => HandleTransfer("JEANS-2025-1009-01", 19),
               icon: ReplaceAll,
+              iconSize: "h-[1.2rem] w-[1.2rem]",
             },
           ]}
         />
@@ -711,18 +787,22 @@ export default function BatchInventory() {
             {
               onClick: () => HandleStockIn("JEANS-2025-1009-02", 20),
               icon: PackagePlus,
+              iconSize: "h-[1.2rem] w-[1.2rem]",
             },
             {
               onClick: () => HandleStockOut("JEANS-2025-1009-02", 20),
               icon: PackageMinus,
+              iconSize: "h-[1.2rem] w-[1.2rem]",
             },
             {
               onClick: () => HandleEdit("JEANS-2025-1009-02", 20),
               icon: SquarePen,
+              iconSize: "h-[1.2rem] w-[1.2rem]",
             },
             {
               onClick: () => HandleTransfer("JEANS-2025-1009-02", 20),
               icon: ReplaceAll,
+              iconSize: "h-[1.2rem] w-[1.2rem]",
             },
           ]}
         />
@@ -745,18 +825,22 @@ export default function BatchInventory() {
             {
               onClick: () => HandleStockIn("JACKET-2025-1009-01", 21),
               icon: PackagePlus,
+              iconSize: "h-[1.2rem] w-[1.2rem]",
             },
             {
               onClick: () => HandleStockOut("JACKET-2025-1009-01", 21),
               icon: PackageMinus,
+              iconSize: "h-[1.2rem] w-[1.2rem]",
             },
             {
               onClick: () => HandleEdit("JACKET-2025-1009-01", 21),
               icon: SquarePen,
+              iconSize: "h-[1.2rem] w-[1.2rem]",
             },
             {
               onClick: () => HandleTransfer("JACKET-2025-1009-01", 21),
               icon: ReplaceAll,
+              iconSize: "h-[1.2rem] w-[1.2rem]",
             },
           ]}
         />
@@ -777,18 +861,22 @@ export default function BatchInventory() {
             {
               onClick: () => HandleStockIn("JACKET-2025-1009-02", 22),
               icon: PackagePlus,
+              iconSize: "h-[1.2rem] w-[1.2rem]",
             },
             {
               onClick: () => HandleStockOut("JACKET-2025-1009-02", 22),
               icon: PackageMinus,
+              iconSize: "h-[1.2rem] w-[1.2rem]",
             },
             {
               onClick: () => HandleEdit("JACKET-2025-1009-02", 22),
               icon: SquarePen,
+              iconSize: "h-[1.2rem] w-[1.2rem]",
             },
             {
               onClick: () => HandleTransfer("JACKET-2025-1009-02", 22),
               icon: ReplaceAll,
+              iconSize: "h-[1.2rem] w-[1.2rem]",
             },
           ]}
         />
@@ -796,7 +884,6 @@ export default function BatchInventory() {
       itemId: 11,
     },
   ];
-
   //Sample fetch from database
   //Temporary Code
   const filteredData = batchData.filter(
