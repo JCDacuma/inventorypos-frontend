@@ -1,7 +1,6 @@
-import { Layout } from "../components/Layout";
+import { Layout } from "../Layouts/Layout";
 
 export default function Settings() {
-
   return (
     <Layout currentWebPage="Settings" style="items-center">
       {/*Dito lagay yung page layout*/}
@@ -13,6 +12,5 @@ export default function Settings() {
         </div>
       </div>
     </Layout>
-
   );
 }

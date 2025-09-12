@@ -1,6 +1,7 @@
 import { Info, CheckCircle2, AlertTriangle, AlertCircle } from "lucide-react";
 
-export default function Status({
+//Registration user Status
+export function Status({
   type = "info",
   message = "Message here",
   style = "",
@@ -41,4 +42,128 @@ export default function Status({
       </div>
     </div>
   );
+}
+
+//Product Status
+export function ProductStatus({ status }) {
+  switch (status) {
+    case "Active":
+      return (
+        <div className="flex justify-center items-center gap-1">
+          <p>Active</p>
+          <div className="w-2 h-2 rounded-4xl bg-green-600 mb-2"></div>
+        </div>
+      );
+    case "Inactive":
+      return (
+        <div className="flex justify-center items-center gap-1">
+          <p>Inactive</p>
+          <div className="w-2 h-2 rounded-4xl bg-red-600 mb-2"></div>
+        </div>
+      );
+    default:
+      <p></p>;
+  }
+}
+
+//Promo Status
+export function PromoStatus({ status }) {
+  switch (status) {
+    case "Active":
+      return (
+        <div className="flex justify-center items-center gap-1">
+          <p>Active</p>
+          <div className="w-2 h-2 rounded-4xl bg-green-600 mb-2"></div>
+        </div>
+      );
+
+    case "Upcoming":
+      return (
+        <div className="flex justify-center items-center gap-1">
+          <p>Upcoming</p>
+          <div className="w-2 h-2 rounded-4xl bg-cyan-600 mb-2"></div>
+        </div>
+      );
+    case "Ended":
+      return (
+        <div className="flex justify-center items-center gap-1">
+          <p>Ended</p>
+          <div className="w-2 h-2 rounded-4xl bg-yellow-600 mb-2"></div>
+        </div>
+      );
+    case "Inactive":
+      return (
+        <div className="flex justify-center items-center gap-1">
+          <p>Inactive</p>
+          <div className="w-2 h-2 rounded-4xl bg-red-600 mb-2"></div>
+        </div>
+      );
+    default:
+      <p></p>;
+  }
+}
+
+//Inventory Status
+export function InventoryStatus({ status }) {
+  switch (status) {
+    case "In Stock":
+      return (
+        <div className="flex justify-center items-center gap-1">
+          <p>In Stock</p>
+          <div className="h-2 w-2 rounded-4xl bg-green-600 mb-2"></div>
+        </div>
+      );
+    case "Low Stock":
+      return (
+        <div className="flex justify-center items-center gap-1">
+          <p>Low Stock</p>
+          <div className="h-2 w-2 rounded-4xl bg-amber-500 mb-2"></div>
+        </div>
+      );
+    case "Out of Stock":
+      return (
+        <div className="flex justify-center items-center gap-1">
+          <p>Out of Stock</p>
+          <div className="h-2 w-2 rounded-4xl bg-red-500 mb-2"></div>
+        </div>
+      );
+    default:
+      return <p></p>;
+  }
+}
+
+//Inventory Status
+export function BatchStockStatus({ status }) {
+  switch (status) {
+    case "Active":
+      return (
+        <div className="flex justify-center items-center gap-1">
+          <p>Active</p>
+          <div className="h-2 w-2 rounded-4xl bg-green-600 mb-2"></div>
+        </div>
+      );
+    case "Expired":
+      return (
+        <div className="flex justify-center items-center gap-1">
+          <p>Expired</p>
+          <div className="h-2 w-2 rounded-4xl bg-cyan-500 mb-2"></div>
+        </div>
+      );
+    case "Low Stock":
+      return (
+        <div className="flex justify-center items-center gap-1">
+          <p>Low Stock</p>
+          <div className="h-2 w-2 rounded-4xl bg-amber-500 mb-2"></div>
+        </div>
+      );
+    case "Out of Stock":
+      return (
+        <div className="flex justify-center items-center gap-1">
+          <p>Out of Stock</p>
+          <div className="h-2 w-2 rounded-4xl bg-red-500 mb-2"></div>
+        </div>
+      );
+    default:
+      return <p></p>;
+  }
 }

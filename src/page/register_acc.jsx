@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
 import Input from "../components/Input";
-import api from "../js/axiosInstance.js";
-import Status from "../components/Status.jsx";
-import { Row, Col, Card, Layout, MainWrapper } from "../components/Layout.jsx";
+import api from "../api/axiosInstance.js";
+import { Status } from "../components/Status.jsx";
+import { Row, Col, Card, Layout, MainWrapper } from "../Layouts/Layout.jsx";
 
 export default function RegisterAccount() {
   const [formData, setFormData] = useState({

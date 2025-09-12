@@ -1,7 +1,6 @@
-import { Layout } from "../components/Layout";
+import { Layout } from "../Layouts/Layout";
 
 export default function Suppliers() {
-
   return (
     <Layout currentWebPage="Suppliers" style="items-center">
       {/*Dito lagay yung page layout*/}
@@ -13,6 +12,5 @@ export default function Suppliers() {
         </div>
       </div>
     </Layout>
-
   );
 }

@@ -3,7 +3,7 @@ import Table from "../components/Table";
 import MobileTable from "../components/MobileTable";
 
 import { Warehouse } from "lucide-react";
-import { Layout, MainWrapper } from "../components/Layout";
+import { Layout, MainWrapper } from "../Layouts/Layout";
 export default function SalesReport() {
   //Sample column
   const columns = [
@@ -142,8 +142,8 @@ export default function SalesReport() {
   return (
     <Layout currentWebPage="Sales Report">
       <MainWrapper>
-          <MobileTable columns={columns} data={data} />
-          <Table columns={columns} data={data} />
+        <MobileTable columns={columns} data={data} />
+        <Table columns={columns} data={data} />
       </MainWrapper>
     </Layout>
   );

@@ -7,15 +7,17 @@ import {
   MainWrapper,
   ButtonLayout,
   ControlLayout,
-} from "../components/Layout";
+} from "../Layouts/Layout";
 import { useMediaQuery } from "react-responsive";
-import ExportButton from "../components/export_buttons";
+import { ExportButton } from "../components/buttons.jsx";
 import Searchbar from "../components/Searchbar.jsx";
-import BatchControl from "../components/ModalContol.jsx";
+import { BatchControl } from "../Layouts/ModalContol.jsx";
 
 //Table Layout component
 import Table from "../components/Table";
 import MobileTable from "../components/MobileTable";
+import { BatchStockStatus } from "../components/Status.jsx";
+import { Action } from "../components/buttons.jsx";
 
 //Animation
 import { motion, AnimatePresence } from "framer-motion";
@@ -39,62 +41,21 @@ export default function BatchInventory() {
   const [selectedID, setSelectedID] = useState([]);
   const openBatchContol = selectedID.length > 0; //Batch Contol Modal State
 
-  //Action button functionality
-  const ActionBatch = () => (
-    <div className="flex justify-center items-center gap-4">
-      <motion.button
-        whileHover={{ backgroundColor: "#9d9d9d", color: "#b15eff" }}
-        animate={{ scale: [1, 1.07, 1] }}
-        transition={{
-          duration: 2.5,
-          repeat: Infinity,
-          ease: "easeInOut",
-        }}
-        className="group bg-gray-200 p-2 shadow-lg rounded-[0.3rem] cursor-pointer text-violet-500"
-      >
-        <PackagePlus className="text-violet-500 h-5 w-5 stroke-[0.15rem] group-hover:text-violet-800 cursor-pointer" />
-      </motion.button>
+  const HandleStockIn = (items, id) => {
+    alert(`stockIn ${items} id: ${id}`);
+  };
 
-      <motion.button
-        whileHover={{ backgroundColor: "#9d9d9d", color: "#b15eff" }}
-        animate={{ scale: [1, 1.07, 1] }}
-        transition={{
-          duration: 2.5,
-          repeat: Infinity,
-          ease: "easeInOut",
-        }}
-        className="group bg-gray-200 p-2 shadow-lg rounded-[0.3rem] cursor-pointer text-violet-500"
-      >
-        <PackageMinus className="text-violet-500 h-5 w-5 stroke-[0.15rem] group-hover:text-violet-800 cursor-pointer" />
-      </motion.button>
+  const HandleStockOut = (items, id) => {
+    alert(`StockOut ${items} id: ${id}`);
+  };
 
-      <motion.button
-        whileHover={{ backgroundColor: "#9d9d9d", color: "#b15eff" }}
-        animate={{ scale: [1, 1.07, 1] }}
-        transition={{
-          duration: 2.5,
-          repeat: Infinity,
-          ease: "easeInOut",
-        }}
-        className="group bg-gray-200 p-2 shadow-lg rounded-[0.3rem] cursor-pointer text-violet-500"
-      >
-        <SquarePen className="text-violet-500 h-5 w-5 stroke-[0.15rem] group-hover:text-violet-800 cursor-pointer" />
-      </motion.button>
+  const HandleEdit = (items, id) => {
+    alert(`Edit ${items} id: ${id}`);
+  };
 
-      <motion.button
-        whileHover={{ backgroundColor: "#9d9d9d", color: "#b15eff" }}
-        animate={{ scale: [1, 1.07, 1] }}
-        transition={{
-          duration: 2.5,
-          repeat: Infinity,
-          ease: "easeInOut",
-        }}
-        className="group bg-gray-200 p-2 shadow-lg rounded-[0.3rem] cursor-pointer text-violet-500"
-      >
-        <ReplaceAll className="text-violet-500 h-5 w-5 stroke-[0.15rem] group-hover:text-violet-800 cursor-pointer" />
-      </motion.button>
-    </div>
-  );
+  const HandleTransfer = (items, id) => {
+    alert(`Transfer ${items} id: ${id}`);
+  };
 
   //Sample column
   const columns = [
@@ -117,8 +78,29 @@ export default function BatchInventory() {
       Location: "Warehouse A",
       Qty: 5,
       Supplier: "Dell Supplier Inc.",
-      Status: "In Stock",
-      Action: <ActionBatch itemBatch="LAP-2025-1009-001" id={1} />,
+      Status: <BatchStockStatus status="Active" />,
+      Action: (
+        <Action
+          buttons={[
+            {
+              onClick: () => HandleStockIn("LAP-2025-1009-001", 1),
+              icon: PackagePlus,
+            },
+            {
+              onClick: () => HandleStockOut("LAP-2025-1009-001", 1),
+              icon: PackageMinus,
+            },
+            {
+              onClick: () => HandleEdit("LAP-2025-1009-001", 1),
+              icon: SquarePen,
+            },
+            {
+              onClick: () => HandleTransfer("LAP-2025-1009-001", 1),
+              icon: ReplaceAll,
+            },
+          ]}
+        />
+      ),
       itemId: 1,
     },
     {
@@ -128,8 +110,29 @@ export default function BatchInventory() {
       Location: "Warehouse B",
       Qty: 7,
       Supplier: "Tech Distributors Ltd.",
-      Status: "In Stock",
-      Action: <ActionBatch itemBatch="LAP-2025-1009-002" id={2} />,
+      Status: <BatchStockStatus status="Active" />,
+      Action: (
+        <Action
+          buttons={[
+            {
+              onClick: () => HandleStockIn("LAP-2025-1009-002", 2),
+              icon: PackagePlus,
+            },
+            {
+              onClick: () => HandleStockOut("LAP-2025-1009-002", 2),
+              icon: PackageMinus,
+            },
+            {
+              onClick: () => HandleEdit("LAP-2025-1009-002", 2),
+              icon: SquarePen,
+            },
+            {
+              onClick: () => HandleTransfer("LAP-2025-1009-002", 2),
+              icon: ReplaceAll,
+            },
+          ]}
+        />
+      ),
       itemId: 1,
     },
 
@@ -141,8 +144,29 @@ export default function BatchInventory() {
       Location: "Warehouse A",
       Qty: 25,
       Supplier: "Logitech Distribution",
-      Status: "In Stock",
-      Action: <ActionBatch itemBatch="MOU-2025-1009-001" id={3} />,
+      Status: <BatchStockStatus status="Active" />,
+      Action: (
+        <Action
+          buttons={[
+            {
+              onClick: () => HandleStockIn("MOU-2025-1009-001", 3),
+              icon: PackagePlus,
+            },
+            {
+              onClick: () => HandleStockOut("MOU-2025-1009-001", 3),
+              icon: PackageMinus,
+            },
+            {
+              onClick: () => HandleEdit("MOU-2025-1009-001", 3),
+              icon: SquarePen,
+            },
+            {
+              onClick: () => HandleTransfer("MOU-2025-1009-001", 3),
+              icon: ReplaceAll,
+            },
+          ]}
+        />
+      ),
       itemId: 2,
     },
     {
@@ -152,8 +176,29 @@ export default function BatchInventory() {
       Location: "Warehouse C",
       Qty: 20,
       Supplier: "Global Peripherals",
-      Status: "In Stock",
-      Action: <ActionBatch itemBatch="MOU-2025-1009-002" id={4} />,
+      Status: <BatchStockStatus status="Active" />,
+      Action: (
+        <Action
+          buttons={[
+            {
+              onClick: () => HandleStockIn("MOU-2025-1009-002", 4),
+              icon: PackagePlus,
+            },
+            {
+              onClick: () => HandleStockOut("MOU-2025-1009-002", 4),
+              icon: PackageMinus,
+            },
+            {
+              onClick: () => HandleEdit("MOU-2025-1009-002", 4),
+              icon: SquarePen,
+            },
+            {
+              onClick: () => HandleTransfer("MOU-2025-1009-002", 4),
+              icon: ReplaceAll,
+            },
+          ]}
+        />
+      ),
       itemId: 2,
     },
 
@@ -165,8 +210,29 @@ export default function BatchInventory() {
       Location: "Warehouse A",
       Qty: 4,
       Supplier: "Apple Authorized Dist.",
-      Status: "In Stock",
-      Action: <ActionBatch itemBatch="IPH-2025-1009-001" id={5} />,
+      Status: <BatchStockStatus status="Low Stock" />,
+      Action: (
+        <Action
+          buttons={[
+            {
+              onClick: () => HandleStockIn("IPH-2025-1009-001", 5),
+              icon: PackagePlus,
+            },
+            {
+              onClick: () => HandleStockOut("IPH-2025-1009-001", 5),
+              icon: PackageMinus,
+            },
+            {
+              onClick: () => HandleEdit("IPH-2025-1009-001", 5),
+              icon: SquarePen,
+            },
+            {
+              onClick: () => HandleTransfer("IPH-2025-1009-001", 5),
+              icon: ReplaceAll,
+            },
+          ]}
+        />
+      ),
       itemId: 3,
     },
     {
@@ -176,12 +242,33 @@ export default function BatchInventory() {
       Location: "Warehouse B",
       Qty: 4,
       Supplier: "Tech Mobile Traders",
-      Status: "In Stock",
-      Action: <ActionBatch itemBatch="IPH-2025-1009-002" id={6} />,
+      Status: <BatchStockStatus status="Low Stock" />,
+      Action: (
+        <Action
+          buttons={[
+            {
+              onClick: () => HandleStockIn("IPH-2025-1009-002", 6),
+              icon: PackagePlus,
+            },
+            {
+              onClick: () => HandleStockOut("IPH-2025-1009-002", 6),
+              icon: PackageMinus,
+            },
+            {
+              onClick: () => HandleEdit("IPH-2025-1009-002", 6),
+              icon: SquarePen,
+            },
+            {
+              onClick: () => HandleTransfer("IPH-2025-1009-002", 6),
+              icon: ReplaceAll,
+            },
+          ]}
+        />
+      ),
       itemId: 3,
     },
 
-    // Batches for Rice - 5kg Bag (id: 4)
+    // Batches for Rice Bag - 50kg (id: 4)
     {
       id: 7,
       BatchNo: "RICE-2025-1009-01",
@@ -189,67 +276,193 @@ export default function BatchInventory() {
       Location: "Warehouse Grain-1",
       Qty: 80,
       Supplier: "Agro Supplier",
-      Status: "In Stock",
-      Action: <ActionBatch itemBatch="RICE-2025-1009-01" id={7} />,
+      Status: <BatchStockStatus status="Active" />,
+      Action: (
+        <Action
+          buttons={[
+            {
+              onClick: () => HandleStockIn("RICE-2025-1009-01", 7),
+              icon: PackagePlus,
+            },
+            {
+              onClick: () => HandleStockOut("RICE-2025-1009-01", 7),
+              icon: PackageMinus,
+            },
+            {
+              onClick: () => HandleEdit("RICE-2025-1009-01", 7),
+              icon: SquarePen,
+            },
+            {
+              onClick: () => HandleTransfer("RICE-2025-1009-01", 7),
+              icon: ReplaceAll,
+            },
+          ]}
+        />
+      ),
       itemId: 4,
     },
     {
       id: 8,
       BatchNo: "RICE-2025-1009-02",
-      Expiry: "2026-04-10",
+      Expiry: "2026-09-10",
       Location: "Warehouse Grain-2",
-      Qty: 40,
-      Supplier: "Farmers Coop",
-      Status: "In Stock",
-      Action: <ActionBatch itemBatch="RICE-2025-1009-02" id={8} />,
+      Qty: 70,
+      Supplier: "Food Supplies Ltd.",
+      Status: <BatchStockStatus status="Active" />,
+      Action: (
+        <Action
+          buttons={[
+            {
+              onClick: () => HandleStockIn("RICE-2025-1009-02", 8),
+              icon: PackagePlus,
+            },
+            {
+              onClick: () => HandleStockOut("RICE-2025-1009-02", 8),
+              icon: PackageMinus,
+            },
+            {
+              onClick: () => HandleEdit("RICE-2025-1009-02", 8),
+              icon: SquarePen,
+            },
+            {
+              onClick: () => HandleTransfer("RICE-2025-1009-02", 8),
+              icon: ReplaceAll,
+            },
+          ]}
+        />
+      ),
       itemId: 4,
     },
 
-    // Batches for Cooking Oil - 1L Bottle (id: 5)
+    // Batches for Milk - 1L Pack (id: 5)
     {
       id: 9,
-      BatchNo: "OIL-2025-1009-01",
-      Expiry: "2026-09-01",
-      Location: "Warehouse C",
-      Qty: 50,
-      Supplier: "Food Essentials Ltd.",
-      Status: "In Stock",
-      Action: <ActionBatch itemBatch="OIL-2025-1009-01" id={9} />,
+      BatchNo: "MILK-2025-1009-01",
+      Expiry: "2025-09-20",
+      Location: "Warehouse Dairy-1",
+      Qty: 40,
+      Supplier: "Dairy Fresh Ltd.",
+      Status: <BatchStockStatus status="Expiring Soon" />,
+      Action: (
+        <Action
+          buttons={[
+            {
+              onClick: () => HandleStockIn("MILK-2025-1009-01", 9),
+              icon: PackagePlus,
+            },
+            {
+              onClick: () => HandleStockOut("MILK-2025-1009-01", 9),
+              icon: PackageMinus,
+            },
+            {
+              onClick: () => HandleEdit("MILK-2025-1009-01", 9),
+              icon: SquarePen,
+            },
+            {
+              onClick: () => HandleTransfer("MILK-2025-1009-01", 9),
+              icon: ReplaceAll,
+            },
+          ]}
+        />
+      ),
       itemId: 5,
     },
     {
       id: 10,
-      BatchNo: "OIL-2025-1009-02",
-      Expiry: "2026-11-15",
-      Location: "Warehouse D",
-      Qty: 30,
-      Supplier: "Agri Traders",
-      Status: "In Stock",
-      Action: <ActionBatch itemBatch="OIL-2025-1009-02" id={10} />,
+      BatchNo: "MILK-2025-1009-02",
+      Expiry: "2025-09-25",
+      Location: "Warehouse Dairy-2",
+      Qty: 35,
+      Supplier: "Happy Cows Dairy",
+      Status: <BatchStockStatus status="Expiring Soon" />,
+      Action: (
+        <Action
+          buttons={[
+            {
+              onClick: () => HandleStockIn("MILK-2025-1009-02", 10),
+              icon: PackagePlus,
+            },
+            {
+              onClick: () => HandleStockOut("MILK-2025-1009-02", 10),
+              icon: PackageMinus,
+            },
+            {
+              onClick: () => HandleEdit("MILK-2025-1009-02", 10),
+              icon: SquarePen,
+            },
+            {
+              onClick: () => HandleTransfer("MILK-2025-1009-02", 10),
+              icon: ReplaceAll,
+            },
+          ]}
+        />
+      ),
       itemId: 5,
     },
 
-    // Batches for Bananas (id: 6)
+    // Batches for Bread - Whole Wheat (id: 6)
     {
       id: 11,
-      BatchNo: "BAN-2025-1009-01",
-      Expiry: "2025-09-15",
-      Location: "Cold Storage A",
-      Qty: 120,
-      Supplier: "Tropical Fruits Co.",
-      Status: "In Stock",
-      Action: <ActionBatch itemBatch="BAN-2025-1009-01" id={11} />,
+      BatchNo: "BREAD-2025-1009-01",
+      Expiry: "2025-09-14",
+      Location: "Warehouse Bakery-1",
+      Qty: 50,
+      Supplier: "Bakery House",
+      Status: <BatchStockStatus status="Expired" />,
+      Action: (
+        <Action
+          buttons={[
+            {
+              onClick: () => HandleStockIn("BREAD-2025-1009-01", 11),
+              icon: PackagePlus,
+            },
+            {
+              onClick: () => HandleStockOut("BREAD-2025-1009-01", 11),
+              icon: PackageMinus,
+            },
+            {
+              onClick: () => HandleEdit("BREAD-2025-1009-01", 11),
+              icon: SquarePen,
+            },
+            {
+              onClick: () => HandleTransfer("BREAD-2025-1009-01", 11),
+              icon: ReplaceAll,
+            },
+          ]}
+        />
+      ),
       itemId: 6,
     },
     {
       id: 12,
-      BatchNo: "BAN-2025-1009-02",
-      Expiry: "2025-09-20",
-      Location: "Cold Storage B",
-      Qty: 80,
-      Supplier: "Farm Fresh Traders",
-      Status: "In Stock",
-      Action: <ActionBatch itemBatch="BAN-2025-1009-02" id={12} />,
+      BatchNo: "BREAD-2025-1009-02",
+      Expiry: "2025-09-16",
+      Location: "Warehouse Bakery-2",
+      Qty: 60,
+      Supplier: "Golden Bakes",
+      Status: <BatchStockStatus status="Active" />,
+      Action: (
+        <Action
+          buttons={[
+            {
+              onClick: () => HandleStockIn("BREAD-2025-1009-02", 12),
+              icon: PackagePlus,
+            },
+            {
+              onClick: () => HandleStockOut("BREAD-2025-1009-02", 12),
+              icon: PackageMinus,
+            },
+            {
+              onClick: () => HandleEdit("BREAD-2025-1009-02", 12),
+              icon: SquarePen,
+            },
+            {
+              onClick: () => HandleTransfer("BREAD-2025-1009-02", 12),
+              icon: ReplaceAll,
+            },
+          ]}
+        />
+      ),
       itemId: 6,
     },
 
@@ -261,8 +474,29 @@ export default function BatchInventory() {
       Location: "Warehouse Furniture-1",
       Qty: 0,
       Supplier: "Office Supplies Ltd.",
-      Status: "Out of Stock",
-      Action: <ActionBatch itemBatch="CHAIR-2025-1009-01" id={13} />,
+      Status: <BatchStockStatus status="Out of Stock" />,
+      Action: (
+        <Action
+          buttons={[
+            {
+              onClick: () => HandleStockIn("CHAIR-2025-1009-01", 13),
+              icon: PackagePlus,
+            },
+            {
+              onClick: () => HandleStockOut("CHAIR-2025-1009-01", 13),
+              icon: PackageMinus,
+            },
+            {
+              onClick: () => HandleEdit("CHAIR-2025-1009-01", 13),
+              icon: SquarePen,
+            },
+            {
+              onClick: () => HandleTransfer("CHAIR-2025-1009-01", 13),
+              icon: ReplaceAll,
+            },
+          ]}
+        />
+      ),
       itemId: 7,
     },
     {
@@ -272,8 +506,29 @@ export default function BatchInventory() {
       Location: "Warehouse Furniture-2",
       Qty: 0,
       Supplier: "Furniture Makers Inc.",
-      Status: "Out of Stock",
-      Action: <ActionBatch itemBatch="CHAIR-2025-1009-02" id={14} />,
+      Status: <BatchStockStatus status="Out of Stock" />,
+      Action: (
+        <Action
+          buttons={[
+            {
+              onClick: () => HandleStockIn("CHAIR-2025-1009-02", 14),
+              icon: PackagePlus,
+            },
+            {
+              onClick: () => HandleStockOut("CHAIR-2025-1009-02", 14),
+              icon: PackageMinus,
+            },
+            {
+              onClick: () => HandleEdit("CHAIR-2025-1009-02", 14),
+              icon: SquarePen,
+            },
+            {
+              onClick: () => HandleTransfer("CHAIR-2025-1009-02", 14),
+              icon: ReplaceAll,
+            },
+          ]}
+        />
+      ),
       itemId: 7,
     },
 
@@ -285,8 +540,29 @@ export default function BatchInventory() {
       Location: "Warehouse Furniture-1",
       Qty: 1,
       Supplier: "Home Interiors",
-      Status: "Low Stock",
-      Action: <ActionBatch itemBatch="TABLE-2025-1009-01" id={15} />,
+      Status: <BatchStockStatus status="Low Stock" />,
+      Action: (
+        <Action
+          buttons={[
+            {
+              onClick: () => HandleStockIn("TABLE-2025-1009-01", 15),
+              icon: PackagePlus,
+            },
+            {
+              onClick: () => HandleStockOut("TABLE-2025-1009-01", 15),
+              icon: PackageMinus,
+            },
+            {
+              onClick: () => HandleEdit("TABLE-2025-1009-01", 15),
+              icon: SquarePen,
+            },
+            {
+              onClick: () => HandleTransfer("TABLE-2025-1009-01", 15),
+              icon: ReplaceAll,
+            },
+          ]}
+        />
+      ),
       itemId: 8,
     },
     {
@@ -296,8 +572,29 @@ export default function BatchInventory() {
       Location: "Warehouse Furniture-2",
       Qty: 0,
       Supplier: "Classic Woodworks",
-      Status: "Low Stock",
-      Action: <ActionBatch itemBatch="TABLE-2025-1009-02" id={16} />,
+      Status: <BatchStockStatus status="Out of Stock" />,
+      Action: (
+        <Action
+          buttons={[
+            {
+              onClick: () => HandleStockIn("TABLE-2025-1009-02", 16),
+              icon: PackagePlus,
+            },
+            {
+              onClick: () => HandleStockOut("TABLE-2025-1009-02", 16),
+              icon: PackageMinus,
+            },
+            {
+              onClick: () => HandleEdit("TABLE-2025-1009-02", 16),
+              icon: SquarePen,
+            },
+            {
+              onClick: () => HandleTransfer("TABLE-2025-1009-02", 16),
+              icon: ReplaceAll,
+            },
+          ]}
+        />
+      ),
       itemId: 8,
     },
 
@@ -309,8 +606,29 @@ export default function BatchInventory() {
       Location: "Warehouse Clothing-1",
       Qty: 30,
       Supplier: "Cotton Textiles Ltd.",
-      Status: "In Stock",
-      Action: <ActionBatch itemBatch="TSHIRT-2025-1009-01" id={17} />,
+      Status: <BatchStockStatus status="Active" />,
+      Action: (
+        <Action
+          buttons={[
+            {
+              onClick: () => HandleStockIn("TSHIRT-2025-1009-01", 17),
+              icon: PackagePlus,
+            },
+            {
+              onClick: () => HandleStockOut("TSHIRT-2025-1009-01", 17),
+              icon: PackageMinus,
+            },
+            {
+              onClick: () => HandleEdit("TSHIRT-2025-1009-01", 17),
+              icon: SquarePen,
+            },
+            {
+              onClick: () => HandleTransfer("TSHIRT-2025-1009-01", 17),
+              icon: ReplaceAll,
+            },
+          ]}
+        />
+      ),
       itemId: 9,
     },
     {
@@ -320,8 +638,29 @@ export default function BatchInventory() {
       Location: "Warehouse Clothing-2",
       Qty: 20,
       Supplier: "Fashion Supplies Inc.",
-      Status: "In Stock",
-      Action: <ActionBatch itemBatch="TSHIRT-2025-1009-02" id={18} />,
+      Status: <BatchStockStatus status="Active" />,
+      Action: (
+        <Action
+          buttons={[
+            {
+              onClick: () => HandleStockIn("TSHIRT-2025-1009-02", 18),
+              icon: PackagePlus,
+            },
+            {
+              onClick: () => HandleStockOut("TSHIRT-2025-1009-02", 18),
+              icon: PackageMinus,
+            },
+            {
+              onClick: () => HandleEdit("TSHIRT-2025-1009-02", 18),
+              icon: SquarePen,
+            },
+            {
+              onClick: () => HandleTransfer("TSHIRT-2025-1009-02", 18),
+              icon: ReplaceAll,
+            },
+          ]}
+        />
+      ),
       itemId: 9,
     },
 
@@ -333,8 +672,29 @@ export default function BatchInventory() {
       Location: "Warehouse Clothing-1",
       Qty: 10,
       Supplier: "Denim Traders",
-      Status: "In Stock",
-      Action: <ActionBatch itemBatch="JEANS-2025-1009-01" id={19} />,
+      Status: <BatchStockStatus status="Active" />,
+      Action: (
+        <Action
+          buttons={[
+            {
+              onClick: () => HandleStockIn("JEANS-2025-1009-01", 19),
+              icon: PackagePlus,
+            },
+            {
+              onClick: () => HandleStockOut("JEANS-2025-1009-01", 19),
+              icon: PackageMinus,
+            },
+            {
+              onClick: () => HandleEdit("JEANS-2025-1009-01", 19),
+              icon: SquarePen,
+            },
+            {
+              onClick: () => HandleTransfer("JEANS-2025-1009-01", 19),
+              icon: ReplaceAll,
+            },
+          ]}
+        />
+      ),
       itemId: 10,
     },
     {
@@ -344,8 +704,29 @@ export default function BatchInventory() {
       Location: "Warehouse Clothing-2",
       Qty: 5,
       Supplier: "Blue Denim Co.",
-      Status: "In Stock",
-      Action: <ActionBatch itemBatch="JEANS-2025-1009-02" id={20} />,
+      Status: <BatchStockStatus status="Low Stock" />,
+      Action: (
+        <Action
+          buttons={[
+            {
+              onClick: () => HandleStockIn("JEANS-2025-1009-02", 20),
+              icon: PackagePlus,
+            },
+            {
+              onClick: () => HandleStockOut("JEANS-2025-1009-02", 20),
+              icon: PackageMinus,
+            },
+            {
+              onClick: () => HandleEdit("JEANS-2025-1009-02", 20),
+              icon: SquarePen,
+            },
+            {
+              onClick: () => HandleTransfer("JEANS-2025-1009-02", 20),
+              icon: ReplaceAll,
+            },
+          ]}
+        />
+      ),
       itemId: 10,
     },
 
@@ -357,8 +738,29 @@ export default function BatchInventory() {
       Location: "Warehouse Clothing-1",
       Qty: 2,
       Supplier: "Winter Wear Ltd.",
-      Status: "Low Stock",
-      Action: <ActionBatch itemBatch="JACKET-2025-1009-01" id={21} />,
+      Status: <BatchStockStatus status="Low Stock" />,
+      Action: (
+        <Action
+          buttons={[
+            {
+              onClick: () => HandleStockIn("JACKET-2025-1009-01", 21),
+              icon: PackagePlus,
+            },
+            {
+              onClick: () => HandleStockOut("JACKET-2025-1009-01", 21),
+              icon: PackageMinus,
+            },
+            {
+              onClick: () => HandleEdit("JACKET-2025-1009-01", 21),
+              icon: SquarePen,
+            },
+            {
+              onClick: () => HandleTransfer("JACKET-2025-1009-01", 21),
+              icon: ReplaceAll,
+            },
+          ]}
+        />
+      ),
       itemId: 11,
     },
     {
@@ -368,8 +770,29 @@ export default function BatchInventory() {
       Location: "Warehouse Clothing-2",
       Qty: 3,
       Supplier: "Cozy Apparel Co.",
-      Status: "Low Stock",
-      Action: <ActionBatch itemBatch="JACKET-2025-1009-02" id={22} />,
+      Status: <BatchStockStatus status="Low Stock" />,
+      Action: (
+        <Action
+          buttons={[
+            {
+              onClick: () => HandleStockIn("JACKET-2025-1009-02", 22),
+              icon: PackagePlus,
+            },
+            {
+              onClick: () => HandleStockOut("JACKET-2025-1009-02", 22),
+              icon: PackageMinus,
+            },
+            {
+              onClick: () => HandleEdit("JACKET-2025-1009-02", 22),
+              icon: SquarePen,
+            },
+            {
+              onClick: () => HandleTransfer("JACKET-2025-1009-02", 22),
+              icon: ReplaceAll,
+            },
+          ]}
+        />
+      ),
       itemId: 11,
     },
   ];

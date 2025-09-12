@@ -7,15 +7,17 @@ import {
   MainWrapper,
   ButtonLayout,
   ControlLayout,
-} from "../components/Layout";
+} from "../Layouts/Layout";
 import { useMediaQuery } from "react-responsive";
-import ExportButton from "../components/export_buttons";
+import { ExportButton } from "../components/buttons.jsx";
 import Searchbar from "../components/Searchbar.jsx";
-import BatchControl from "../components/ModalContol.jsx";
+import { BatchControl } from "../Layouts/ModalContol.jsx";
 
 //Table Layout component
 import Table from "../components/Table";
 import MobileTable from "../components/MobileTable";
+import { ProductStatus } from "../components/Status.jsx";
+import { Action } from "../components/buttons.jsx";
 
 //Animation
 import { motion, AnimatePresence } from "framer-motion";
@@ -30,56 +32,13 @@ export default function ProductManagement() {
 
   const isSmallMobile = useMediaQuery({ maxWidth: 375 });
 
-  //Status State
-  const Action = ({ items, id }) => (
-    <div className="flex justify-center items-center gap-4">
-      <motion.button
-        onClick={() => HandleEditAction(items, id)}
-        animate={{ scale: [1, 1.07, 1] }}
-        transition={{
-          duration: 2,
-          repeat: Infinity,
-          ease: "easeInOut",
-        }}
-        className="group bg-gray-200 p-2 shadow-lg rounded-[0.3rem] cursor-pointer hover:bg-gray-400"
-      >
-        <SquarePen className="text-violet-500 h-[1rem] w-[1rem] stroke-[0.15rem] group-hover:text-violet-800 cursor-pointer" />
-      </motion.button>
+  // Table Action functionality
+  const HandleEdit = (items, id) => {
+    alert(`Edit ${items} id: ${id}`);
+  };
 
-      <motion.button
-        onClick={() => HandleEditAction(items, id)}
-        animate={{ scale: [1, 1.07, 1] }}
-        transition={{
-          duration: 2,
-          repeat: Infinity,
-          ease: "easeInOut",
-        }}
-        className="group bg-gray-200 p-2 shadow-lg rounded-[0.3rem] cursor-pointer hover:bg-gray-400"
-      >
-        <Trash2 className="text-violet-500 h-[1rem] w-[1rem] stroke-[0.15rem] group-hover:text-violet-800 cursor-pointer" />
-      </motion.button>
-    </div>
-  );
-
-  const StatusState = ({ status }) => {
-    switch (status) {
-      case "Active":
-        return (
-          <div className="flex justify-center items-center gap-1">
-            <p>Active</p>
-            <div className="w-2 h-2 rounded-4xl bg-green-600 mb-2"></div>
-          </div>
-        );
-      case "Inactive":
-        return (
-          <div className="flex justify-center items-center gap-1">
-            <p>Inactive</p>
-            <div className="w-2 h-2 rounded-4xl bg-red-600 mb-2"></div>
-          </div>
-        );
-      default:
-        <p></p>;
-    }
+  const HandleRemove = (items, id) => {
+    alert(`remove ${items} id: ${id}`);
   };
 
   //Sample columns
@@ -99,88 +58,231 @@ export default function ProductManagement() {
       product: "Laptop - Dell Inspiron 15",
       category: "Electronics",
       unit: "₱6000",
-      status: <StatusState status="Active" />,
-      action: <Action items="Laptop - Dell Inspiron 15" id={1} />,
+      status: <ProductStatus status="Active" />,
+      action: (
+        <Action
+          buttons={[
+            {
+              onClick: () => HandleEdit("Laptop - Dell Inspiron 15", 1),
+              icon: SquarePen,
+            },
+            {
+              onClick: () => HandleRemove("Laptop - Dell Inspiron 15", 1),
+              icon: Trash2,
+            },
+          ]}
+        />
+      ),
     },
     {
       id: 2,
       product: "Wireless Mouse - Logitech M185",
       category: "Electronics",
       unit: "₱900",
-      status: <StatusState status="Inactive" />,
-      action: <Action items="Wireless Mouse - Logitech M185" id={2} />,
+      status: <ProductStatus status="Inactive" />,
+      action: (
+        <Action
+          buttons={[
+            {
+              onClick: () => HandleEdit("Wireless Mouse - Logitech M185", 2),
+              icon: SquarePen,
+            },
+            {
+              onClick: () => HandleRemove("Wireless Mouse - Logitech M185", 2),
+              icon: Trash2,
+            },
+          ]}
+        />
+      ),
     },
     {
       id: 3,
       product: "Smartphone - iPhone 14",
       category: "Electronics",
       unit: "₱65000",
-      status: <StatusState status="Active" />,
-      action: <Action items="Smartphone - iPhone 14" id={3} />,
+      status: <ProductStatus status="Active" />,
+      action: (
+        <Action
+          buttons={[
+            {
+              onClick: () => HandleEdit("Smartphone - iPhone 14", 3),
+              icon: SquarePen,
+            },
+            {
+              onClick: () => HandleRemove("Smartphone - iPhone 14", 3),
+              icon: Trash2,
+            },
+          ]}
+        />
+      ),
     },
     {
       id: 4,
       product: "Rice - 5kg Bag",
       category: "Grocery",
       unit: "₱500",
-      status: <StatusState status="Active" />,
-      action: <Action items="Rice - 5kg Bag" id={4} />,
+      status: <ProductStatus status="Active" />,
+      action: (
+        <Action
+          buttons={[
+            {
+              onClick: () => HandleEdit("Rice - 5kg Bag", 4),
+              icon: SquarePen,
+            },
+            {
+              onClick: () => HandleRemove("Rice - 5kg Bag", 4),
+              icon: Trash2,
+            },
+          ]}
+        />
+      ),
     },
     {
       id: 5,
       product: "Cooking Oil - 1L Bottle",
       category: "Grocery",
       unit: "₱120",
-      status: <StatusState status="Active" />,
-      action: <Action items="Cooking Oil - 1L Bottle" id={5} />,
+      status: <ProductStatus status="Active" />,
+      action: (
+        <Action
+          buttons={[
+            {
+              onClick: () => HandleEdit("Cooking Oil - 1L Bottle", 5),
+              icon: SquarePen,
+            },
+            {
+              onClick: () => HandleRemove("Cooking Oil - 1L Bottle", 5),
+              icon: Trash2,
+            },
+          ]}
+        />
+      ),
     },
     {
       id: 6,
       product: "Bananas (1kg)",
       category: "Grocery",
       unit: "₱120",
-      status: <StatusState status="Active" />,
-      action: <Action items="Bananas (1kg)" id={6} />,
+      status: <ProductStatus status="Active" />,
+      action: (
+        <Action
+          buttons={[
+            {
+              onClick: () => HandleEdit("Bananas (1kg)", 6),
+              icon: SquarePen,
+            },
+            {
+              onClick: () => HandleRemove("Bananas (1kg)", 6),
+              icon: Trash2,
+            },
+          ]}
+        />
+      ),
     },
     {
       id: 7,
       product: "Office Chair - Ergonomic",
       category: "Furniture",
       unit: "₱1500",
-      status: <StatusState status="Active" />,
-      action: <Action items="Office Chair - Ergonomic" id={7} />,
+      status: <ProductStatus status="Active" />,
+      action: (
+        <Action
+          buttons={[
+            {
+              onClick: () => HandleEdit("Office Chair - Ergonomic", 7),
+              icon: SquarePen,
+            },
+            {
+              onClick: () => HandleRemove("Office Chair - Ergonomic", 7),
+              icon: Trash2,
+            },
+          ]}
+        />
+      ),
     },
     {
       id: 8,
       product: "Dining Table - 6 Seater",
       category: "Furniture",
       unit: "₱4500",
-      status: <StatusState status="Active" />,
-      action: <Action items="Dining Table - 6 Seater" id={8} />,
+      status: <ProductStatus status="Active" />,
+      action: (
+        <Action
+          buttons={[
+            {
+              onClick: () => HandleEdit("Dining Table - 6 Seater", 8),
+              icon: SquarePen,
+            },
+            {
+              onClick: () => HandleRemove("Dining Table - 6 Seater", 8),
+              icon: Trash2,
+            },
+          ]}
+        />
+      ),
     },
     {
       id: 9,
       product: "T-Shirt - Cotton (Large)",
       category: "Clothing",
       unit: "₱220",
-      status: <StatusState status="Active" />,
-      action: <Action items="T-Shirt - Cotton (Large)" id={9} />,
+      status: <ProductStatus status="Active" />,
+      action: (
+        <Action
+          buttons={[
+            {
+              onClick: () => HandleEdit("T-Shirt - Cotton (Large)", 9),
+              icon: SquarePen,
+            },
+            {
+              onClick: () => HandleRemove("T-Shirt - Cotton (Large)", 9),
+              icon: Trash2,
+            },
+          ]}
+        />
+      ),
     },
     {
       id: 10,
       product: "Jeans - Blue Denim",
       category: "Clothing",
       unit: "₱345",
-      status: <StatusState status="Active" />,
-      action: <Action items="Jeans - Blue Denim" id={10} />,
+      status: <ProductStatus status="Active" />,
+      action: (
+        <Action
+          buttons={[
+            {
+              onClick: () => HandleEdit("Jeans - Blue Denim", 10),
+              icon: SquarePen,
+            },
+            {
+              onClick: () => HandleRemove("Jeans - Blue Denim", 10),
+              icon: Trash2,
+            },
+          ]}
+        />
+      ),
     },
     {
       id: 11,
       product: "Jacket - Winter Coat",
       category: "Clothing",
       unit: "₱590",
-      status: <StatusState status="Active" />,
-      action: <Action items="Jacket - Winter Coat" id={11} />,
+      status: <ProductStatus status="Active" />,
+      action: (
+        <Action
+          buttons={[
+            {
+              onClick: () => HandleEdit("Jacket - Winter Coat", 11),
+              icon: SquarePen,
+            },
+            {
+              onClick: () => HandleRemove("Jacket - Winter Coat", 11),
+              icon: Trash2,
+            },
+          ]}
+        />
+      ),
     },
   ];
 

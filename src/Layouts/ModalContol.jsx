@@ -3,7 +3,7 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 
 //Batch Contol Modal
-export default function BatchControl({ children, Count }) {
+export function BatchControl({ children, Count }) {
   return (
     <>
       <motion.div

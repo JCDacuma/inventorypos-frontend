@@ -7,15 +7,17 @@ import {
   MainWrapper,
   ButtonLayout,
   ControlLayout,
-} from "../components/Layout";
+} from "../Layouts/Layout";
 import { useMediaQuery } from "react-responsive";
-import ExportButton from "../components/export_buttons";
+import { ExportButton } from "../components/buttons.jsx";
 import Searchbar from "../components/Searchbar.jsx";
-import BatchControl from "../components/ModalContol.jsx";
+import { BatchControl } from "../Layouts/ModalContol.jsx";
 
 //Table Layout component
 import Table from "../components/Table";
 import MobileTable from "../components/MobileTable";
+import { InventoryStatus } from "../components/Status.jsx";
+import { Action } from "../components/buttons.jsx";
 
 //Animation
 import { motion, AnimatePresence } from "framer-motion";
@@ -37,63 +39,7 @@ export default function Inventory() {
 
   const isSmallMobile = useMediaQuery({ maxWidth: 375 });
 
-  const Actions = ({ items, id }) => (
-    <div className="flex justify-center items-center gap-4 ">
-      <motion.button
-        onClick={() => HandleStockIn(items, id)}
-        animate={{ scale: [1, 1.07, 1] }}
-        transition={{
-          duration: 2.5,
-          repeat: Infinity,
-          ease: "easeInOut",
-        }}
-        className="group bg-gray-200 p-2 shadow-lg rounded-[0.3rem] cursor-pointer hover:bg-gray-400"
-      >
-        <PackagePlus className="text-violet-500 h-5 w-5 stroke-[0.15rem] group-hover:text-violet-800 cursor-pointer" />
-      </motion.button>
-
-      <motion.button
-        onClick={() => HandleStockOut(items, id)}
-        animate={{ scale: [1, 1.07, 1] }}
-        transition={{
-          duration: 2,
-          repeat: Infinity,
-          ease: "easeInOut",
-        }}
-        className="group bg-gray-200 p-2 shadow-lg rounded-[0.3rem] cursor-pointer hover:bg-gray-400"
-      >
-        <PackageMinus className="text-violet-500 h-5 w-5 stroke-[0.15rem] group-hover:text-violet-800 cursor-pointer" />
-      </motion.button>
-
-      <motion.button
-        onClick={() => HandleEditAction(items, id)}
-        animate={{ scale: [1, 1.07, 1] }}
-        transition={{
-          duration: 2,
-          repeat: Infinity,
-          ease: "easeInOut",
-        }}
-        className="group bg-gray-200 p-2 shadow-lg rounded-[0.3rem] cursor-pointer hover:bg-gray-400"
-      >
-        <SquarePen className="text-violet-500 h-5 w-5 stroke-[0.15rem] group-hover:text-violet-800 cursor-pointer" />
-      </motion.button>
-      <Link to={`/batch-inventory/${id}`}>
-        <motion.button
-          animate={{ scale: [1, 1.07, 1] }}
-          transition={{
-            duration: 2,
-            repeat: Infinity,
-            ease: "easeInOut",
-          }}
-          className="group bg-gray-200 p-2 shadow-lg rounded-[0.3rem] cursor-pointer hover:bg-gray-400"
-        >
-          <PackageOpen className="text-violet-500 h-5 w-5 stroke-[0.15rem] group-hover:text-violet-800 cursor-pointer" />
-        </motion.button>
-      </Link>
-    </div>
-  );
-
-  //view
+  //Action Table functionality
   const HandleStockIn = (items, id) => {
     alert(`addStock ${items} ${id}`);
   };
@@ -106,35 +52,6 @@ export default function Inventory() {
   //view
   const HandleEditAction = (items, id) => {
     alert(`Edit ${items}`);
-  };
-
-  //For Status
-  const StatusDisplay = ({ status }) => {
-    switch (status) {
-      case "In Stock":
-        return (
-          <div className="flex justify-center items-center gap-1">
-            <p>In Stock</p>
-            <div className="h-2 w-2 rounded-4xl bg-green-600 mb-2"></div>
-          </div>
-        );
-      case "Low Stock":
-        return (
-          <div className="flex justify-center items-center gap-1">
-            <p>Low Stock</p>
-            <div className="h-2 w-2 rounded-4xl bg-amber-500 mb-2"></div>
-          </div>
-        );
-      case "Out of Stock":
-        return (
-          <div className="flex justify-center items-center gap-1">
-            <p>Out of Stock</p>
-            <div className="h-2 w-2 rounded-4xl bg-red-500 mb-2"></div>
-          </div>
-        );
-      default:
-        return <p></p>;
-    }
   };
 
   //Sample column
@@ -151,20 +68,37 @@ export default function Inventory() {
     { key: "Action", label: "Action" },
   ];
 
-  //Sample fetch from database
+  // Sample fetch from database
   const data = [
     {
       id: 1,
       item: "Laptop - Dell Inspiron 15",
       sku: "DL-INS-15-001",
       Category: "Electronics",
-
       CurrentStock: 12,
       Unit: "pcs",
       MinStock: 5,
       Movement: "2025-08-28",
-      Status: <StatusDisplay status="In Stock" />,
-      Action: <Actions items="Laptop - Dell Inspiron 15" id={1} />,
+      Status: <InventoryStatus status="In Stock" />,
+      Action: (
+        <Action
+          buttons={[
+            {
+              onClick: () => HandleStockIn("Laptop - Dell Inspiron 15", 1),
+              icon: PackagePlus,
+            },
+            {
+              onClick: () => HandleStockOut("Laptop - Dell Inspiron 15", 1),
+              icon: PackageMinus,
+            },
+            {
+              onClick: () => HandleEditAction("Laptop - Dell Inspiron 15", 1),
+              icon: SquarePen,
+            },
+            { to: "/batch-inventory/1", icon: PackageOpen },
+          ]}
+        />
+      ),
     },
     {
       id: 2,
@@ -175,128 +109,289 @@ export default function Inventory() {
       Unit: "pcs",
       MinStock: 20,
       Movement: "2025-08-30",
-      Status: <StatusDisplay status="In Stock" />,
-      Action: <Actions items="Wireless Mouse - Logitech M185" id={2} />,
+      Status: <InventoryStatus status="In Stock" />,
+      Action: (
+        <Action
+          buttons={[
+            {
+              onClick: () => HandleStockIn("Wireless Mouse - Logitech M185", 2),
+              icon: PackagePlus,
+            },
+            {
+              onClick: () =>
+                HandleStockOut("Wireless Mouse - Logitech M185", 2),
+              icon: PackageMinus,
+            },
+            {
+              onClick: () =>
+                HandleEditAction("Wireless Mouse - Logitech M185", 2),
+              icon: SquarePen,
+            },
+            { to: "/batch-inventory/2", icon: PackageOpen },
+          ]}
+        />
+      ),
     },
     {
       id: 3,
       item: "Smartphone - iPhone 14",
       sku: "AP-IP14-006",
       Category: "Electronics",
-
       CurrentStock: 8,
       Unit: "pcs",
       MinStock: 5,
       Movement: "2025-08-31",
-      Status: <StatusDisplay status="In Stock" />,
-      Action: <Actions items="Smartphone - iPhone 14" id={3} />,
+      Status: <InventoryStatus status="In Stock" />,
+      Action: (
+        <Action
+          buttons={[
+            {
+              onClick: () => HandleStockIn("Smartphone - iPhone 14", 3),
+              icon: PackagePlus,
+            },
+            {
+              onClick: () => HandleStockOut("Smartphone - iPhone 14", 3),
+              icon: PackageMinus,
+            },
+            {
+              onClick: () => HandleEditAction("Smartphone - iPhone 14", 3),
+              icon: SquarePen,
+            },
+            { to: "/batch-inventory/3", icon: PackageOpen },
+          ]}
+        />
+      ),
     },
-
     {
       id: 4,
       item: "Rice - 5kg Bag",
       sku: "GR-RICE-5KG",
       Category: "Grocery",
-
       CurrentStock: 120,
       Unit: "kg",
       MinStock: 50,
       Movement: "2025-08-30",
-      Status: <StatusDisplay status="In Stock" />,
-      Action: <Actions items="Rice - 5kg Bag" id={4} />,
+      Status: <InventoryStatus status="In Stock" />,
+      Action: (
+        <Action
+          buttons={[
+            {
+              onClick: () => HandleStockIn("Rice - 5kg Bag", 4),
+              icon: PackagePlus,
+            },
+            {
+              onClick: () => HandleStockOut("Rice - 5kg Bag", 4),
+              icon: PackageMinus,
+            },
+            {
+              onClick: () => HandleEditAction("Rice - 5kg Bag", 4),
+              icon: SquarePen,
+            },
+            { to: "/batch-inventory/4", icon: PackageOpen },
+          ]}
+        />
+      ),
     },
     {
       id: 5,
       item: "Cooking Oil - 1L Bottle",
       sku: "GR-OIL-1L",
       Category: "Grocery",
-
       CurrentStock: 80,
       Unit: "liters",
       MinStock: 30,
       Movement: "2025-08-29",
-      Status: <StatusDisplay status="In Stock" />,
-      Action: <Actions items="Cooking Oil - 1L Bottle" id={5} />,
+      Status: <InventoryStatus status="In Stock" />,
+      Action: (
+        <Action
+          buttons={[
+            {
+              onClick: () => HandleStockIn("Cooking Oil - 1L Bottle", 5),
+              icon: PackagePlus,
+            },
+            {
+              onClick: () => HandleStockOut("Cooking Oil - 1L Bottle", 5),
+              icon: PackageMinus,
+            },
+            {
+              onClick: () => HandleEditAction("Cooking Oil - 1L Bottle", 5),
+              icon: SquarePen,
+            },
+            { to: "/batch-inventory/5", icon: PackageOpen },
+          ]}
+        />
+      ),
     },
     {
       id: 6,
       item: "Bananas",
       sku: "GR-BANANA-001",
       Category: "Grocery",
-
       CurrentStock: 200,
       Unit: "kg",
       MinStock: 100,
       Movement: "2025-08-31",
-      Status: <StatusDisplay status="In Stock" />,
-      Action: <Actions items="Bananas" id={6} />,
+      Status: <InventoryStatus status="In Stock" />,
+      Action: (
+        <Action
+          buttons={[
+            { onClick: () => HandleStockIn("Bananas", 6), icon: PackagePlus },
+            { onClick: () => HandleStockOut("Bananas", 6), icon: PackageMinus },
+            { onClick: () => HandleEditAction("Bananas", 6), icon: SquarePen },
+            { to: "/batch-inventory/6", icon: PackageOpen },
+          ]}
+        />
+      ),
     },
-
     {
       id: 7,
       item: "Office Chair - Ergonomic",
       sku: "CH-ERGO-010",
       Category: "Furniture",
-
       CurrentStock: 0,
       Unit: "pcs",
       MinStock: 2,
       Movement: "2025-08-27",
-      Status: <StatusDisplay status="Out of Stock" />,
-      Action: <Actions items="Office Chair - Ergonomic" id={7} />,
+      Status: <InventoryStatus status="Out of Stock" />,
+      Action: (
+        <Action
+          buttons={[
+            {
+              onClick: () => HandleStockIn("Office Chair - Ergonomic", 7),
+              icon: PackagePlus,
+            },
+            {
+              onClick: () => HandleStockOut("Office Chair - Ergonomic", 7),
+              icon: PackageMinus,
+            },
+            {
+              onClick: () => HandleEditAction("Office Chair - Ergonomic", 7),
+              icon: SquarePen,
+            },
+            { to: "/batch-inventory/7", icon: PackageOpen },
+          ]}
+        />
+      ),
     },
     {
       id: 8,
       item: "Dining Table - 6 Seater",
       sku: "TB-DINE-006",
       Category: "Furniture",
-
       CurrentStock: 1,
       Unit: "pcs",
       MinStock: 2,
       Movement: "2025-08-25",
-      Status: <StatusDisplay status="Low Stock" />,
-      Action: <Actions items="Dining Table - 6 Seater" id={8} />,
+      Status: <InventoryStatus status="Low Stock" />,
+      Action: (
+        <Action
+          buttons={[
+            {
+              onClick: () => HandleStockIn("Dining Table - 6 Seater", 8),
+              icon: PackagePlus,
+            },
+            {
+              onClick: () => HandleStockOut("Dining Table - 6 Seater", 8),
+              icon: PackageMinus,
+            },
+            {
+              onClick: () => HandleEditAction("Dining Table - 6 Seater", 8),
+              icon: SquarePen,
+            },
+            { to: "/batch-inventory/8", icon: PackageOpen },
+          ]}
+        />
+      ),
     },
-
     {
       id: 9,
       item: "T-Shirt - Cotton (Large)",
       sku: "CL-TSHIRT-L",
       Category: "Clothing",
-
       CurrentStock: 50,
       Unit: "pcs",
       MinStock: 20,
       Movement: "2025-08-29",
-      Status: <StatusDisplay status="In Stock" />,
-      Action: <Actions items="T-Shirt - Cotton (Large)" id={9} />,
+      Status: <InventoryStatus status="In Stock" />,
+      Action: (
+        <Action
+          buttons={[
+            {
+              onClick: () => HandleStockIn("T-Shirt - Cotton (Large)", 9),
+              icon: PackagePlus,
+            },
+            {
+              onClick: () => HandleStockOut("T-Shirt - Cotton (Large)", 9),
+              icon: PackageMinus,
+            },
+            {
+              onClick: () => HandleEditAction("T-Shirt - Cotton (Large)", 9),
+              icon: SquarePen,
+            },
+            { to: "/batch-inventory/9", icon: PackageOpen },
+          ]}
+        />
+      ),
     },
     {
       id: 10,
       item: "Jeans - Blue Denim",
       sku: "CL-JEANS-32",
       Category: "Clothing",
-
       CurrentStock: 15,
       Unit: "pcs",
       MinStock: 10,
       Movement: "2025-08-28",
-      Status: <StatusDisplay status="In Stock" />,
-      Action: <Actions items="Jeans - Blue Denim" id={10} />,
+      Status: <InventoryStatus status="In Stock" />,
+      Action: (
+        <Action
+          buttons={[
+            {
+              onClick: () => HandleStockIn("Jeans - Blue Denim", 10),
+              icon: PackagePlus,
+            },
+            {
+              onClick: () => HandleStockOut("Jeans - Blue Denim", 10),
+              icon: PackageMinus,
+            },
+            {
+              onClick: () => HandleEditAction("Jeans - Blue Denim", 10),
+              icon: SquarePen,
+            },
+            { to: "/batch-inventory/10", icon: PackageOpen },
+          ]}
+        />
+      ),
     },
     {
       id: 11,
       item: "Jacket - Winter Coat",
       sku: "CL-JACKET-WT",
       Category: "Clothing",
-
       CurrentStock: 5,
       Unit: "pcs",
       MinStock: 8,
       Movement: "2025-08-27",
-      Status: <StatusDisplay status="Low Stock" />,
-      Action: <Actions items="Jacket - Winter Coat" id={11} />,
+      Status: <InventoryStatus status="Low Stock" />,
+      Action: (
+        <Action
+          buttons={[
+            {
+              onClick: () => HandleStockIn("Jacket - Winter Coat", 11),
+              icon: PackagePlus,
+            },
+            {
+              onClick: () => HandleStockOut("Jacket - Winter Coat", 11),
+              icon: PackageMinus,
+            },
+            {
+              onClick: () => HandleEditAction("Jacket - Winter Coat", 11),
+              icon: SquarePen,
+            },
+            { to: "/batch-inventory/11", icon: PackageOpen },
+          ]}
+        />
+      ),
     },
   ];
 

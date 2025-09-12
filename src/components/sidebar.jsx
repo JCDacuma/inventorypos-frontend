@@ -399,7 +399,8 @@ const Sidebar = ({ SideBarMobileState }) => {
                   <Link
                     to={item.path}
                     className={`group flex items-center gap-2 p-2  rounded-lg cursor-pointer text-base ${
-                      item.path === location.pathname
+                      item.path === location.pathname ||
+                      item.secondPath === secondLocation
                         ? "bg-gray-400/70 font-semibold text-white hover:bg-gray-200 hover:text-violet-400 hover:font-bold"
                         : "font-medium text-white hover:text-violet-400 hover:font-bold hover:bg-gray-200"
                     }`}
@@ -449,7 +450,8 @@ const Sidebar = ({ SideBarMobileState }) => {
                           key={i}
                           to={child.path}
                           className={`flex items-center gap-3 p-2 text-white rounded-lg cursor-pointer text-base ${
-                            child.path === location.pathname
+                            child.path === location.pathname ||
+                            child.secondPath === secondLocation
                               ? "bg-gray-400/70 font-semibold text-white hover:bg-gray-200 hover:text-violet-400 hover:font-bold"
                               : "font-medium text-white hover:text-violet-400 hover:font-bold hover:bg-gray-200"
                           }`}
