@@ -224,3 +224,25 @@ export function OrderManagementStatus({ status }) {
       return <p></p>;
   }
 }
+
+export function SupplierStatus({ status }) {
+  switch (status) {
+    case "Active":
+      return (
+        <div className="flex justify-center items-center gap-1">
+          <p>Active</p>
+          <div className="h-2 w-2 rounded-4xl bg-green-600 mb-2"></div>
+        </div>
+      );
+    case "Inactive":
+      return (
+        <div className="flex justify-center items-center gap-1">
+          <p>Inactive</p>
+          <div className="h-2 w-2 rounded-4xl bg-orange-500 mb-2"></div>
+        </div>
+      );
+
+    default:
+      return <p></p>;
+  }
+}

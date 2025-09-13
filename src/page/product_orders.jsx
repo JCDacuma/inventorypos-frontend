@@ -17,7 +17,7 @@ import { BatchControl } from "../Layouts/ModalContol.jsx";
 import Table from "../components/Table";
 import MobileTable from "../components/MobileTable";
 import { OrderManagementStatus } from "../components/Status.jsx";
-import { PromoStatus } from "../components/Status.jsx";
+
 import { Action } from "../components/buttons.jsx";
 //Animation
 import { motion, AnimatePresence } from "framer-motion";
@@ -50,8 +50,9 @@ export default function PromoManagement() {
     { key: "Select", label: "" },
     { key: "orderId", label: "Order" },
     { key: "supplier", label: "Supplier" },
-    { key: "dateorder", label: "DateOfOrder" },
-    { key: "arrival", label: "ExpectedArrival" },
+    { key: "dateorder", label: "OrderDate" },
+    { key: "arrival", label: "Arrival" },
+    { key: "totalItem", label: "Items" },
     { key: "total", label: "Total" },
     { key: "status", label: "Status" },
     { key: "Action", label: "Action" },
@@ -64,6 +65,7 @@ export default function PromoManagement() {
       supplier: "Dell Supplier Inc.",
       dateorder: "2025-09-01",
       arrival: "2025-09-15",
+      totalItem: 25,
       total: `₱${250000}`,
       status: <OrderManagementStatus status="Received" />,
       Action: (
@@ -94,6 +96,7 @@ export default function PromoManagement() {
       supplier: "Tech Distributors Ltd.",
       dateorder: "2025-09-03",
       arrival: "2025-09-18",
+      totalItem: 18,
       total: `₱${145000}`,
       status: <OrderManagementStatus status="In Transit" />,
       Action: (
@@ -124,6 +127,7 @@ export default function PromoManagement() {
       supplier: "Logitech Distribution",
       dateorder: "2025-09-05",
       arrival: "2025-09-20",
+      totalItem: 12,
       total: `₱${78000}`,
       status: <OrderManagementStatus status="Pending" />,
       Action: (
@@ -154,6 +158,7 @@ export default function PromoManagement() {
       supplier: "Apple Authorized Dist.",
       dateorder: "2025-09-08",
       arrival: "2025-09-25",
+      totalItem: 40,
       total: `₱${520000}`,
       status: <OrderManagementStatus status="Ordered" />,
       Action: (
@@ -184,6 +189,7 @@ export default function PromoManagement() {
       supplier: "Samsung Electronics",
       dateorder: "2025-09-10",
       arrival: "2025-09-28",
+      totalItem: 30,
       total: `₱${310000}`,
       status: <OrderManagementStatus status="Partially Received" />,
       Action: (

@@ -16,6 +16,7 @@ import RegisterAccount from "./page/register_acc.jsx";
 import SalesReport from "./page/sales_report.jsx";
 import Settings from "./page/settings.jsx";
 import Suppliers from "./page/suppliers.jsx";
+import SupplierHistory from "./page/supplier_history.jsx";
 import ProductManagement from "./page/product_manage.jsx";
 import PromoManagement from "./page/product_managepromo.jsx";
 import PointofSale from "./page/point_of_sale.jsx";
@@ -41,6 +42,10 @@ ReactDOM.createRoot(document.getElementById("root")).render(
         <Route path="/sales-reports" element={<SalesReport />}></Route>
         <Route path="/settings" element={<Settings />}></Route>
         <Route path="/suppliers" element={<Suppliers />}></Route>
+        <Route
+          path="/suppliers-history/:id"
+          element={<SupplierHistory />}
+        ></Route>
         <Route
           path="/product-management"
           element={<ProductManagement />}
