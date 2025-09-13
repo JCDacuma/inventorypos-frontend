@@ -23,7 +23,13 @@ import { Action } from "../components/buttons.jsx";
 import { motion, AnimatePresence } from "framer-motion";
 
 //Icons
-import { ListEnd, PackageSearch, X, Package, Trash2 } from "lucide-react";
+import {
+  ListEnd,
+  PackageSearch,
+  X,
+  Package,
+  ClipboardClock,
+} from "lucide-react";
 
 export default function PromoManagement() {
   //Selected Id
@@ -31,9 +37,12 @@ export default function PromoManagement() {
 
   //Batch Contol Modal State
   const openBatchContol = selectedID.length > 0;
-
+  //Mobile Layout breakpoint
   const isSmallMobile = useMediaQuery({ maxWidth: 375 });
 
+  //Show HistoryProduct
+
+  //Action Table functionality
   const HandleUpdateStatus = (items, id) => {
     alert(`update ${items} id: ${id}`);
   };
@@ -229,15 +238,26 @@ export default function PromoManagement() {
             <ButtonLayout>
               <div className="flex gap-3 justify-between w-1/1 items-center ">
                 <div className="flex justify-center gap-2 align-middle items-center"></div>
-                <div className="flex justify-center items-end gap-2 ">
+                <div className="flex justify-center items-end gap-3 ">
                   <motion.button
                     whileTap={{ scale: 0.9, backgroundColor: "#6d00c5" }}
                     whileHover={{ scale: 1.05, backgroundColor: "#3c2350" }}
                     className="bg-violet-400 text-white flex text-sm py-2 px-4 rounded-3xl cursor-pointer"
                   >
-                    <Package className={"h-5 w-5 "} />
-                    Create Order
+                    <Package className={"h-5 w-5 mr-1"} />
+                    Create
                   </motion.button>
+                  <Link to={"/order-history/all"}>
+                    <motion.button
+                      whileTap={{ scale: 0.9, backgroundColor: "#6d00c5" }}
+                      whileHover={{ scale: 1.05, backgroundColor: "#3c2350" }}
+                      className="bg-violet-400 text-white flex text-sm py-2 px-4 rounded-3xl cursor-pointer"
+                    >
+                      <ClipboardClock className={"h-5 w-5 mr-1"} />
+                      Records
+                    </motion.button>
+                  </Link>
+
                   {/* Exportation button */}
                   <ExportButton />
                 </div>

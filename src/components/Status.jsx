@@ -225,6 +225,7 @@ export function OrderManagementStatus({ status }) {
   }
 }
 
+//Supplier Status
 export function SupplierStatus({ status }) {
   switch (status) {
     case "Active":
@@ -239,6 +240,36 @@ export function SupplierStatus({ status }) {
         <div className="flex justify-center items-center gap-1">
           <p>Inactive</p>
           <div className="h-2 w-2 rounded-4xl bg-orange-500 mb-2"></div>
+        </div>
+      );
+
+    default:
+      return <p></p>;
+  }
+}
+
+//OrderHistoryStatus
+export function OrderHistoryStatus({ status }) {
+  switch (status) {
+    case "Received":
+      return (
+        <div className="flex justify-center items-center gap-1">
+          <p>Recieved</p>
+          <div className="h-2 w-2 rounded-4xl bg-green-600 mb-2"></div>
+        </div>
+      );
+    case "Cancelled":
+      return (
+        <div className="flex justify-center items-center gap-1">
+          <p>Cancelled</p>
+          <div className="h-2 w-2 rounded-4xl bg-red-500 mb-2"></div>
+        </div>
+      );
+    case "Returned":
+      return (
+        <div className="flex justify-center items-center gap-1">
+          <p>Returned</p>
+          <div className="h-2 w-2 rounded-4xl bg-cyan-500 mb-2"></div>
         </div>
       );
 

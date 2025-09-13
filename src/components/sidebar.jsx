@@ -63,8 +63,8 @@ const menuItems = [
         path: "/inventory",
         secondPath: "/batch-inventory",
       },
-      { title: "Suppliers", icon: ClipboardList, path: "/suppliers" },
-      { title: "Orders", icon: Truck, path: "/product-orders" },
+      { title: "Product Order", icon: ClipboardList, path: "/product-orders" },
+      { title: "Supplier", icon: Truck, path: "/suppliers" },
     ],
   },
   {

@@ -22,7 +22,9 @@ export default function MobileTable({
 
   //passing id to page
   useEffect(() => {
-    setSelectedId(selectedId);
+    if (setSelectedId !== null) {
+      setSelectedId(selectedId);
+    }
   }, [selectedId]);
 
   return (

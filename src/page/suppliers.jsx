@@ -70,7 +70,7 @@ export default function Suppliers() {
               iconSize: "h-[1.2rem] w-[1.2rem]",
             },
             {
-              to: "/suppliers-history/1",
+              to: "/order-history/1",
               icon: Eye,
               iconSize: "h-[1.2rem] w-[1.2rem]",
             },
@@ -100,7 +100,7 @@ export default function Suppliers() {
               iconSize: "h-[1.2rem] w-[1.2rem]",
             },
             {
-              to: "/suppliers-history/2",
+              to: "/order-history/2",
               icon: Eye,
               iconSize: "h-[1.2rem] w-[1.2rem]",
             },
@@ -130,7 +130,7 @@ export default function Suppliers() {
               iconSize: "h-[1.2rem] w-[1.2rem]",
             },
             {
-              to: "/suppliers-history/3",
+              to: "/order-history/3",
               icon: Eye,
               iconSize: "h-[1.2rem] w-[1.2rem]",
             },
@@ -160,7 +160,7 @@ export default function Suppliers() {
               iconSize: "h-[1.2rem] w-[1.2rem]",
             },
             {
-              to: "/suppliers-history/4",
+              to: "/order-history/4",
               icon: Eye,
               iconSize: "h-[1.2rem] w-[1.2rem]",
             },
@@ -190,7 +190,7 @@ export default function Suppliers() {
               iconSize: "h-[1.2rem] w-[1.2rem]",
             },
             {
-              to: "/suppliers-history/5",
+              to: "/order-history/5",
               icon: Eye,
               iconSize: "h-[1.2rem] w-[1.2rem]",
             },
@@ -220,7 +220,7 @@ export default function Suppliers() {
               iconSize: "h-[1.2rem] w-[1.2rem]",
             },
             {
-              to: "/suppliers-history/6",
+              to: "/order-history/6",
               icon: Eye,
               iconSize: "h-[1.2rem] w-[1.2rem]",
             },
@@ -250,7 +250,7 @@ export default function Suppliers() {
               iconSize: "h-[1.2rem] w-[1.2rem]",
             },
             {
-              to: "/suppliers-history/7",
+              to: "/order-history/7",
               icon: Eye,
               iconSize: "h-[1.2rem] w-[1.2rem]",
             },
@@ -280,7 +280,7 @@ export default function Suppliers() {
               iconSize: "h-[1.2rem] w-[1.2rem]",
             },
             {
-              to: "/suppliers-history/8",
+              to: "/order-history/8",
               icon: Eye,
               iconSize: "h-[1.2rem] w-[1.2rem]",
             },
