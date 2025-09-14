@@ -18,6 +18,7 @@ import Table from "../components/Table";
 import MobileTable from "../components/MobileTable";
 import { SupplierStatus } from "../components/Status.jsx";
 import { Action } from "../components/buttons.jsx";
+
 //Animation
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -309,14 +310,17 @@ export default function Suppliers() {
               <div className="flex gap-3 justify-between w-1/1 items-center ">
                 <div className="flex justify-center gap-2 align-middle items-center"></div>
                 <div className="flex justify-center items-end gap-2 ">
-                  <motion.button
-                    whileTap={{ scale: 0.9, backgroundColor: "#6d00c5" }}
-                    whileHover={{ scale: 1.05, backgroundColor: "#3c2350" }}
-                    className="bg-violet-400 text-white flex text-sm py-2 px-4 rounded-3xl cursor-pointer"
-                  >
-                    <TruckElectric className={"h-5 w-5 mr-1"} />
-                    Register Supplier
-                  </motion.button>
+                  <Link to={"/register-supplier"}>
+                    <motion.button
+                      whileTap={{ scale: 0.9, backgroundColor: "#6d00c5" }}
+                      whileHover={{ scale: 1.05, backgroundColor: "#3c2350" }}
+                      className="bg-violet-400 text-white flex text-sm py-2 px-4 rounded-3xl cursor-pointer"
+                    >
+                      <TruckElectric className={"h-5 w-5 mr-1"} />
+                      Register Supplier
+                    </motion.button>
+                  </Link>
+
                   {/* Exportation button */}
                   <ExportButton />
                 </div>

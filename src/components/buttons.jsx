@@ -12,17 +12,17 @@ export function ExportButton() {
       <motion.button
         whileTap={{ scale: 0.9, backgroundColor: "#6d00c5" }}
         whileHover={{ scale: 1.05, backgroundColor: "#3c2350" }}
-        className="bg-violet-400 text-white flex text-sm py-2 px-4 rounded-3xl cursor-pointer"
+        className="bg-violet-400 text-white flex text-sm py-2 px-4 rounded-3xl cursor-pointer items-center justify-center"
       >
-        <BsFileEarmarkPdf className={"h-5 w-5 "} />
+        <BsFileEarmarkPdf className={"h-4 w-4 mr-1"} />
         Export PDF
       </motion.button>
       <motion.button
         whileTap={{ scale: 0.9, backgroundColor: "#6d00c5" }}
         whileHover={{ scale: 1.05, backgroundColor: "#3c2350" }}
-        className=" bg-violet-400 text-white flex text-sm  py-2 px-4 rounded-3xl cursor-pointer"
+        className=" bg-violet-400 text-white flex text-sm  py-2 px-4 rounded-3xl cursor-pointer  items-center justify-center"
       >
-        <BsFileEarmarkExcel className={"h-5 w-5"} />
+        <BsFileEarmarkExcel className={"h-4 w-4 mr-1"} />
         Export Excel
       </motion.button>
     </div>
