@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-
+import { Link } from "react-router-dom";
 // Page Layout component
 import {
   Layout,
@@ -24,6 +24,7 @@ import {
   Phone,
   Mail,
   Check,
+  Undo2,
 } from "lucide-react";
 
 export default function RegisterSupplier() {
@@ -36,8 +37,18 @@ export default function RegisterSupplier() {
 
   return (
     <Layout currentWebPage={"Register Supplier"}>
-      <form className="w-full h-auto py-0s px-2 2xl:px-10  overflow-auto mt-20 ">
-        <div className=" flex flex-col justify-center items-center gap-5 w-full h-auto py-5 mb-0 2xl:mb-35 ">
+      <form className="w-full h-auto py-0s px-2 2xl:px-10  overflow-auto mt-20">
+        {/* Back button */}
+        <Link to={"/suppliers"}>
+          <motion.button
+            whileTap={{ scale: 0.9 }}
+            whileHover={{ scale: 1.05, color: "#3c2350" }}
+            className="flex text-violet-500  justify-center items-center font-semibold gap-1 cursor-pointer mt-1 ml-3 sm:mt-5 sm:ml-10 "
+          >
+            <Undo2 /> Back
+          </motion.button>
+        </Link>
+        <div className=" flex flex-col justify-center items-center gap-5 w-full h-auto py-5 mb-0 2xl:mb-20 ">
           <div className="w-full  h-full  flex flex-col md:flex-row justify-center items-center px-0 2xl:px-20">
             {/* First Column */}
             <div className="flex flex-col gap-5 text-[#82439C]/79 justify-center items-center h-full w-full md:w-1/2 pt-2  ">
@@ -45,7 +56,7 @@ export default function RegisterSupplier() {
                 <Truck className="stroke-3" /> Supplier Info
               </p>
 
-              <div className="flex flex-col px-5 lg:px-15 2xl:18 gap-5 text-[#82439C]/79 h-full w-full md:w-full ">
+              <div className="flex flex-col px-5 lg:px-15 2xl:18 gap-5 text-[#82439C]/79 h-full w-full md:w-full 2xl:gap-12">
                 <div className="flex flex-col">
                   <label className="font-bold flex gap-1">
                     <Truck /> Supplier Name
@@ -88,7 +99,6 @@ export default function RegisterSupplier() {
                       className="flex items-center justify-evenly px-5 w-full border border-gray-400 rounded-[0.6rem] pt-2 gap-6 mt-1 
              focus-within:border-[#82439C] focus-within:ring-1 focus-within:ring-violet-500 "
                     >
-                      {/* ✅ YES checkbox */}
                       <label className="flex items-center gap-2 cursor-pointer">
                         <div className="relative">
                           <input
@@ -106,7 +116,6 @@ export default function RegisterSupplier() {
                         </span>
                       </label>
 
-                      {/* ❌ NO checkbox */}
                       <label className="flex items-center gap-2 cursor-pointer">
                         <div className="relative">
                           <input
@@ -150,7 +159,7 @@ export default function RegisterSupplier() {
                 Contact Info{" "}
               </p>
 
-              <div className="flex flex-col px-5 lg:px-15 2xl:18  gap-5 text-[#82439C]/79 h-full w-full md:w-full ">
+              <div className="flex flex-col px-5 lg:px-15 2xl:18  gap-5 text-[#82439C]/79 h-full w-full md:w-full 2xl:gap-12">
                 <div className="flex flex-col">
                   <label className="font-bold flex gap-1">
                     {" "}
@@ -193,7 +202,7 @@ export default function RegisterSupplier() {
             </div>
           </div>
           {/* Submit Button */}
-          <div className="flex justify-center items-center mt-5 w-[90%] sm:w-[50%] lg:w-[30%] 2xl:w-[23%]">
+          <div className="flex justify-center items-center mt-5 2xl:mt-12 w-[90%] sm:w-[50%] lg:w-[30%] 2xl:w-[23%]">
             <motion.button
               whileHover={{
                 scale: 1.05,

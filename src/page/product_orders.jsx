@@ -239,14 +239,17 @@ export default function PromoManagement() {
               <div className="flex gap-3 justify-between w-1/1 items-center ">
                 <div className="flex justify-center gap-2 align-middle items-center"></div>
                 <div className="flex justify-center items-end gap-3 ">
-                  <motion.button
-                    whileTap={{ scale: 0.9, backgroundColor: "#6d00c5" }}
-                    whileHover={{ scale: 1.05, backgroundColor: "#3c2350" }}
-                    className="bg-violet-400 text-white flex text-sm py-2 px-4 rounded-3xl cursor-pointer"
-                  >
-                    <Package className={"h-5 w-5 mr-1"} />
-                    Create
-                  </motion.button>
+                  <Link to={"/create-order"}>
+                    <motion.button
+                      whileTap={{ scale: 0.9, backgroundColor: "#6d00c5" }}
+                      whileHover={{ scale: 1.05, backgroundColor: "#3c2350" }}
+                      className="bg-violet-400 text-white flex text-sm py-2 px-4 rounded-3xl cursor-pointer"
+                    >
+                      <Package className={"h-5 w-5 mr-1"} />
+                      Create
+                    </motion.button>
+                  </Link>
+
                   <Link to={"/order-history/all"}>
                     <motion.button
                       whileTap={{ scale: 0.9, backgroundColor: "#6d00c5" }}

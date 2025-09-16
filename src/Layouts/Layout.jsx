@@ -25,26 +25,6 @@ export const Card = ({ style = "", children }) => {
   );
 };
 
-export const Layout = ({ currentWebPage = "", children, style = "" }) => {
-  const [MobileSideBar, setMobileSideBar] = useState(null);
-
-  const HandleMobileSideBar = (state) => {
-    setMobileSideBar(state);
-  };
-
-  return (
-    <div className={`bg-gray-100 w-1/1 h-screen flex ${style}`}>
-      <Navbar
-        page={currentWebPage}
-        setSideBarMobile={HandleMobileSideBar}
-        mobileSideBarState={MobileSideBar}
-      />
-      <Sidebar SideBarMobileState={MobileSideBar} />
-      {children}
-    </div>
-  );
-};
-
 //Layout Contols layout
 export const ControlLayout = ({ children }) => {
   const isSmallMobile = useMediaQuery({ maxWidth: 768 });
@@ -89,6 +69,27 @@ export const ButtonLayout = ({ children }) => {
           </button>
         </div>
       )}
+    </div>
+  );
+};
+
+//Page Setup
+export const Layout = ({ currentWebPage = "", children, style = "" }) => {
+  const [MobileSideBar, setMobileSideBar] = useState(null);
+
+  const HandleMobileSideBar = (state) => {
+    setMobileSideBar(state);
+  };
+
+  return (
+    <div className={`bg-gray-100 w-1/1 h-screen flex ${style}`}>
+      <Navbar
+        page={currentWebPage}
+        setSideBarMobile={HandleMobileSideBar}
+        mobileSideBarState={MobileSideBar}
+      />
+      <Sidebar SideBarMobileState={MobileSideBar} />
+      {children}
     </div>
   );
 };
