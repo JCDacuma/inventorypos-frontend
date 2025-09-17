@@ -23,6 +23,8 @@ import {
   LogOut,
 } from "lucide-react";
 
+import { AnimatePresence, motion } from "framer-motion";
+
 /* ----- Links ---- */
 const menuItems = [
   {
@@ -169,19 +171,27 @@ const Sidebar = ({ SideBarMobileState }) => {
       } `}
     >
       {isDesktop ? (
-        <div
-          className={`absolute flex items-baseline justify-baseline pl-[1rem] pt-4 border-b-2 border-violet-500  top-15  z-100 text-white bg-violet-800 transition-[width] duration-500 ease-in-out  ${
-            showFullSidebar ? `w-62 h-20` : `w-23 h-17`
-          }`}
-        >
-          <Hamburger
-            size={24}
-            duration={0.3}
-            easing="ease-in"
-            toggled={showFullSidebar}
-            toggle={toggleSidebarview}
-          />
-        </div>
+        <AnimatePresence>
+          <motion.div
+            initial={{ width: 0 }}
+            animate={{
+              width: showFullSidebar ? "15.5rem" : "5.7rem",
+              height: showFullSidebar ? "5rem" : "4.25rem",
+              paddingLeft: showFullSidebar ? "0.49rem" : "1.3rem",
+            }}
+            exit={{ width: 0 }}
+            transition={{ duration: 0.3, ease: "easeInOut" }}
+            className="absolute flex items-baseline justify-baseline pt-4 border-b-2 border-violet-500 top-15 z-[100] text-white bg-violet-800"
+          >
+            <Hamburger
+              size={24}
+              duration={0.3}
+              easing="ease-in"
+              toggled={showFullSidebar}
+              toggle={toggleSidebarview}
+            />
+          </motion.div>
+        </AnimatePresence>
       ) : (
         ""
       )}
@@ -190,7 +200,7 @@ const Sidebar = ({ SideBarMobileState }) => {
         showFullSidebar ? (
           <div
             className={`bg-violet-800 h-screen shadow-lg flex flex-col  overflow-y-auto
-    transition-[width] duration-500 ease-in-out z-50
+    transition-[width] duration-300 ease-in-out z-50
     ${showFullSidebar ? "w-64" : "w-20"}`}
           >
             {/* ---- Links ---- */}
@@ -281,11 +291,11 @@ const Sidebar = ({ SideBarMobileState }) => {
         ) : (
           <div
             className={`bg-violet-800 h-screen shadow-lg flex flex-col transition-[width] duration-500 ease-in-out z-50
-    ${showFullSidebar ? "w-68" : "w-24"}
-    overflow-y-auto overflow-x-visible [scrollbar-width:thin] [scrollbar-color:#8b5cf6_transparent]`}
+    ${showFullSidebar ? "w-68" : "w-23"}
+    overflow-y-auto `}
           >
             {/* ---- Links ---- */}
-            <nav className={`flex-1 py-4 px-4   text-sm mt-18 `}>
+            <nav className={`flex-1 py-4 px-4  text-sm mt-18 `}>
               <div className=" flex ml-4">
                 {showFullSidebar ? (
                   ""
@@ -322,11 +332,11 @@ const Sidebar = ({ SideBarMobileState }) => {
                       </span>
                     </div>
                   ) : (
-                    /* ----- kapag may dropdown ---- */
+                    /* ----- if there is dropdown ---- */
                     <div>
                       <button
                         onClick={() => toggleMenu(item.title)}
-                        className="group  flex items-center justify-between w-full p-4 rounded-lg hover:bg-gray-200 hover:font-bold  cursor-pointer mt-2"
+                        className="group  flex items-center justify-between w-full px-4 py-4 rounded-lg hover:bg-gray-200 hover:font-bold  cursor-pointer mt-2"
                       >
                         <span className="flex items-center gap-3">
                           <item.icon className="w-5 h-5 text-white group-hover:text-violet-400 group-hover:stroke-2" />
@@ -348,7 +358,7 @@ const Sidebar = ({ SideBarMobileState }) => {
                       {/*-------- Child Menu with the link dropdown------*/}
                       {
                         <div
-                          className={` mt-1 space-y-1 overflow-hidden transition-all duration-400 ease-in-out ${
+                          className={` mt-1 pl-1 space-y-1 overflow-hidden transition-all duration-400 ease-in-out ${
                             isMenuOpen(item.title)
                               ? `max-h-90 `
                               : `max-h-0 capacity-0`

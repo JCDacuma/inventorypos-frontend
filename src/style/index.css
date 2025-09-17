@@ -1,2 +1,14 @@
 @import "tailwindcss";
 @import "bootstrap-icons/font/bootstrap-icons.css";
+
+::-webkit-scrollbar {
+  width: 2px;
+  height: 1px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: #8b5cf6;
+  border-radius: 9999px;
+}
