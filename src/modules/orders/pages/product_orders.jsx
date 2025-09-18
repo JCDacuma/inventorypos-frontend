@@ -7,18 +7,18 @@ import {
   MainWrapper,
   ButtonLayout,
   ControlLayout,
-} from "../Layouts/Layout";
+} from "../../../components/Layouts/Layout.jsx";
 import { useMediaQuery } from "react-responsive";
-import { ExportButton } from "../components/buttons.jsx";
-import Searchbar from "../components/Searchbar.jsx";
-import { BatchControl } from "../Layouts/ModalContol.jsx";
+import { ExportButton } from "../../../components/ui/buttons.jsx";
+import Searchbar from "../../../components/ui/Searchbar.jsx";
+import { BatchControl } from "../../../components/Layouts/ModalControl.jsx";
 
 //Table Layout component
-import Table from "../components/Table";
-import MobileTable from "../components/MobileTable";
-import { OrderManagementStatus } from "../components/Status.jsx";
+import Table from "../../../components/ui/Table.jsx";
+import MobileTable from "../../../components/ui/MobileTable.jsx";
+import { OrderManagementStatus } from "../../../components/ui/Status.jsx";
 
-import { Action } from "../components/buttons.jsx";
+import { Action } from "../../../components/ui/buttons.jsx";
 //Animation
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -236,14 +236,14 @@ export default function PromoManagement() {
           {/* Control Section */}
           <ControlLayout>
             <ButtonLayout>
-              <div className="flex gap-3 justify-between w-1/1 items-center ">
-                <div className="flex justify-center gap-2 align-middle items-center"></div>
-                <div className="flex justify-center items-end gap-3 ">
+              <div className="flex items-center justify-between gap-3 w-1/1 ">
+                <div className="flex items-center justify-center gap-2 align-middle"></div>
+                <div className="flex items-end justify-center gap-3 ">
                   <Link to={"/create-order"}>
                     <motion.button
                       whileTap={{ scale: 0.9, backgroundColor: "#6d00c5" }}
                       whileHover={{ scale: 1.05, backgroundColor: "#3c2350" }}
-                      className="bg-violet-400 text-white flex text-sm py-2 px-4 rounded-3xl cursor-pointer"
+                      className="flex px-4 py-2 text-sm text-white cursor-pointer bg-violet-400 rounded-3xl"
                     >
                       <Package className={"h-5 w-5 mr-1"} />
                       Create
@@ -254,7 +254,7 @@ export default function PromoManagement() {
                     <motion.button
                       whileTap={{ scale: 0.9, backgroundColor: "#6d00c5" }}
                       whileHover={{ scale: 1.05, backgroundColor: "#3c2350" }}
-                      className="bg-violet-400 text-white flex text-sm py-2 px-4 rounded-3xl cursor-pointer"
+                      className="flex px-4 py-2 text-sm text-white cursor-pointer bg-violet-400 rounded-3xl"
                     >
                       <ClipboardClock className={"h-5 w-5 mr-1"} />
                       Records

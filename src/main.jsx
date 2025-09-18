@@ -8,21 +8,21 @@ import "./style/index.css";
 }
 import Home from "./page/home.jsx";
 import Dashboard from "./page/dashboard.jsx";
-import InventoryReport from "./page/inventory_report.jsx";
-import Inventory from "./page/inventory.jsx";
-import BatchInventory from "./page/batch_inv.jsx";
-import ProductOrders from "./page/product_orders.jsx";
-import CreateOrder from "./page/order_create.jsx";
-import RegisterAccount from "./page/register_acc.jsx";
-import SalesReport from "./page/sales_report.jsx";
+import InventoryReport from "./modules/inventory/pages/inventory_report.jsx";
+import Inventory from "./modules/inventory/pages/inventory.jsx";
+import BatchInventory from "./modules/inventory/pages/batch_inv.jsx";
+import ProductOrders from "./modules/orders/pages/product_orders.jsx";
+import CreateOrder from "./modules/orders/pages/order_create.jsx";
+import RegisterAccount from "./modules/Account/pages/register_acc.jsx";
+import SalesReport from "./modules/pos/pages/sales_report.jsx";
 import Settings from "./page/settings.jsx";
-import Suppliers from "./page/suppliers.jsx";
-import SupplierHistory from "./page/order_history.jsx";
-import RegisterSupplier from "./page/register_supplier.jsx";
-import ProductManagement from "./page/product_manage.jsx";
-import PromoManagement from "./page/product_managepromo.jsx";
-import PointofSale from "./page/point_of_sale.jsx";
-import ConfigAccount from "./page/config_acc.jsx";
+import Suppliers from "./modules/supplier/pages/suppliers.jsx";
+import SupplierHistory from "./modules/orders/pages/order_history.jsx";
+import RegisterSupplier from "./modules/supplier/pages/register_supplier.jsx";
+import ProductManagement from "./modules/product/pages/product_manage.jsx";
+import PromoManagement from "./modules/product/pages/product_managepromo.jsx";
+import PointofSale from "./modules/pos/pages/point_of_sale.jsx";
+import ConfigAccount from "./modules/account/pages/config_acc.jsx";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>

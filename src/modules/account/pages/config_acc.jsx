@@ -1,4 +1,4 @@
-import { Layout } from "../Layouts/Layout";
+import { Layout } from "../../../components/Layouts/Layout";
 
 export default function ConfigAccount() {
   return (

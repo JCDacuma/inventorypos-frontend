@@ -6,7 +6,7 @@ import {
   MainWrapper,
   ButtonLayout,
   ControlLayout,
-} from "../Layouts/Layout";
+} from "../../../components/Layouts/Layout";
 import { useMediaQuery } from "react-responsive";
 
 //Animation

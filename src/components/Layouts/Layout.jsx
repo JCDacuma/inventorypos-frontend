@@ -1,6 +1,6 @@
 import { useState } from "react";
-import Sidebar from "../components/sidebar";
-import Navbar from "../components/navbar";
+import Sidebar from "./sidebar";
+import Navbar from "./navbar";
 import { useMediaQuery } from "react-responsive";
 import { Settings2 } from "lucide-react";
 

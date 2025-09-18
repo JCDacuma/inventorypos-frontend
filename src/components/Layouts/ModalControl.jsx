@@ -23,3 +23,12 @@ export function BatchControl({ children, Count }) {
     </>
   );
 }
+
+//Order summary mobile
+export function ModalBackground({ children }) {
+  return (
+    <div className="absolute w-full h-full  inset-0 z-[200] bg-[#6E6E6E]/50 backdrop-blur-sm flex justify-center items-center">
+      {children}
+    </div>
+  );
+}

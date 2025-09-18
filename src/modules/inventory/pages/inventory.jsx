@@ -7,17 +7,17 @@ import {
   MainWrapper,
   ButtonLayout,
   ControlLayout,
-} from "../Layouts/Layout";
+} from "../../../components/Layouts/Layout.jsx";
 import { useMediaQuery } from "react-responsive";
-import { ExportButton } from "../components/buttons.jsx";
-import Searchbar from "../components/Searchbar.jsx";
-import { BatchControl } from "../Layouts/ModalContol.jsx";
+import { ExportButton } from "../../../components/ui/buttons.jsx";
+import Searchbar from "../../../components/ui/Searchbar.jsx";
+import { BatchControl } from "../../../components/Layouts/ModalControl.jsx";
 
 //Table Layout component
-import Table from "../components/Table";
-import MobileTable from "../components/MobileTable";
-import { InventoryStatus } from "../components/Status.jsx";
-import { Action } from "../components/buttons.jsx";
+import Table from "../../../components/ui/Table.jsx";
+import MobileTable from "../../../components/ui/MobileTable.jsx";
+import { InventoryStatus } from "../../../components/ui/Status.jsx";
+import { Action } from "../../../components/ui/buttons.jsx";
 
 //Animation
 import { motion, AnimatePresence } from "framer-motion";
@@ -495,8 +495,8 @@ export default function Inventory() {
           {/* Control Section */}
           <ControlLayout>
             <ButtonLayout>
-              <div className="flex gap-3 justify-between w-1/1">
-                <div className="flex justify-center align-middle items-center"></div>
+              <div className="flex justify-between gap-3 w-1/1">
+                <div className="flex items-center justify-center align-middle"></div>
                 {/* Exportation button */}
                 <ExportButton />
               </div>

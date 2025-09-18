@@ -1,8 +1,14 @@
 import { useState, useEffect } from "react";
-import Input from "../components/Input";
-import api from "../api/axiosInstance.js";
-import { Status } from "../components/Status.jsx";
-import { Row, Col, Card, Layout, MainWrapper } from "../Layouts/Layout.jsx";
+import Input from "../../../components/ui/Input.jsx";
+import api from "../../../api/axiosInstance.js";
+import { Status } from "../../../components/ui/Status.jsx";
+import {
+  Row,
+  Col,
+  Card,
+  Layout,
+  MainWrapper,
+} from "../../../components/Layouts/Layout.jsx";
 
 export default function RegisterAccount() {
   const [formData, setFormData] = useState({
@@ -123,16 +129,16 @@ export default function RegisterAccount() {
           </Row>
 
           <Card style="my-7">
-            <h4 className="font-semibold mb-4">User role and permissions</h4>
+            <h4 className="mb-4 font-semibold">User role and permissions</h4>
             <Row>
               <Col>
-                <div className="inline-flex rounded-2xl border border-slate-200 bg-white shadow-sm p-3">
+                <div className="inline-flex p-3 bg-white border shadow-sm rounded-2xl border-slate-200">
                   <input
                     type="checkbox"
                     name="is_admin"
                     checked={formData.is_admin}
                     onChange={handleCheckboxChange}
-                    className="h-5 w-5 text-blue-600 border-gray-300 rounded focus:ring-2 me-3"
+                    className="w-5 h-5 text-blue-600 border-gray-300 rounded focus:ring-2 me-3"
                   />
                   <span className="text-sm text-slate-700">
                     Register user as Admin
@@ -141,13 +147,13 @@ export default function RegisterAccount() {
               </Col>
 
               <Col className="inline-flex items-center space-x-2">
-                <div className="inline-flex rounded-2xl border border-slate-200 bg-white shadow-sm p-3">
+                <div className="inline-flex p-3 bg-white border shadow-sm rounded-2xl border-slate-200">
                   <input
                     type="checkbox"
                     name="can_edit_item"
                     checked={formData.can_edit_item}
                     onChange={handleCheckboxChange}
-                    className="h-5 w-5 text-blue-600 border-gray-300 rounded focus:ring-2 me-3"
+                    className="w-5 h-5 text-blue-600 border-gray-300 rounded focus:ring-2 me-3"
                   />
                   <span className="text-sm text-slate-700">
                     Can edit item details
@@ -156,13 +162,13 @@ export default function RegisterAccount() {
               </Col>
 
               <Col className="inline-flex items-center space-x-2">
-                <div className="inline-flex rounded-2xl border border-slate-200 bg-white shadow-sm p-3">
+                <div className="inline-flex p-3 bg-white border shadow-sm rounded-2xl border-slate-200">
                   <input
                     type="checkbox"
                     name="can_edit_stock"
                     checked={formData.can_edit_stock}
                     onChange={handleCheckboxChange}
-                    className="h-5 w-5 text-blue-600 border-gray-300 rounded focus:ring-2 me-3"
+                    className="w-5 h-5 text-blue-600 border-gray-300 rounded focus:ring-2 me-3"
                   />
                   <span className="text-sm text-slate-700">
                     Can edit item stocks
@@ -171,13 +177,13 @@ export default function RegisterAccount() {
               </Col>
 
               <Col className="inline-flex items-center space-x-2">
-                <div className="inline-flex rounded-2xl border border-slate-200 bg-white shadow-sm p-3">
+                <div className="inline-flex p-3 bg-white border shadow-sm rounded-2xl border-slate-200">
                   <input
                     type="checkbox"
                     name="can_order"
                     checked={formData.can_order}
                     onChange={handleCheckboxChange}
-                    className="h-5 w-5 text-blue-600 border-gray-300 rounded focus:ring-2 me-3"
+                    className="w-5 h-5 text-blue-600 border-gray-300 rounded focus:ring-2 me-3"
                   />
                   <span className="text-sm text-slate-700">Can order item</span>
                 </div>
@@ -214,8 +220,7 @@ export default function RegisterAccount() {
           <Row>
             <button
               onClick={handleRegister}
-              className="bg-emerald-600 w-50 text-white py-2 px-4 
-             rounded-md hover:bg-emerald-700 transition mt-6"
+              className="px-4 py-2 mt-6 text-white transition rounded-md bg-emerald-600 w-50 hover:bg-emerald-700"
             >
               Register User
             </button>

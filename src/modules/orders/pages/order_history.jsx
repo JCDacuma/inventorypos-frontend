@@ -7,16 +7,16 @@ import {
   MainWrapper,
   ButtonLayout,
   ControlLayout,
-} from "../Layouts/Layout.jsx";
+} from "../../../components/Layouts/Layout.jsx";
 import { useMediaQuery } from "react-responsive";
-import { ExportButton } from "../components/buttons.jsx";
-import Searchbar from "../components/Searchbar.jsx";
+import { ExportButton } from "../../../components/ui/buttons.jsx";
+import Searchbar from "../../../components/ui/Searchbar.jsx";
 
 //Table Layout component
-import Table from "../components/Table.jsx";
-import MobileTable from "../components/MobileTable.jsx";
-import { OrderHistoryStatus } from "../components/Status.jsx";
-import { Action } from "../components/buttons.jsx";
+import Table from "../../../components/ui/Table.jsx";
+import MobileTable from "../../../components/ui/MobileTable.jsx";
+import { OrderHistoryStatus } from "../../../components/ui/Status.jsx";
+import { Action } from "../../../components/ui/buttons.jsx";
 //Animation
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -180,15 +180,15 @@ export default function Suppliers() {
                 <motion.button
                   whileTap={{ scale: 0.9 }}
                   whileHover={{ scale: 1.05, color: "#3c2350" }}
-                  className=" hidden sm:flex text-violet-500 mt-2 justify-center items-center font-semibold gap-1 cursor-pointer"
+                  className="items-center justify-center hidden gap-1 mt-2 font-semibold cursor-pointer  sm:flex text-violet-500"
                 >
                   <Undo2 /> Back
                 </motion.button>
               </Link>
 
-              <div className="flex gap-3 justify-between w-1/1 items-center ">
-                <div className="flex justify-center gap-2 align-middle items-center"></div>
-                <div className="flex justify-center items-end gap-2 ">
+              <div className="flex items-center justify-between gap-3 w-1/1 ">
+                <div className="flex items-center justify-center gap-2 align-middle"></div>
+                <div className="flex items-end justify-center gap-2 ">
                   {/* Exportation button */}
                   <ExportButton />
                 </div>
