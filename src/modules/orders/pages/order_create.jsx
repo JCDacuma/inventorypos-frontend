@@ -1,11 +1,12 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-
+import { useMediaQuery } from "react-responsive";
 // Page Layout component
 import { Layout } from "../../../components/Layouts/Layout";
-import { ModalBackground } from "../../../components/Layouts/ModalControl";
 
-import { useMediaQuery } from "react-responsive";
+//Order Summary Modal (Mobile)
+import OrderSummaryMobile from "../components/Layouts/OrderSummaryModal";
+import SupplierModal from "../components/Layouts/OrderSupplierModal";
 //Animation
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -282,6 +283,7 @@ export default function CreateOrder() {
 
   //Open mobile order summary
   const [isOpenOrderSummary, setOpenSummary] = useState(false);
+  const [isOpenSupplierInfo, setOpenSupplier] = useState(false);
 
   //TotalQuantity Item to be order
   const TotalItem = productOrdering.reduce(
@@ -298,14 +300,14 @@ export default function CreateOrder() {
             <div className="h-full min-h-[500px] md:min-h-[350px] max-h-[calc(100vh-20px)] w-full shadow-lg  rounded-2xl bg-white  flex flex-col p-0 sm:p-3  ">
               <div className="flex flex-col flex-1 gap-1 px-1 py-1 overflow-auto custom-scroll">
                 {/* --------- Search and Control Section -------- */}
-                <div className="flex items-center justify-between gap-4 px-1 py-2 bg-white sm:px-5 md:shadow-md shadow-gray-100 rounded-sm lg:py-4">
-                  <div className="flex items-center justify-between w-full gap-2 px-1 py-2  shadow-sm sm:px-3 rounded-xl">
+                <div className="flex items-center justify-between gap-4 px-1 py-2 bg-white rounded-sm sm:px-5 md:shadow-md shadow-gray-100 lg:py-4">
+                  <div className="flex items-center justify-between w-full gap-2 px-1 py-2 shadow-sm sm:px-3 rounded-xl">
                     {/* Back button */}
                     <Link to={"/product-orders"}>
                       <motion.button
                         whileTap={{ scale: 0.95 }}
                         whileHover={{ scale: 1.05, color: "#3c2350" }}
-                        className="items-center ml-1  gap-1 font-medium transition-colors flex text-violet-600 hover:text-violet-700"
+                        className="flex items-center gap-1 ml-1 font-medium transition-colors text-violet-600 hover:text-violet-700"
                       >
                         <Undo2 size={24} className="stoke-2" />
                         <span className="hidden sm:flex">Back</span>
@@ -315,6 +317,7 @@ export default function CreateOrder() {
                     <div className="flex items-center justify-end w-full gap-2 sm:gap-1">
                       {/*------- Supplier Info (Desktop only) --------------*/}
                       <button
+                        onClick={() => setOpenSupplier(true)}
                         className={`${
                           isDesktop ? "flex" : "hidden"
                         } items-center justify-center w-11 h-10 rounded-full 
@@ -356,9 +359,9 @@ export default function CreateOrder() {
                     <label className="mb-1 text-sm font-medium text-violet-700">
                       Supplier
                     </label>
-                    <div className="flex gap-1 justify-center items-center w-full ">
+                    <div className="flex items-center justify-center w-full gap-1 ">
                       <select
-                        className="px-3 py-2 w-full text-sm border rounded-lg border-violet-300 focus:outline-none focus:ring-2 focus:ring-violet-400 disabled:bg-gray-100 disabled:text-gray-400 disabled:border-gray-300 disabled:cursor-not-allowed disabled:shadow-none"
+                        className="w-full px-3 py-2 text-sm border rounded-lg border-violet-300 focus:outline-none focus:ring-2 focus:ring-violet-400 disabled:bg-gray-100 disabled:text-gray-400 disabled:border-gray-300 disabled:cursor-not-allowed disabled:shadow-none"
                         disabled={productOrdering.length > 0}
                         onChange={(e) => setSelectedSup(e.target.value)}
                         value={selectedSupplier}
@@ -794,16 +797,21 @@ export default function CreateOrder() {
             </div>
           </div>
         </div>
-        {/* Order Summary Mobile */}
-        {isOpenOrderSummary ? (
-          <ModalBackground>
-            <div className=" h-20 w-20 ">
-              <p>Hello</p>
-            </div>
-          </ModalBackground>
-        ) : (
-          ""
-        )}
+        {/* Modal */}
+        <OrderSummaryMobile
+          isOpen={isOpenOrderSummary}
+          onClosed={() => setOpenSummary(false)}
+          order={productOrdering}
+          setOrder={setproductOrdering}
+          //Functionality
+          AddStocks={AddStock}
+          MinStocks={DecreaseStock}
+          RemoveItem={HandleRemoveItem}
+        />
+        <SupplierModal
+          isOpen={isOpenSupplierInfo}
+          onClosed={() => setOpenSupplier(false)}
+        />
       </Layout>
     </>
   );
