@@ -13,6 +13,12 @@ export default function OrderSummaryMobile({
   AddStocks,
   MinStocks,
   RemoveItem,
+  //SummaryTotal
+  Subtotal,
+  TotalVat,
+  TotalPrice,
+  ChangeShippingFee,
+  ShippingFee,
 }) {
   const [orders, setOrders] = useState([]);
 
@@ -148,19 +154,26 @@ export default function OrderSummaryMobile({
           <div className="space-y-2">
             <div className="flex justify-between text-sm text-gray-600">
               <span>Subtotal</span>
-              <span>₱450</span>
+              <span>₱ {Subtotal}</span>
             </div>
             <div className="flex justify-between text-sm text-gray-600">
               <span>Tax (12% VAT)</span>
-              <span>₱54</span>
+              <span>₱ {TotalVat}</span>
             </div>
             <div className="flex justify-between text-sm text-gray-600">
               <span>Shipping Fee</span>
-              <span>₱50</span>
+              <div>
+                ₱
+                <input
+                  value={ShippingFee}
+                  onChange={(e) => ChangeShippingFee(e.target.value)}
+                  className="p-1 ml-1 border border-gray-300 rounded-md shadow-sm text-end w-29"
+                />
+              </div>
             </div>
             <div className="flex justify-between pt-3 font-bold border-t text-md">
               <span>Total</span>
-              <span className="text-purple-600">₱554</span>
+              <span className="text-purple-600">₱{TotalPrice}</span>
             </div>
           </div>
           <div className="flex items-center justify-center">

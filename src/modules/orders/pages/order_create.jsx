@@ -4,11 +4,15 @@ import { useMediaQuery } from "react-responsive";
 // Page Layout component
 import { Layout } from "../../../components/Layouts/Layout";
 
+//Component
 //Order Summary Modal (Mobile)
 import OrderSummaryMobile from "../components/Layouts/OrderSummaryModal";
 import SupplierModal from "../components/Layouts/OrderSupplierModal";
-//Animation
+import OrderCreationSummary from "@/modules/orders/components/ui/OrderSummarySection.jsx";
+
+//Animation and icons
 import { motion, AnimatePresence } from "framer-motion";
+import { SweetAlert } from "@/utils/sweetalert";
 
 //icons
 import {
@@ -28,6 +32,12 @@ import {
 export default function CreateOrder() {
   const isDesktop = useMediaQuery({ minWidth: 968 });
 
+  //Open mobile order summary
+  const [isOpenOrderSummary, setOpenSummary] = useState(false);
+
+  //Open Supplier Selection
+  const [isOpenSupplierInfo, setOpenSupplier] = useState(false);
+
   //sample supplier data fetch
   const supplier = [
     {
@@ -35,8 +45,8 @@ export default function CreateOrder() {
       suppliername: "Dell Supplier Inc.",
       contactperson: "John Smith",
       phonenumber: "+63 912 345 6789",
-      vatregistered: "Yes",
-      shippingfee: "₱2,500",
+      vatregistered: true,
+      shippingfee: 2500,
       status: "Active",
     },
     {
@@ -44,17 +54,17 @@ export default function CreateOrder() {
       suppliername: "Tech Distributors Ltd.",
       contactperson: "Emily Davis",
       phonenumber: "+63 917 222 3344",
-      vatregistered: "No",
-      shippingfee: "₱1,800",
-      status: "Inactive",
+      vatregistered: false,
+      shippingfee: 1800,
+      status: "Active",
     },
     {
       id: 3,
       suppliername: "Logitech Distribution",
       contactperson: "Michael Lee",
       phonenumber: "+63 918 555 7788",
-      vatregistered: "Yes",
-      shippingfee: "₱1,200",
+      vatregistered: true,
+      shippingfee: 1200,
       status: "Active",
     },
     {
@@ -62,17 +72,17 @@ export default function CreateOrder() {
       suppliername: "Apple Authorized Dist.",
       contactperson: "Sophia Tan",
       phonenumber: "+63 915 111 2233",
-      vatregistered: "Yes",
-      shippingfee: "₱3,000",
-      status: "Inactive",
+      vatregistered: true,
+      shippingfee: 3000,
+      status: "Active",
     },
     {
       id: 5,
       suppliername: "Samsung Electronics",
       contactperson: "David Kim",
       phonenumber: "+63 916 777 8899",
-      vatregistered: "No",
-      shippingfee: "₱2,200",
+      vatregistered: false,
+      shippingfee: 2200,
       status: "Active",
     },
     {
@@ -80,17 +90,17 @@ export default function CreateOrder() {
       suppliername: "Grocery Trading Corp.",
       contactperson: "Maria Lopez",
       phonenumber: "+63 913 444 5566",
-      vatregistered: "Yes",
-      shippingfee: "₱900",
-      status: "Inactive",
+      vatregistered: true,
+      shippingfee: 900,
+      status: "Active",
     },
     {
       id: 7,
       suppliername: "Furniture World Supply",
       contactperson: "James Rodriguez",
       phonenumber: "+63 919 888 3344",
-      vatregistered: "No",
-      shippingfee: "₱1,500",
+      vatregistered: false,
+      shippingfee: 1500,
       status: "Active",
     },
     {
@@ -98,17 +108,17 @@ export default function CreateOrder() {
       suppliername: "Clothing Hub Dist.",
       contactperson: "Anna Garcia",
       phonenumber: "+63 914 222 7788",
-      vatregistered: "Yes",
-      shippingfee: "₱1,000",
-      status: "Inactive",
+      vatregistered: true,
+      shippingfee: 1000,
+      status: "Active",
     },
     {
       id: 9,
       suppliername: "Nestle Philippines",
       contactperson: "Maria Santos",
       phonenumber: "+63 913 444 5566",
-      vatregistered: "Yes",
-      shippingfee: "₱1000",
+      vatregistered: true,
+      shippingfee: 1000,
       status: "Active",
     },
   ];
@@ -122,8 +132,9 @@ export default function CreateOrder() {
       category: "Beverages",
       Quantity: 1,
       Unit: "Pack",
-      price: 1,
-      supplierID: 9, //Nestle Philippines
+      price: 13,
+      supplierID: 9,
+      taxable: true,
     },
     {
       id: 2,
@@ -132,7 +143,8 @@ export default function CreateOrder() {
       Quantity: 1,
       Unit: "pcs",
       price: 35000,
-      supplierID: 1, // Dell Supplier Inc.
+      supplierID: 1,
+      taxable: true,
     },
     {
       id: 3,
@@ -141,7 +153,8 @@ export default function CreateOrder() {
       Quantity: 1,
       Unit: "pcs",
       price: 800,
-      supplierID: 3, // Logitech Distribution
+      supplierID: 3,
+      taxable: true,
     },
     {
       id: 4,
@@ -150,7 +163,8 @@ export default function CreateOrder() {
       Quantity: 1,
       Unit: "pcs",
       price: 45000,
-      supplierID: 4, // Apple Authorized Dist.
+      supplierID: 4,
+      taxable: true,
     },
     {
       id: 5,
@@ -159,7 +173,8 @@ export default function CreateOrder() {
       Quantity: 1,
       Unit: "kg",
       price: 250,
-      supplierID: 6, // Grocery Trading Corp.
+      supplierID: 6,
+      taxable: false,
     },
     {
       id: 6,
@@ -168,7 +183,8 @@ export default function CreateOrder() {
       Quantity: 1,
       Unit: "liters",
       price: 85,
-      supplierID: 6, // Grocery Trading Corp.
+      supplierID: 6,
+      taxable: true,
     },
     {
       id: 7,
@@ -177,7 +193,8 @@ export default function CreateOrder() {
       Quantity: 1,
       Unit: "kg",
       price: 60,
-      supplierID: 6, // Grocery Trading Corp.
+      supplierID: 6,
+      taxable: false,
     },
     {
       id: 8,
@@ -186,7 +203,8 @@ export default function CreateOrder() {
       Quantity: 1,
       Unit: "pcs",
       price: 8500,
-      supplierID: 7, // Furniture World Supply
+      supplierID: 7,
+      taxable: true,
     },
     {
       id: 9,
@@ -195,7 +213,8 @@ export default function CreateOrder() {
       Quantity: 1,
       Unit: "pcs",
       price: 25000,
-      supplierID: 7, // Furniture World Supply
+      supplierID: 7,
+      taxable: true,
     },
     {
       id: 10,
@@ -204,7 +223,8 @@ export default function CreateOrder() {
       Quantity: 1,
       Unit: "pcs",
       price: 450,
-      supplierID: 8, // Clothing Hub Dist.
+      supplierID: 8,
+      taxable: true,
     },
     {
       id: 11,
@@ -213,7 +233,8 @@ export default function CreateOrder() {
       Quantity: 1,
       Unit: "pcs",
       price: 1200,
-      supplierID: 8, // Clothing Hub Dist.
+      supplierID: 8,
+      taxable: true,
     },
     {
       id: 12,
@@ -222,27 +243,35 @@ export default function CreateOrder() {
       Quantity: 1,
       Unit: "pcs",
       price: 2800,
-      supplierID: 8, // Clothing Hub Dist.
+      supplierID: 8,
+      taxable: true,
     },
   ]);
 
   //Selected Supplier
-  const [selectedSupplier, setSelectedSup] = useState(null);
+  const [selectedSupplier, setSelectedSup] = useState([]);
 
   //Product Showing for ordering
   const [productShowing, setProductShowing] = useState([]);
 
+  //Product to be order
+  const [productOrdering, setproductOrdering] = useState([]);
+
   useEffect(() => {
     const newSupplierProduct = supplierProduct.filter(
-      (item) => item.supplierID === Number(selectedSupplier)
+      (item) => item.supplierID === selectedSupplier.id
     );
     setProductShowing(newSupplierProduct);
   }, [selectedSupplier]);
 
-  //Product to be order
-  const [productOrdering, setproductOrdering] = useState([]);
+  //Selecting supplier functionality
+  const SelectedNewSupplier = (value) => {
+    const Newsupplier = supplier.find((sup) => sup.id === Number(value));
+    setSelectedSup(Newsupplier);
+    SweetAlert.success(`Supplier Selected`, `${Newsupplier.suppliername}`);
+  };
 
-  //Selecting order
+  //Selecting order functionality
   const HandleSelectOrder = (itemId) => {
     const newProductOrdering = [
       ...productOrdering,
@@ -251,7 +280,7 @@ export default function CreateOrder() {
     setproductOrdering(newProductOrdering);
   };
 
-  //Disable select order button
+  //Disabling Add order button
   const HandleDisableButton = (itemId) => {
     const hasOrdered = productOrdering.some((item) => item.id === itemId);
     return hasOrdered;
@@ -281,15 +310,54 @@ export default function CreateOrder() {
     setproductOrdering(NewproductOrdering);
   };
 
-  //Open mobile order summary
-  const [isOpenOrderSummary, setOpenSummary] = useState(false);
-  const [isOpenSupplierInfo, setOpenSupplier] = useState(false);
-
-  //TotalQuantity Item to be order
+  //Total Quantity Item to be order
   const TotalItem = productOrdering.reduce(
     (acc, curr) => acc + curr.Quantity,
     0
   );
+
+  //Summary Total
+  const Subtotal = productOrdering.reduce(
+    (acc, curr) => acc + curr.price * curr.Quantity,
+    0
+  );
+
+  //Shipping fee set
+  const [ShippingFee, setShippingfee] = useState(
+    selectedSupplier?.shippingfee ?? 0
+  );
+
+  useEffect(() => {
+    if (selectedSupplier?.shippingfee != null && productOrdering.length > 0) {
+      setShippingfee(selectedSupplier.shippingfee);
+    } else {
+      setShippingfee(0);
+    }
+  }, [selectedSupplier, productOrdering]);
+
+  const HandleSetShippingFee = (value) => {
+    if (value === "" || value === null) {
+      setShippingfee(0);
+      return;
+    }
+    if (isNaN(value) || Number(value) < 0) {
+      SweetAlert.error("Oops!", "Please enter a valid number.");
+      return;
+    }
+    setShippingfee(Number(value));
+  };
+
+  // Subtotal of only taxable products
+  const TaxableSubtotal = productOrdering.reduce(
+    (acc, curr) => (curr.taxable ? acc + curr.price * curr.Quantity : acc),
+    0
+  );
+
+  //Total Vat
+  const Vat = selectedSupplier?.vatregistered ? TaxableSubtotal * 0.12 : 0;
+
+  //Total Price
+  const TotalPrice = parseFloat((Subtotal + Vat + ShippingFee).toFixed(2));
 
   return (
     <>
@@ -363,8 +431,8 @@ export default function CreateOrder() {
                       <select
                         className="w-full px-3 py-2 text-sm border rounded-lg border-violet-300 focus:outline-none focus:ring-2 focus:ring-violet-400 disabled:bg-gray-100 disabled:text-gray-400 disabled:border-gray-300 disabled:cursor-not-allowed disabled:shadow-none"
                         disabled={productOrdering.length > 0}
-                        onChange={(e) => setSelectedSup(e.target.value)}
-                        value={selectedSupplier}
+                        onChange={(e) => SelectedNewSupplier(e.target.value)}
+                        value={selectedSupplier.id}
                       >
                         <option value="">Choose Supplier</option>
                         {supplier.map((sup) =>
@@ -473,19 +541,32 @@ export default function CreateOrder() {
                           <motion.button
                             onClick={() => HandleSelectOrder(item.id)}
                             disabled={HandleDisableButton(item.id)}
-                            whileTap={{
-                              scale: 0.9,
-                              backgroundColor: "#6d00c5",
+                            animate={{
+                              backgroundColor: HandleDisableButton(item.id)
+                                ? "#9ca3af" // gray-400
+                                : "#c084fc", // purple-400
                             }}
-                            whileHover={{
-                              scale: 1.05,
-                              backgroundColor: "#3c2350",
-                            }}
-                            className={`flex items-center justify-center text-lg font-bold text-white transition  ${
+                            whileHover={
                               HandleDisableButton(item.id)
-                                ? `bg-gray-400`
-                                : `bg-purple-400`
-                            } rounded-full cursor-pointer w-9 h-9 hover:bg-purple-700 active:scale-95`}
+                                ? {}
+                                : {
+                                    scale: 1.05,
+                                    backgroundColor: "#7e22ce", // purple-700
+                                  }
+                            }
+                            whileTap={
+                              HandleDisableButton(item.id)
+                                ? {}
+                                : {
+                                    scale: 0.9,
+                                    backgroundColor: "#6d00c5",
+                                  }
+                            }
+                            className={`flex items-center justify-center text-lg font-bold text-white rounded-full w-9 h-9 ${
+                              HandleDisableButton(item.id)
+                                ? "cursor-not-allowed"
+                                : "cursor-pointer"
+                            }`}
                           >
                             <Plus className="stroke-3" size={18} />
                           </motion.button>
@@ -548,25 +629,43 @@ export default function CreateOrder() {
                               setProductShowing(newProduct);
                             }}
                           ></input>
+
                           {/* Add Button */}
                           <motion.button
                             onClick={() => HandleSelectOrder(item.id)}
                             disabled={HandleDisableButton(item.id)}
-                            whileTap={{
-                              scale: 0.9,
-                              backgroundColor: "#6d00c5",
+                            animate={{
+                              backgroundColor: HandleDisableButton(item.id)
+                                ? "#9ca3af"
+                                : "#a78bfa",
                             }}
-                            whileHover={{
-                              scale: 1.05,
-                              backgroundColor: "#3c2350",
-                            }}
-                            className={`flex items-center justify-center w-8 h-8 text-lg font-bold text-white transition ${
+                            whileHover={
                               HandleDisableButton(item.id)
-                                ? `bg-gray-400`
-                                : `bg-violet-400`
-                            } rounded-full cursor-pointer hover:bg-purple-700 active:scale-95`}
+                                ? {}
+                                : {
+                                    scale: 1.05,
+                                    backgroundColor: "#7e22ce",
+                                  }
+                            }
+                            whileTap={
+                              HandleDisableButton(item.id)
+                                ? {}
+                                : {
+                                    scale: 0.9,
+                                    backgroundColor: "#6d00c5",
+                                  }
+                            }
+                            className={`flex items-center justify-center w-8 h-8 text-lg font-bold text-white rounded-full transition 
+    ${HandleDisableButton(item.id) ? "cursor-not-allowed" : "cursor-pointer"}`}
                           >
-                            <Plus className="stroke-3" size={16} />
+                            <Plus
+                              size={16}
+                              className={
+                                HandleDisableButton(item.id)
+                                  ? "text-gray-200"
+                                  : "text-white"
+                              }
+                            />
                           </motion.button>
                         </div>
                       </div>
@@ -633,171 +732,25 @@ export default function CreateOrder() {
             </div>
           </div>
 
-          {/* ------- Order Summary ------ */}
-          <div
-            className={`${
-              isDesktop ? `flex` : `hidden`
-            } shadow-md-gray   w-1/1 md:w-[65%] xl:w-[60%] px-2  pt-3 h-[calc(100vh-60px)] min-h-[361px]  max-h-[calc(100vh-61px)] 2xl:max-h-[calc(100vh-98px)]`}
-          >
-            <div className="flex flex-col w-full h-full p-3 overflow-auto bg-white shadow-lg shadow-violet-200 rounded-2xl scrollbar-thin scrollbar-thumb-violet-500 hover:scrollbar-thumb-violet-600 scrollbar-track-violet-100 scrollbar-thumb-rounded-full">
-              <div className="flex flex-col flex-1 gap-4">
-                {/* Ordering */}
-                <div className="flex items-center justify-center pb-2 mb-2 border-b border-gray-200">
-                  <h2 className="text-xl font-semibold text-gray-800">
-                    Order Summary
-                  </h2>
-                </div>
-
-                <div className="overflow-auto h-[calc(100vh-390px)] min-h-[200px] 2xl:h-[calc(100vh-410px)]">
-                  {/* Scrollable product list */}
-                  <div className="flex flex-col items-center justify-center flex-1 gap-4 pr-1">
-                    {productOrdering.length > 0 ? (
-                      productOrdering.map((item, index) => (
-                        <div
-                          key={item.id}
-                          className="grid items-center justify-end w-full grid-cols-3 px-4 py-4 transition bg-white border border-gray-200 shadow-md rounded-xl xl:px-8 hover:shadow-lg"
-                        >
-                          {/* Product Info */}
-                          <div className="flex flex-col items-start justify-center col-span-2 pl-2">
-                            <span className="flex items-center justify-center text-lg font-semibold text-gray-800">
-                              {item.itemname}
-                            </span>
-
-                            <span className="pl-12 font-medium text-purple-600">
-                              ₱{item.price}
-                            </span>
-
-                            <span className="font-semibold text-gray-700 pl-7 ">
-                              Total: ₱{item.price * item.Quantity}
-                            </span>
-
-                            {/* Actions */}
-                            <div className="flex items-center justify-end gap-2">
-                              {/* Decrease Button */}
-                              <motion.button
-                                onClick={() => DecreaseStock(index)}
-                                whileTap={{
-                                  scale: 0.9,
-                                  backgroundColor:
-                                    item.Quantity - 1 <= 0
-                                      ? "#e5e7eb"
-                                      : "#6d00c5",
-                                }}
-                                whileHover={
-                                  item.Quantity - 1 <= 0
-                                    ? {}
-                                    : {
-                                        scale: 1.05,
-                                        backgroundColor: "#9977B5",
-                                      }
-                                }
-                                disabled={item.Quantity - 1 <= 0}
-                                className={`flex items-center justify-center w-8 h-8 rounded-full font-bold transition
-                                    ${
-                                      item.Quantity - 1 <= 0
-                                        ? "bg-gray-200 text-gray-400 cursor-not-allowed"
-                                        : "bg-purple-200 text-purple-600 hover:bg-purple-200 cursor-pointer"
-                                    }`}
-                              >
-                                <Minus size={12} />
-                              </motion.button>
-
-                              <input
-                                className="py-1 text-center border border-gray-300 rounded-md shadow-sm w-14 focus:outline-none focus:ring-2 focus:ring-purple-500"
-                                value={item.Quantity}
-                                onChange={(e) => {
-                                  const newproductOrdering = [
-                                    ...productOrdering,
-                                  ];
-                                  newproductOrdering[index].Quantity = Number(
-                                    e.target.value
-                                  );
-                                  setproductOrdering(newproductOrdering);
-                                }}
-                              />
-
-                              {/* Add Button */}
-                              <motion.button
-                                onClick={() => AddStock(index)}
-                                whileTap={{
-                                  scale: 0.9,
-                                  backgroundColor: "#6d00c5",
-                                }}
-                                whileHover={{
-                                  scale: 1.05,
-                                  backgroundColor: "#3c2350",
-                                }}
-                                className="flex items-center justify-center text-lg font-bold text-white transition bg-purple-400 rounded-full cursor-pointer w-7 h-7 hover:bg-purple-700 active:scale-95"
-                              >
-                                <Plus className="stroke-3" size={16} />
-                              </motion.button>
-                              {/* Unit */}
-                              <span className="flex justify-center text-center text-gray-500">
-                                {item.Unit}
-                              </span>
-                            </div>
-                          </div>
-
-                          <div className="flex justify-end">
-                            <motion.button
-                              onClick={() => HandleRemoveItem(item.id)}
-                              whileHover={{
-                                color: "#59222C",
-                                scale: 1.07,
-                              }}
-                              whileTap={{
-                                scale: 0.9,
-                              }}
-                              className="ml-2 font-medium text-red-500 cursor-pointer"
-                            >
-                              <Trash />
-                            </motion.button>
-                          </div>
-                        </div>
-                      ))
-                    ) : (
-                      <div className="flex flex-col items-center justify-center w-full p-8 mt-10 text-gray-500 border border-gray-300 border-dashed bg-gray-50 rounded-xl">
-                        <span className="text-lg font-medium">
-                          No products ordered
-                        </span>
-                        <span className="text-sm text-gray-400">
-                          Your items will appear here once added.
-                        </span>
-                      </div>
-                    )}
-                  </div>
-                </div>
-                {/* Order Summary */}
-                <div className="w-full max-w-3xl p-6 mx-auto border border-gray-200 shadow-sm bg-gray-50 rounded-xl">
-                  <div className="space-y-2">
-                    <div className="flex justify-between text-gray-600">
-                      <span>Subtotal</span>
-                      <span>₱450</span>
-                    </div>
-                    <div className="flex justify-between text-gray-600">
-                      <span>Tax (12% VAT)</span>
-                      <span>₱54</span>
-                    </div>
-                    <div className="flex justify-between text-gray-600">
-                      <span>Shipping Fee</span>
-                      <span>₱50</span>
-                    </div>
-                    <div className="flex justify-between pt-3 text-lg font-bold border-t">
-                      <span>Total</span>
-                      <span className="text-purple-600">₱554</span>
-                    </div>
-                  </div>
-
-                  {/* Order Button */}
-                  <motion.button className="w-full py-3 mt-6 text-lg font-semibold text-white transition-all duration-200 ease-in-out bg-purple-600 shadow-md cursor-pointer rounded-xl hover:bg-purple-700 active:scale-95 focus:outline-none focus:ring-2 focus:ring-violet-400 focus:ring-offset-2">
-                    Create Order
-                  </motion.button>
-                </div>
-              </div>
-            </div>
-          </div>
+          {/* Summary Sections */}
+          <OrderCreationSummary
+            //Data
+            productOrdering={productOrdering}
+            setProductOrder={setproductOrdering}
+            //functionality
+            DecreaseStockBtn={DecreaseStock}
+            IncreaseStockBtn={AddStock}
+            RemoveItem={HandleRemoveItem}
+            //Summary Total Info
+            Subtotal={Subtotal}
+            TotalVat={Vat}
+            TotalPrice={TotalPrice}
+            ChangeShippingFee={HandleSetShippingFee}
+            ShippingFee={ShippingFee}
+          />
         </div>
         {/* Modal */}
+        {/* Order Summary Modal */}
         <OrderSummaryMobile
           isOpen={isOpenOrderSummary}
           onClosed={() => setOpenSummary(false)}
@@ -807,10 +760,22 @@ export default function CreateOrder() {
           AddStocks={AddStock}
           MinStocks={DecreaseStock}
           RemoveItem={HandleRemoveItem}
+          //Summary Total Info
+          Subtotal={Subtotal}
+          TotalVat={Vat}
+          TotalPrice={TotalPrice}
+          ChangeShippingFee={HandleSetShippingFee}
+          ShippingFee={ShippingFee}
         />
+        {/* Supplier Modal */}
         <SupplierModal
           isOpen={isOpenSupplierInfo}
           onClosed={() => setOpenSupplier(false)}
+          supplier={supplier}
+          order={productOrdering}
+          setSelectedSup={SelectedNewSupplier}
+          totalItem={TotalItem}
+          selectedSupplier={selectedSupplier}
         />
       </Layout>
     </>
