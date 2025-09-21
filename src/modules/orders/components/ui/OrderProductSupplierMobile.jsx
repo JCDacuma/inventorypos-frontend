@@ -1,6 +1,7 @@
 import { useMediaQuery } from "react-responsive";
 import { useState, useEffect } from "react";
 import { ArrowBigRight, ShoppingBasket } from "lucide-react";
+import { DefaultDropDown } from "@/components/ui/dropdown.jsx";
 
 export default function SupplierSectionMobile({
   //Data and functionality
@@ -16,41 +17,63 @@ export default function SupplierSectionMobile({
   openSummaryModal,
 }) {
   const isDesktop = useMediaQuery({ minWidth: 968 });
+  const [selectedSupplierName, setSelectedSupplierName] = useState("");
+
+  // Extract supplier names safely
+  const supplierNames = supplier?.map((sup) => sup.suppliername) || [];
+
+  // Sync selectedSupplier prop to local state for display
+  useEffect(() => {
+    if (
+      selectedSupplier &&
+      typeof selectedSupplier === "object" &&
+      selectedSupplier.suppliername
+    ) {
+      setSelectedSupplierName(selectedSupplier.suppliername);
+    } else {
+      setSelectedSupplierName("");
+    }
+  }, [selectedSupplier]);
+
+  // Handle supplier selection
+  const HandleSupplierSelection = (supplierName) => {
+    setSelectedSupplierName(supplierName);
+
+    // Find the supplier object by name
+    const supplierSelected = supplier?.find(
+      (sup) => sup.suppliername === supplierName
+    );
+
+    if (supplierSelected) {
+      setSelectedSupplier(supplierSelected.id);
+    } else {
+      setSelectedSupplier(null);
+    }
+  };
 
   return (
     <div
-      className={` ${
+      className={`${
         isDesktop ? `hidden` : `flex`
-      } flex-col justify-center gap-4 shadow-md shadow-gray-200 p-4  rounded-xl bg-white  `}
+      } flex-col justify-center gap-4 shadow-md shadow-gray-200 p-4 rounded-xl bg-white`}
     >
       {/* Supplier Dropdown */}
       <div className="flex flex-col w-full">
         <label className="mb-1 text-sm font-medium text-violet-700">
           Supplier
         </label>
-        <div className="flex items-center justify-center w-full gap-1 ">
-          <select
-            className="w-full px-3 py-2 text-sm border rounded-lg border-violet-300 focus:outline-none focus:ring-2 focus:ring-violet-400 disabled:bg-gray-100 disabled:text-gray-400 disabled:border-gray-300 disabled:cursor-not-allowed disabled:shadow-none"
-            disabled={order.length > 0}
-            onChange={(e) => {
-              const value = e.target.value;
-              setSelectedSupplier(value === "" ? null : Number(value));
-            }}
-            value={selectedSupplier.id || ""}
-          >
-            <option value="">Choose Supplier</option>
-            {supplier.map(
-              (sup) =>
-                sup.status !== "Inactive" && (
-                  <option key={sup.id} value={sup.id}>
-                    {sup.suppliername}
-                  </option>
-                )
-            )}
-          </select>
+        <div className="flex items-center justify-center w-full gap-1">
+          <div className="flex flex-col items-center justify-center w-full gap-1">
+            <DefaultDropDown
+              items={supplierNames}
+              SetSelected={HandleSupplierSelection}
+              selectedValue={selectedSupplierName} // Show current selection
+              placeholder="Select a supplier..."
+            />
+          </div>
 
           {/*------------- Order Summary Button (Mobile only) ----------------*/}
-          <div className="relative ">
+          <div className="relative">
             <button
               onClick={() => openSummaryModal(true)}
               className={`bg-violet-400 ${
@@ -63,12 +86,10 @@ export default function SupplierSectionMobile({
             >
               <ShoppingBasket size={18} />
             </button>
-            {order.length > 0 ? (
-              <div className="absolute bg-red-900 text-white text-[0.55rem] text-center items-center rounded-4xl px-2 py-1 w-auto ml-7 bottom-7 ">
+            {order.length > 0 && (
+              <div className="absolute bg-red-900 text-white text-[0.55rem] text-center items-center rounded-4xl px-2 py-1 w-auto ml-7 bottom-7">
                 <p>{totalItem}</p>
               </div>
-            ) : (
-              ""
             )}
           </div>
         </div>

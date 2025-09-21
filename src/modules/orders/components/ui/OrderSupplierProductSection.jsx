@@ -8,6 +8,7 @@ export default function SupplierProductSection({
   productShowing,
   selectedSupplier,
   HandleSelectOrder,
+  setProductShowing,
 }) {
   const isDesktop = useMediaQuery({ minWidth: 968 });
   return (

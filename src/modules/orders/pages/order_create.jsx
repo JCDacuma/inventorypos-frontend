@@ -393,8 +393,7 @@ export default function CreateOrder() {
         "Invalid Date Selection",
         "The Order Date cannot be later than the Arrival Date."
       );
-      setLocalOrderDates("");
-      setLocalArrivalDate("");
+
       return;
     }
 
@@ -452,6 +451,7 @@ export default function CreateOrder() {
                   productShowing={productShowing}
                   selectedSupplier={selectedSupplier}
                   HandleSelectOrder={HandleSelectOrder}
+                  setProductShowing={setProductShowing}
                 />
 
                 {/* --------- Pagination section --------- */}
