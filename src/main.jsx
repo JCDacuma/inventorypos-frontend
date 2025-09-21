@@ -13,7 +13,7 @@ import Inventory from "./modules/inventory/pages/inventory.jsx";
 import BatchInventory from "./modules/inventory/pages/batch_inv.jsx";
 import ProductOrders from "./modules/orders/pages/product_orders.jsx";
 import CreateOrder from "./modules/orders/pages/order_create.jsx";
-import RegisterAccount from "./modules/Account/pages/register_acc.jsx";
+import RegisterAccount from "./modules/account/pages/register_acc.jsx";
 import SalesReport from "./modules/pos/pages/sales_report.jsx";
 import Settings from "./page/settings.jsx";
 import Suppliers from "./modules/supplier/pages/suppliers.jsx";
