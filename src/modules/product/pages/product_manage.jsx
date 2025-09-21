@@ -11,7 +11,7 @@ import {
 import { useMediaQuery } from "react-responsive";
 import { ExportButton } from "../../../components/ui/buttons.jsx";
 import Searchbar from "../../../components/ui/Searchbar.jsx";
-import { BatchControl } from "../../../components/Layouts/ModalControl.jsx";
+import BatchControl from "../../../components/Layouts/BatchControl.jsx";
 
 //Table Layout component
 import Table from "../../../components/ui/Table.jsx";
@@ -41,24 +41,39 @@ export default function ProductManagement() {
     alert(`remove ${items} id: ${id}`);
   };
 
+  //BatchControls
+  const BatchControlBtn = [
+    {
+      btnLabel: "Edit",
+      color: "bg-violet-500 ",
+      icon: SquarePen,
+      padding: "py-2 px-6",
+    },
+    {
+      btnLabel: "Remove",
+      color: "bg-[#910B0B]/[0.69]",
+      icon: Trash2,
+      padding: "py-2 px-6",
+    },
+  ];
+
   //Sample columns
   const columns = [
     { key: "Select", label: "" },
     { key: "product", label: "Product" },
     { key: "category", label: "Category" },
-    { key: "unit", label: "Price" },
+    { key: "price", label: "Price" },
     { key: "status", label: "Status" },
     { key: "action", label: "Action" },
   ];
 
-  // Sample fetch from database
   // Sample fetch from database
   const data = [
     {
       id: 1,
       product: "Laptop - Dell Inspiron 15",
       category: "Electronics",
-      unit: "₱6000",
+      price: "₱6000",
       status: <ProductStatus status="Active" />,
       action: (
         <Action
@@ -81,7 +96,7 @@ export default function ProductManagement() {
       id: 2,
       product: "Wireless Mouse - Logitech M185",
       category: "Electronics",
-      unit: "₱900",
+      price: "₱900",
       status: <ProductStatus status="Inactive" />,
       action: (
         <Action
@@ -104,7 +119,7 @@ export default function ProductManagement() {
       id: 3,
       product: "Smartphone - iPhone 14",
       category: "Electronics",
-      unit: "₱65000",
+      price: "₱65000",
       status: <ProductStatus status="Active" />,
       action: (
         <Action
@@ -127,7 +142,7 @@ export default function ProductManagement() {
       id: 4,
       product: "Rice - 5kg Bag",
       category: "Grocery",
-      unit: "₱500",
+      price: "₱500",
       status: <ProductStatus status="Active" />,
       action: (
         <Action
@@ -150,7 +165,7 @@ export default function ProductManagement() {
       id: 5,
       product: "Cooking Oil - 1L Bottle",
       category: "Grocery",
-      unit: "₱120",
+      price: "₱120",
       status: <ProductStatus status="Active" />,
       action: (
         <Action
@@ -173,7 +188,7 @@ export default function ProductManagement() {
       id: 6,
       product: "Bananas (1kg)",
       category: "Grocery",
-      unit: "₱120",
+      price: "₱120",
       status: <ProductStatus status="Active" />,
       action: (
         <Action
@@ -196,7 +211,7 @@ export default function ProductManagement() {
       id: 7,
       product: "Office Chair - Ergonomic",
       category: "Furniture",
-      unit: "₱1500",
+      price: "₱1500",
       status: <ProductStatus status="Active" />,
       action: (
         <Action
@@ -219,7 +234,7 @@ export default function ProductManagement() {
       id: 8,
       product: "Dining Table - 6 Seater",
       category: "Furniture",
-      unit: "₱4500",
+      price: "₱4500",
       status: <ProductStatus status="Active" />,
       action: (
         <Action
@@ -242,7 +257,7 @@ export default function ProductManagement() {
       id: 9,
       product: "T-Shirt - Cotton (Large)",
       category: "Clothing",
-      unit: "₱220",
+      price: "₱220",
       status: <ProductStatus status="Active" />,
       action: (
         <Action
@@ -265,7 +280,7 @@ export default function ProductManagement() {
       id: 10,
       product: "Jeans - Blue Denim",
       category: "Clothing",
-      unit: "₱345",
+      price: "₱345",
       status: <ProductStatus status="Active" />,
       action: (
         <Action
@@ -288,7 +303,7 @@ export default function ProductManagement() {
       id: 11,
       product: "Jacket - Winter Coat",
       category: "Clothing",
-      unit: "₱590",
+      price: "₱590",
       status: <ProductStatus status="Active" />,
       action: (
         <Action
@@ -351,34 +366,11 @@ export default function ProductManagement() {
       </MainWrapper>
 
       {/* Batch Contol */}
-      <AnimatePresence>
-        {openBatchContol ? (
-          <BatchControl Count={selectedID.length}>
-            <button
-              className={`bg-violet-500 flex gap-1 text-white py-2 px-6 rounded-2xl cursor-pointer shadow-md shadow-gray-500 ${
-                isSmallMobile ? `text-sm` : `text-md`
-              }`}
-            >
-              <SquarePen
-                className={` ${isSmallMobile ? `h-5 w-5` : `h-6 w-6`} `}
-              />
-              Edit
-            </button>
-            <button
-              className={`bg-[#910B0B]/[0.69] flex gap-1 text-white   py-2 px-4 rounded-2xl cursor-pointer shadow-md shadow-gray-500 ${
-                isSmallMobile ? `text-sm` : `text-md`
-              }`}
-            >
-              <Trash2
-                className={` ${isSmallMobile ? `h-5 w-5` : `h-6 w-6`} `}
-              />
-              Remove
-            </button>
-          </BatchControl>
-        ) : (
-          ""
-        )}
-      </AnimatePresence>
+      <BatchControl
+        Count={selectedID.length}
+        Buttons={BatchControlBtn}
+        openBatchContol={openBatchContol}
+      />
     </Layout>
   );
 }

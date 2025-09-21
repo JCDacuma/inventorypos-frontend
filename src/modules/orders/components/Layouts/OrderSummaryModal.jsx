@@ -1,4 +1,4 @@
-import Modal from "@/components/Layouts/modal.jsx";
+import { Modal } from "@/components/Layouts/modal.jsx";
 import { SweetAlert } from "@/utils/sweetalert";
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";

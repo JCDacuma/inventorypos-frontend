@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import Modal from "@/components/Layouts/modal";
+import { Modal } from "@/components/Layouts/modal";
 import { DefaultDropDown } from "@/components/ui/dropdown.jsx";
 import { SweetAlert } from "@/utils/sweetalert";
 import { ArrowBigRight } from "lucide-react";

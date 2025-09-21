@@ -1,6 +1,6 @@
 import { motion, AnimatePresence, scale } from "framer-motion";
 
-export default function Modal({
+export function Modal({
   isOpen,
   onClosed,
   children,

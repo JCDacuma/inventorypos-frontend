@@ -16,7 +16,7 @@ import SupplierProductSection from "@/modules/orders/components/ui/OrderSupplier
 import SearchAndControl from "@/modules/orders/components/ui/OrderSearchAndControl.jsx";
 
 //Animation and icons
-import { motion, AnimatePresence } from "framer-motion";
+
 import { SweetAlert } from "@/utils/sweetalert";
 
 //icons
@@ -37,10 +37,10 @@ import {
 export default function CreateOrder() {
   const isDesktop = useMediaQuery({ minWidth: 968 });
 
-  //Open mobile order summary
+  //State mobile order summary Modal
   const [isOpenOrderSummary, setOpenSummary] = useState(false);
 
-  //Open Supplier Selection
+  //State Supplier Selection Modal
   const [isOpenSupplierInfo, setOpenSupplier] = useState(false);
 
   //sample supplier data fetch
@@ -432,6 +432,7 @@ export default function CreateOrder() {
                 {/* --------- Search and Control Section -------- */}
                 <SearchAndControl setOpenSupplier={setOpenSupplier} />
 
+                {/* --------- Supplier Control UI Mobile Only (OrderProductSupplierMobile.jsx)-------- */}
                 <SupplierSectionMobile
                   supplier={supplier}
                   order={productOrdering}
@@ -445,7 +446,7 @@ export default function CreateOrder() {
                   openSummaryModal={setOpenSummary}
                 />
 
-                {/* -------- Supplier Product Section - Desktop Layout ------ */}
+                {/* -------- Supplier Product Section UI - Desktop Only (OrderSupplierProductSection.jsx) ------ */}
                 <SupplierProductSection
                   HandleDisableButton={HandleDisableButton}
                   productShowing={productShowing}
@@ -491,7 +492,7 @@ export default function CreateOrder() {
             </div>
           </div>
 
-          {/*-------------- Summary Sections -------------*/}
+          {/*--------------Order Summary Sections UI Desktop Only (OrderSummarySection.jsx) -------------*/}
           <OrderCreationSummary
             //Data
             productOrdering={productOrdering}
@@ -508,8 +509,8 @@ export default function CreateOrder() {
             ShippingFee={ShippingFee}
           />
         </div>
-        {/*---------------- Modal Section ---------------*/}
-        {/* Order Summary Modal */}
+        {/*---------------- Modal Section Mobile Only ---------------*/}
+        {/* Order Summary Modal Mobile Only */}
         <OrderSummaryMobile
           isOpen={isOpenOrderSummary}
           onClosed={() => setOpenSummary(false)}
@@ -526,7 +527,7 @@ export default function CreateOrder() {
           ChangeShippingFee={HandleSetShippingFee}
           ShippingFee={ShippingFee}
         />
-        {/* Supplier Modal */}
+        {/* Supplier Modal Desktop Only*/}
         <SupplierModal
           isOpen={isOpenSupplierInfo}
           onClosed={() => setOpenSupplier(false)}

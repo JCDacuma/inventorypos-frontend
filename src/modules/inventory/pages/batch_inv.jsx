@@ -11,7 +11,7 @@ import {
 import { useMediaQuery } from "react-responsive";
 import { ExportButton } from "../../../components/ui/buttons.jsx";
 import Searchbar from "../../../components/ui/Searchbar.jsx";
-import { BatchControl } from "../../../components/Layouts/ModalControl.jsx";
+import BatchControl from "../../../components/Layouts/BatchControl.jsx";
 
 //Table Layout component
 import Table from "../../../components/ui/Table.jsx";
@@ -56,6 +56,22 @@ export default function BatchInventory() {
   const HandleTransfer = (items, id) => {
     alert(`Transfer ${items} id: ${id}`);
   };
+
+  //BatchControls
+  const BatchControlBtn = [
+    {
+      btnLabel: "Edit",
+      color: "bg-violet-500 ",
+      icon: SquarePen,
+      padding: "py-2 px-6",
+    },
+    {
+      btnLabel: "Remove",
+      color: "bg-[#910B0B]/[0.69]",
+      icon: Trash2,
+      padding: "py-2 px-6",
+    },
+  ];
 
   //Sample column
   const columns = [
@@ -945,34 +961,11 @@ export default function BatchInventory() {
       </MainWrapper>
 
       {/* Batch Contol */}
-      <AnimatePresence>
-        {openBatchContol ? (
-          <BatchControl Count={selectedID.length}>
-            <button
-              className={`bg-violet-500 flex gap-1 text-white py-2 px-6 rounded-2xl cursor-pointer ${
-                isSmallMobile ? `text-sm` : `text-md`
-              }`}
-            >
-              <SquarePen
-                className={` ${isSmallMobile ? `h-5 w-5` : `h-6 w-6`} `}
-              />
-              Edit
-            </button>
-            <button
-              className={`bg-[#910B0B]/[0.69] flex gap-1 text-white   py-2 px-4 rounded-2xl cursor-pointer ${
-                isSmallMobile ? `text-sm` : `text-md`
-              }`}
-            >
-              <Trash2
-                className={` ${isSmallMobile ? `h-5 w-5` : `h-6 w-6`} `}
-              />
-              Remove
-            </button>
-          </BatchControl>
-        ) : (
-          ""
-        )}
-      </AnimatePresence>
+      <BatchControl
+        Count={selectedID.length}
+        openBatchContol={openBatchContol}
+        Buttons={BatchControlBtn}
+      />
     </Layout>
   );
 }
