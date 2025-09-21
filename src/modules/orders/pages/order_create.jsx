@@ -8,7 +8,12 @@ import { Layout } from "../../../components/Layouts/Layout";
 //Order Summary Modal (Mobile)
 import OrderSummaryMobile from "../components/Layouts/OrderSummaryModal";
 import SupplierModal from "../components/Layouts/OrderSupplierModal";
+
+//ui
 import OrderCreationSummary from "@/modules/orders/components/ui/OrderSummarySection.jsx";
+import SupplierSectionMobile from "@/modules/orders/components/ui/OrderProductSupplierMobile.jsx";
+import SupplierProductSection from "@/modules/orders/components/ui/OrderSupplierProductSection.jsx";
+import SearchAndControl from "@/modules/orders/components/ui/OrderSearchAndControl.jsx";
 
 //Animation and icons
 import { motion, AnimatePresence } from "framer-motion";
@@ -268,8 +273,13 @@ export default function CreateOrder() {
   const SelectedNewSupplier = (value) => {
     const Newsupplier = supplier.find((sup) => sup.id === Number(value));
     setSelectedSup(Newsupplier);
-    SweetAlert.success(`Supplier Selected`, `${Newsupplier.suppliername}`);
   };
+
+  //Date of order
+  const [orderDate, setOrderDate] = useState("");
+
+  //Date Expected Order Arrival
+  const [arrivalDate, setArrivalDate] = useState("");
 
   //Selecting order functionality
   const HandleSelectOrder = (itemId) => {
@@ -286,7 +296,7 @@ export default function CreateOrder() {
     return hasOrdered;
   };
 
-  /*---------- Summary Order Controls  ----------- */
+  /*---------- Order Summary Controls Functionality  ----------- */
 
   //Add current ordering stock
   const AddStock = (index) => {
@@ -322,7 +332,7 @@ export default function CreateOrder() {
     0
   );
 
-  //Shipping fee set
+  //Set shipping fee
   const [ShippingFee, setShippingfee] = useState(
     selectedSupplier?.shippingfee ?? 0
   );
@@ -354,10 +364,63 @@ export default function CreateOrder() {
   );
 
   //Total Vat
-  const Vat = selectedSupplier?.vatregistered ? TaxableSubtotal * 0.12 : 0;
+  const Vat = parseFloat(
+    (selectedSupplier?.vatregistered ? TaxableSubtotal * 0.12 : 0).toFixed(2)
+  );
 
   //Total Price
   const TotalPrice = parseFloat((Subtotal + Vat + ShippingFee).toFixed(2));
+
+  /* ---------------- Validation ---------------- */
+
+  const [ValidSupplier, setValidSupplier] = useState(false);
+
+  //Supplier validation
+  const HandleValidationSupplier = (OrderDate, ArrivalDate, Supplier) => {
+    if (!OrderDate || !ArrivalDate) {
+      SweetAlert.error(
+        "Missing Dates",
+        "Please select both order and arrival dates."
+      );
+      return;
+    }
+
+    const FromDate = new Date(OrderDate);
+    const ToDate = new Date(ArrivalDate);
+
+    if (FromDate > ToDate) {
+      SweetAlert.error(
+        "Invalid Date Selection",
+        "The Order Date cannot be later than the Arrival Date."
+      );
+      setLocalOrderDates("");
+      setLocalArrivalDate("");
+      return;
+    }
+
+    // Check if no supplier is selected
+    if (
+      Supplier === "" ||
+      Supplier === null ||
+      Supplier === undefined ||
+      isNaN(Supplier)
+    ) {
+      SweetAlert.error(
+        "No Supplier Selected",
+        "Please select a supplier before continuing."
+      );
+      return;
+    }
+
+    SelectedNewSupplier(Supplier);
+    setOrderDate(OrderDate);
+    setArrivalDate(ArrivalDate);
+    //Supplier Modal
+    setOpenSupplier(false);
+
+    //Mark as validated supplier
+    setValidSupplier(true);
+  };
 
   return (
     <>
@@ -368,332 +431,28 @@ export default function CreateOrder() {
             <div className="h-full min-h-[500px] md:min-h-[350px] max-h-[calc(100vh-20px)] w-full shadow-lg  rounded-2xl bg-white  flex flex-col p-0 sm:p-3  ">
               <div className="flex flex-col flex-1 gap-1 px-1 py-1 overflow-auto custom-scroll">
                 {/* --------- Search and Control Section -------- */}
-                <div className="flex items-center justify-between gap-4 px-1 py-2 bg-white rounded-sm sm:px-5 md:shadow-md shadow-gray-100 lg:py-4">
-                  <div className="flex items-center justify-between w-full gap-2 px-1 py-2 shadow-sm sm:px-3 rounded-xl">
-                    {/* Back button */}
-                    <Link to={"/product-orders"}>
-                      <motion.button
-                        whileTap={{ scale: 0.95 }}
-                        whileHover={{ scale: 1.05, color: "#3c2350" }}
-                        className="flex items-center gap-1 ml-1 font-medium transition-colors text-violet-600 hover:text-violet-700"
-                      >
-                        <Undo2 size={24} className="stoke-2" />
-                        <span className="hidden sm:flex">Back</span>
-                      </motion.button>
-                    </Link>
+                <SearchAndControl setOpenSupplier={setOpenSupplier} />
 
-                    <div className="flex items-center justify-end w-full gap-2 sm:gap-1">
-                      {/*------- Supplier Info (Desktop only) --------------*/}
-                      <button
-                        onClick={() => setOpenSupplier(true)}
-                        className={`${
-                          isDesktop ? "flex" : "hidden"
-                        } items-center justify-center w-11 h-10 rounded-full 
-                            bg-gradient-to-r from-violet-500 to-purple-600 
-                            text-white shadow-md
-                            hover:from-violet-600 hover:to-purple-700 hover:shadow-lg hover:scale-110
-                            active:scale-95 active:from-violet-700 active:to-purple-800 active:shadow-md
-                            focus:outline-none focus:ring-2 focus:ring-violet-400 focus:ring-offset-2
-                            transition-all duration-200 ease-in-out`}
-                      >
-                        <Truck
-                          size={20}
-                          className="stroke-[2.5] drop-shadow-sm"
-                        />
-                      </button>
-
-                      {/* Search Bar*/}
-                      <div className="relative flex w-full sm:w-1/2 lg:w-2/5 2xl:w-1/4">
-                        <Search className="absolute -translate-y-1/2 left-3 top-1/2 text-violet-300" />
-                        <input
-                          placeholder="Search here..."
-                          className="w-full rounded-2xl pl-10 pr-3 border border-gray-300 bg-white py-2.5 text-sm shadow-sm outline-none
-                          placeholder:text-slate-400
-                          focus:border-violet-600 focus:ring-2 focus:ring-violet-400"
-                        />
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                {/* -------- Supplier Info (Mobile Only) --------- */}
-                <div
-                  className={` ${
-                    isDesktop ? `hidden` : `flex`
-                  } flex-col justify-center gap-4 shadow-md shadow-gray-200 p-4  rounded-xl bg-white  `}
-                >
-                  {/* Supplier Dropdown */}
-                  <div className="flex flex-col w-full">
-                    <label className="mb-1 text-sm font-medium text-violet-700">
-                      Supplier
-                    </label>
-                    <div className="flex items-center justify-center w-full gap-1 ">
-                      <select
-                        className="w-full px-3 py-2 text-sm border rounded-lg border-violet-300 focus:outline-none focus:ring-2 focus:ring-violet-400 disabled:bg-gray-100 disabled:text-gray-400 disabled:border-gray-300 disabled:cursor-not-allowed disabled:shadow-none"
-                        disabled={productOrdering.length > 0}
-                        onChange={(e) => SelectedNewSupplier(e.target.value)}
-                        value={selectedSupplier.id}
-                      >
-                        <option value="">Choose Supplier</option>
-                        {supplier.map((sup) =>
-                          sup.status !== "Inactive" ? (
-                            <option key={sup.id} value={sup.id}>
-                              {sup.suppliername}
-                            </option>
-                          ) : null
-                        )}
-                      </select>
-
-                      {/*------------- Order Summary Button (Mobile only) ----------------*/}
-                      <div className="relative ">
-                        <button
-                          onClick={() => setOpenSummary(true)}
-                          className={`bg-violet-400 ${
-                            isDesktop ? "hidden" : "flex"
-                          } items-center justify-center w-13 h-10 rounded-full 
-                          bg-violet-530 text-white shadow-md
-                          hover:bg-violet-600 hover:shadow-lg hover:scale-110
-                          active:scale-95 active:shadow-sm
-                          transition-all duration-200 ease-in-out`}
-                        >
-                          <ShoppingBasket size={18} />
-                        </button>
-                        {productOrdering.length > 0 ? (
-                          <div className="absolute bg-red-900 text-white text-[0.55rem] text-center items-center rounded-4xl px-2 py-1 w-auto ml-7 bottom-7 ">
-                            <p>{TotalItem}</p>
-                          </div>
-                        ) : (
-                          ""
-                        )}
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Dates */}
-                  <div className="flex items-center justify-between gap-3">
-                    {/* Order Date */}
-                    <div className="flex flex-col w-1/2">
-                      <label className="mb-1 text-sm font-medium text-violet-700">
-                        Order Date
-                      </label>
-                      <input
-                        type="date"
-                        className="px-2 py-2 text-sm border rounded-lg border-violet-300 focus:outline-none focus:ring-2 focus:ring-violet-400"
-                      />
-                    </div>
-
-                    <ArrowBigRight
-                      className="hidden mt-6 text-violet-500 shrink-0 sm:flex"
-                      size={24}
-                    />
-
-                    {/* Expected Arrival */}
-                    <div className="flex flex-col w-1/2">
-                      <label className="mb-1 text-sm font-medium text-violet-700">
-                        Expected Arrival
-                      </label>
-                      <input
-                        type="date"
-                        className="px-2 py-2 text-sm border rounded-lg border-violet-300 focus:outline-none focus:ring-2 focus:ring-violet-400"
-                      />
-                    </div>
-                  </div>
-                </div>
+                <SupplierSectionMobile
+                  supplier={supplier}
+                  order={productOrdering}
+                  totalItem={TotalItem}
+                  selectedSupplier={selectedSupplier}
+                  setSelectedSupplier={SelectedNewSupplier}
+                  setOrderDate={setOrderDate}
+                  orderDate={orderDate}
+                  setArrivalDate={setArrivalDate}
+                  arrivalDate={arrivalDate}
+                  openSummaryModal={setOpenSummary}
+                />
 
                 {/* -------- Supplier Product Section - Desktop Layout ------ */}
-                <div
-                  className={`${
-                    isDesktop ? `flex` : `hidden`
-                  } flex-col gap-3 h-full overflow-auto py-3 px-2`}
-                >
-                  {productShowing.length > 0 ? (
-                    productShowing.map((item, index) => (
-                      <div
-                        key={item.id}
-                        className="grid items-center grid-cols-4 px-3 py-8 transition bg-white border border-gray-200 rounded-lg shadow-md shadow-gray-200 hover:shadow-lg"
-                      >
-                        {/* Product Info */}
-                        <p className="font-medium text-gray-800">
-                          {item.itemname}
-                        </p>
-                        <p className="flex justify-end text-gray-600">
-                          {item.category}
-                        </p>
-                        <span className="flex justify-center text-gray-500">
-                          {item.Unit}
-                        </span>
-
-                        {/* Action Button */}
-                        <div className="flex justify-end gap-2">
-                          <input
-                            className=" w-15 p-[0.02rem] border-[0.04rem] border-gray-400 shadow-md shadow-gray-200 text-center rounded-md"
-                            value={item.Quantity}
-                            min={0}
-                            onChange={(e) => {
-                              const newProduct = [...productShowing];
-                              newProduct[index].Quantity = Number(
-                                e.target.value
-                              );
-                              setProductShowing(newProduct);
-                            }}
-                          ></input>
-                          {/* Add Button */}
-                          <motion.button
-                            onClick={() => HandleSelectOrder(item.id)}
-                            disabled={HandleDisableButton(item.id)}
-                            animate={{
-                              backgroundColor: HandleDisableButton(item.id)
-                                ? "#9ca3af" // gray-400
-                                : "#c084fc", // purple-400
-                            }}
-                            whileHover={
-                              HandleDisableButton(item.id)
-                                ? {}
-                                : {
-                                    scale: 1.05,
-                                    backgroundColor: "#7e22ce", // purple-700
-                                  }
-                            }
-                            whileTap={
-                              HandleDisableButton(item.id)
-                                ? {}
-                                : {
-                                    scale: 0.9,
-                                    backgroundColor: "#6d00c5",
-                                  }
-                            }
-                            className={`flex items-center justify-center text-lg font-bold text-white rounded-full w-9 h-9 ${
-                              HandleDisableButton(item.id)
-                                ? "cursor-not-allowed"
-                                : "cursor-pointer"
-                            }`}
-                          >
-                            <Plus className="stroke-3" size={18} />
-                          </motion.button>
-                        </div>
-                      </div>
-                    )) /*------ No Supplier Selected ------*/
-                  ) : selectedSupplier === null || selectedSupplier === "" ? (
-                    <div className="flex flex-col items-center justify-center py-12 border border-gray-300 border-dashed shadow-sm bg-gray-50 rounded-2xl">
-                      <Store className="w-12 h-12 mb-3 text-gray-400" />
-                      <p className="font-medium text-gray-600">
-                        No supplier selected
-                      </p>
-                      <p className="text-sm text-gray-400">
-                        Please choose a supplier to view products
-                      </p>
-                    </div>
-                  ) : (
-                    /*------ No items found for the supplier ------*/
-                    <div className="flex flex-col items-center justify-center py-12 border border-gray-300 border-dashed shadow-sm bg-gray-50 rounded-2xl">
-                      <PackageX className="w-12 h-12 mb-3 text-gray-400" />
-                      <p className="font-medium text-gray-600">
-                        No items found for this supplier
-                      </p>
-                      <p className="text-sm text-center text-gray-400">
-                        Please select a different supplier to see products
-                      </p>
-                    </div>
-                  )}
-                </div>
-
-                {/* -------------- Supplier Product Section - Mobile Layout ---------- */}
-                <div
-                  className={`${
-                    isDesktop ? `hidden` : `flex`
-                  } flex-col gap-3 h-full overflow-auto py-3 px-2`}
-                >
-                  {productShowing.length > 0 ? (
-                    productShowing.map((item, index) => (
-                      <div
-                        key={item.id}
-                        className="flex items-center justify-between p-4 transition bg-white border border-gray-200 shadow-md shadow-gray-200 rounded-xl hover:shadow-lg"
-                      >
-                        {/* Product Info */}
-                        <div className="flex flex-col text-gray-800">
-                          <p className="font-semibold">{item.itemname}</p>
-                          <p className="text-sm text-gray-500">
-                            {item.category}
-                          </p>
-                          <p className="text-xs text-gray-400">{item.Unit}</p>
-                        </div>
-                        <div className="flex gap-2">
-                          <input
-                            className=" w-15 p-[0.02rem] border-[0.04rem] border-gray-400 shadow-md shadow-gray-200 text-center rounded-md"
-                            value={item.Quantity}
-                            onChange={(e) => {
-                              const newProduct = [...productShowing];
-                              newProduct[index].Quantity = Number(
-                                e.target.value
-                              );
-                              setProductShowing(newProduct);
-                            }}
-                          ></input>
-
-                          {/* Add Button */}
-                          <motion.button
-                            onClick={() => HandleSelectOrder(item.id)}
-                            disabled={HandleDisableButton(item.id)}
-                            animate={{
-                              backgroundColor: HandleDisableButton(item.id)
-                                ? "#9ca3af"
-                                : "#a78bfa",
-                            }}
-                            whileHover={
-                              HandleDisableButton(item.id)
-                                ? {}
-                                : {
-                                    scale: 1.05,
-                                    backgroundColor: "#7e22ce",
-                                  }
-                            }
-                            whileTap={
-                              HandleDisableButton(item.id)
-                                ? {}
-                                : {
-                                    scale: 0.9,
-                                    backgroundColor: "#6d00c5",
-                                  }
-                            }
-                            className={`flex items-center justify-center w-8 h-8 text-lg font-bold text-white rounded-full transition 
-    ${HandleDisableButton(item.id) ? "cursor-not-allowed" : "cursor-pointer"}`}
-                          >
-                            <Plus
-                              size={16}
-                              className={
-                                HandleDisableButton(item.id)
-                                  ? "text-gray-200"
-                                  : "text-white"
-                              }
-                            />
-                          </motion.button>
-                        </div>
-                      </div>
-                    ))
-                  ) : /*------ No Supplier Selected ------*/
-                  selectedSupplier === null || selectedSupplier === "" ? (
-                    <div className="flex flex-col items-center justify-center py-12 border border-gray-300 border-dashed shadow-sm bg-gray-50 rounded-2xl">
-                      <Store className="w-12 h-12 mb-3 text-gray-400" />
-                      <p className="font-medium text-gray-600">
-                        No supplier selected
-                      </p>
-                      <p className="text-sm text-gray-400">
-                        Please choose a supplier to view products
-                      </p>
-                    </div>
-                  ) : (
-                    /*------ No items found for the supplier ------*/
-                    <div className="flex flex-col items-center justify-center py-12 border border-gray-300 border-dashed shadow-sm bg-gray-50 rounded-2xl">
-                      <PackageX className="w-12 h-12 mb-3 text-gray-400" />
-                      <p className="font-medium text-gray-600">
-                        No items found for this supplier
-                      </p>
-                      <p className="text-sm text-center text-gray-400">
-                        Please select a different supplier to see products
-                      </p>
-                    </div>
-                  )}
-                </div>
+                <SupplierProductSection
+                  HandleDisableButton={HandleDisableButton}
+                  productShowing={productShowing}
+                  selectedSupplier={selectedSupplier}
+                  HandleSelectOrder={HandleSelectOrder}
+                />
 
                 {/* --------- Pagination section --------- */}
                 <div>
@@ -732,7 +491,7 @@ export default function CreateOrder() {
             </div>
           </div>
 
-          {/* Summary Sections */}
+          {/*-------------- Summary Sections -------------*/}
           <OrderCreationSummary
             //Data
             productOrdering={productOrdering}
@@ -749,7 +508,7 @@ export default function CreateOrder() {
             ShippingFee={ShippingFee}
           />
         </div>
-        {/* Modal */}
+        {/*---------------- Modal Section ---------------*/}
         {/* Order Summary Modal */}
         <OrderSummaryMobile
           isOpen={isOpenOrderSummary}
@@ -773,9 +532,12 @@ export default function CreateOrder() {
           onClosed={() => setOpenSupplier(false)}
           supplier={supplier}
           order={productOrdering}
-          setSelectedSup={SelectedNewSupplier}
-          totalItem={TotalItem}
+          SubmitSupplier={HandleValidationSupplier}
           selectedSupplier={selectedSupplier}
+          setOrderDate={setOrderDate}
+          orderDate={orderDate}
+          setArrivalDate={setArrivalDate}
+          arrivalDate={arrivalDate}
         />
       </Layout>
     </>

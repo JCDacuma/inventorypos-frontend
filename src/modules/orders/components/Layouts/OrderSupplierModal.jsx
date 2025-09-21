@@ -1,17 +1,40 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Modal from "@/components/Layouts/modal";
 import { SweetAlert } from "@/utils/sweetalert";
 import { ArrowBigRight } from "lucide-react";
 import { motion } from "framer-motion";
+
 export default function SupplierModal({
+  //Modal State
   isOpen,
   onClosed,
+  //Data and functionality
   supplier,
-  setSelectedSup,
+  SubmitSupplier,
   selectedSupplier,
   order,
-  totalItem,
+  setOrderDate,
+  setArrivalDate,
+  orderDate,
+  arrivalDate,
 }) {
+  const [localOrderDate, setLocalOrderDates] = useState();
+  const [localArrivalDate, setLocalArrivalDate] = useState();
+  const [selectedLocalSupplier, setLocalselectedSuppliers] = useState(null);
+
+  // Sync parent -> local (only when parent changes externally)
+  useEffect(() => {
+    if (orderDate !== localOrderDate) setLocalOrderDates(orderDate || "");
+    if (arrivalDate !== localArrivalDate)
+      setLocalArrivalDate(arrivalDate || "");
+  }, [orderDate, arrivalDate]);
+
+  useEffect(() => {
+    setLocalselectedSuppliers(
+      selectedSupplier.length <= 0 ? null : selectedSupplier.id
+    );
+  }, [selectedSupplier]);
+
   return (
     <Modal
       isOpen={isOpen}
@@ -19,7 +42,7 @@ export default function SupplierModal({
       ModalTitle="Supplier Info"
       margin="mb-20"
     >
-      {/* -------- Supplier Info (Mobile Only) --------- */}
+      {/* -------- Supplier Info Modal (Desktop Only) --------- */}
       <div
         className={` flex flex-col justify-center gap-4 shadow-md shadow-gray-200 px-8 py-10 rounded-xl bg-white  `}
       >
@@ -29,26 +52,27 @@ export default function SupplierModal({
             Supplier
           </label>
           <div className="flex items-center justify-center w-full gap-1 ">
-            <div className="flex w-full gap-1 ">
+            <div className="flex w-full gap-1">
               <select
                 className="w-full px-3 py-2 text-sm border rounded-lg border-violet-300 focus:outline-none focus:ring-2 focus:ring-violet-400 disabled:bg-gray-100 disabled:text-gray-400 disabled:border-gray-300 disabled:cursor-not-allowed disabled:shadow-none"
                 disabled={order.length > 0}
                 onChange={(e) => {
-                  if (e.target.value !== "placeholder") {
-                    setSelectedSup(e.target.value);
-                  }
+                  const value = e.target.value;
+
+                  setLocalselectedSuppliers(
+                    value === "" ? null : Number(value)
+                  );
                 }}
-                value={selectedSupplier.id || "placeholder"}
+                value={selectedLocalSupplier || ""}
               >
-                <option value="placeholder" disabled>
-                  Choose Supplier
-                </option>
-                {supplier.map((sup) =>
-                  sup.status !== "Inactive" ? (
-                    <option key={sup.id} value={sup.id}>
-                      {sup.suppliername}
-                    </option>
-                  ) : null
+                <option value="">Choose Supplier</option>
+                {supplier.map(
+                  (sup) =>
+                    sup.status !== "Inactive" && (
+                      <option key={sup.id} value={sup.id}>
+                        {sup.suppliername}
+                      </option>
+                    )
                 )}
               </select>
             </div>
@@ -62,8 +86,9 @@ export default function SupplierModal({
             <label className="mb-1 text-sm font-medium text-violet-700">
               Order Date
             </label>
-
             <input
+              value={localOrderDate}
+              onChange={(e) => setLocalOrderDates(e.target.value)}
               type="date"
               className="px-2 py-2 text-sm border rounded-lg border-violet-300 focus:outline-none focus:ring-2 focus:ring-violet-400"
             />
@@ -80,14 +105,23 @@ export default function SupplierModal({
               Expected Arrival
             </label>
             <input
+              value={localArrivalDate}
+              onChange={(e) => setLocalArrivalDate(e.target.value)}
               type="date"
               className="px-2 py-2 text-sm border rounded-lg border-violet-300 focus:outline-none focus:ring-2 focus:ring-violet-400"
             />
           </div>
         </div>
+
         <div className="w-[100%] flex justify-center mt-2">
           <motion.button
-            onClick={onClosed}
+            onClick={() =>
+              SubmitSupplier(
+                localOrderDate,
+                localArrivalDate,
+                selectedLocalSupplier
+              )
+            }
             whileHover={{ scale: 1.03 }}
             whileTap={{ scale: 0.9 }}
             className="

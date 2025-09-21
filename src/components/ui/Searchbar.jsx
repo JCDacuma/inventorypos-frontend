@@ -19,7 +19,7 @@ export default function Searchbar() {
       {<Search className="absolute mt-[0.7rem] ml-2 text-violet-200" />}
       <input
         placeholder="   Search here..."
-        className="  w-1/1 rounded-2xl border pl-9 border-slate-300 bg-white py-3 text-sm shadow-sm outline-none ring-0 placeholder:text-slate-400 focus:border-slate-400 focus:ring-2 focus:ring-slate-200"
+        className="py-3 text-sm bg-white border shadow-sm outline-none  w-1/1 rounded-2xl pl-9 border-slate-300 ring-0 placeholder:text-slate-400 focus:border-slate-400 focus:ring-2 focus:ring-slate-200"
       />
     </div>
   );

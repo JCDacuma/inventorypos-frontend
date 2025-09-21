@@ -21,7 +21,7 @@ export default function OrderCreationSummary({
   RemoveItem,
 }) {
   const isDesktop = useMediaQuery({ minWidth: 968 });
-  console.log(productOrdering);
+
   return (
     <div
       className={`${
