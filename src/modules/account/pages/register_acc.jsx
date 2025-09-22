@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+/*import { useState, useEffect } from "react";
 import Input from "../../../components/ui/Input.jsx";
 import api from "../../../api/axiosInstance.js";
 import { Status } from "../../../components/ui/Status.jsx";
@@ -229,4 +229,6 @@ export default function RegisterAccount() {
       </MainWrapper>
     </Layout>
   );
-}
+}*/
+
+export default function RegisterAccount() {}
