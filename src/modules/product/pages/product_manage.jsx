@@ -5,9 +5,9 @@ import { Link } from "react-router-dom";
 import {
   Layout,
   MainWrapper,
-  ButtonLayout,
   ControlLayout,
 } from "../../../components/Layouts/Layout.jsx";
+import ButtonLayout from "@/components/Layouts/pageControlButtons.jsx";
 import { useMediaQuery } from "react-responsive";
 import { ExportButton } from "../../../components/ui/buttons.jsx";
 import Searchbar from "../../../components/ui/Searchbar.jsx";
@@ -65,6 +65,15 @@ export default function ProductManagement() {
     { key: "price", label: "Price" },
     { key: "status", label: "Status" },
     { key: "action", label: "Action" },
+  ];
+
+  //Page Controls
+  const PageBtnControls = [
+    {
+      BtnLabel: "Product Promo",
+      iconControl: Megaphone,
+      to: "/promo-management",
+    },
   ];
 
   // Sample fetch from database
@@ -334,24 +343,8 @@ export default function ProductManagement() {
         >
           {/* Control Section */}
           <ControlLayout>
-            <ButtonLayout>
-              <div className="flex justify-between gap-3 w-1/1">
-                <div className="flex items-center justify-center align-middle">
-                  <Link to={"/promo-management"}>
-                    <motion.button
-                      whileTap={{ scale: 0.9, backgroundColor: "#6d00c5" }}
-                      whileHover={{ scale: 1.05, backgroundColor: "#3c2350" }}
-                      className="flex px-4 py-2 text-sm text-white cursor-pointer bg-violet-400 rounded-3xl"
-                    >
-                      <Megaphone className={"h-5 w-5 mr-1"} />
-                      Product Promo
-                    </motion.button>
-                  </Link>
-                </div>
-                {/* Exportation button */}
-                <ExportButton />
-              </div>
-            </ButtonLayout>
+            <ButtonLayout hasExport={true} Buttons={PageBtnControls} />
+
             <Searchbar />
           </ControlLayout>
 

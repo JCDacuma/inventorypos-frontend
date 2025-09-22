@@ -102,7 +102,7 @@ export default function RegisterSupplier() {
                       Vat Registered
                     </label>
 
-                    <div className="flex items-center justify-between w-full gap-1 px-5 py-3 mt-2 transition-all duration-200 border shadow-sm border-violet-300 rounded-xl focus-within:border-violet-500 focus-within:ring-2 focus-within:ring-violet-400">
+                    <div className="flex items-center justify-between w-full gap-1 px-16 py-3 mt-2 transition-all duration-200 border shadow-sm sm:px-5 border-violet-300 rounded-xl focus-within:border-violet-500 focus-within:ring-2 focus-within:ring-violet-400">
                       {/* Yes Option */}
                       <label className="flex items-center gap-2 cursor-pointer hover:opacity-90">
                         <div className="relative">
@@ -235,7 +235,7 @@ export default function RegisterSupplier() {
               </div>
             </div>
           </div>
-          {/* Submit Button */}
+
           {/* Submit Button */}
           <div className="flex justify-center items-center mt-4 sm:mt-8 2xl:mt-12 w-[90%] sm:w-[50%] lg:w-[30%]">
             <motion.button

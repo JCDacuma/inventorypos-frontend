@@ -1,57 +1,19 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import Sidebar from "./sidebar";
-import Navbar from "./navbar";
 import { useMediaQuery } from "react-responsive";
+
+//icons
 import { Settings2, Undo2 } from "lucide-react";
 import { motion } from "framer-motion";
 import { ExportButton } from "@/components/ui/buttons.jsx";
 
-export const Row = ({ children, style }) => {
-  return (
-    <div className={`flex flex-col sm:flex-row gap-4 ${style}`}>{children}</div>
-  );
-};
-
-export const Col = ({ children, style }) => {
-  return <div className={`flex-1 flex flex-col ${style}`}>{children}</div>;
-};
-
-export const Card = ({ style = "", children }) => {
-  return (
-    <div
-      className={`w-full p-3
-                  rounded-2xl border border-gray-200 bg-white shadow-sm ${style}`}
-    >
-      {children}
-    </div>
-  );
-};
-
-//Layout Contols layout
-export const ControlLayout = ({ children }) => {
-  const isSmallMobile = useMediaQuery({ maxWidth: 768 });
-
-  return (
-    <>
-      <header
-        className={`flex
-         ${isSmallMobile ? `  flex-row` : `flex-row`}
-         gap-1 w-full mb-5 justify-end `}
-      >
-        {children}
-      </header>
-    </>
-  );
-};
-
 //For Button Layout Responsiveness for table
-export const ButtonLayout = ({
+export default function ButtonLayout({
   Buttons = [],
   hasExport = false,
   hasNavBack = false,
   BackNavigationLink = "",
-}) => {
+}) {
   const isDesktop = useMediaQuery({ minWidth: 968 });
   const isSmallDesktop = useMediaQuery({ minWidth: 768 });
   const isXSmallMobile = useMediaQuery({ maxWidth: 500 });
@@ -112,45 +74,4 @@ export const ButtonLayout = ({
       )}
     </div>
   );
-};
-
-//Page Setup
-export const Layout = ({ currentWebPage = "", children, style = "" }) => {
-  const [MobileSideBar, setMobileSideBar] = useState(null);
-
-  const HandleMobileSideBar = (state) => {
-    setMobileSideBar(state);
-  };
-
-  return (
-    <div className={`bg-gray-100 w-1/1 h-screen flex ${style}`}>
-      <Navbar
-        page={currentWebPage}
-        setSideBarMobile={HandleMobileSideBar}
-        mobileSideBarState={MobileSideBar}
-      />
-      <Sidebar SideBarMobileState={MobileSideBar} />
-      {children}
-    </div>
-  );
-};
-
-//Parent
-export const MainWrapper = ({ children, mainStyle = "", style = "" }) => {
-  const IsSmallMobile = useMediaQuery({ maxWidth: 768 });
-  return (
-    <div
-      className={`flex-1 pt-3 px-0 w-1/2 ${mainStyle}  ${
-        IsSmallMobile ? `mt-15` : `mt-15`
-      }`}
-    >
-      <div
-        className={`  rounded-2xl w-full h-1/1 ${style} ${
-          IsSmallMobile ? `p-1` : `p-3`
-        }`}
-      >
-        {children}
-      </div>
-    </div>
-  );
-};
+}

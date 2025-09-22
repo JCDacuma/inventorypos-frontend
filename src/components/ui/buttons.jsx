@@ -8,11 +8,11 @@ import { BsFileEarmarkPdf, BsFileEarmarkExcel } from "react-icons/bs";
 //Export buttons
 export function ExportButton() {
   return (
-    <div className="flex justify-center items-center gap-3 ">
+    <div className="flex items-center justify-center gap-3 ">
       <motion.button
         whileTap={{ scale: 0.9, backgroundColor: "#6d00c5" }}
         whileHover={{ scale: 1.05, backgroundColor: "#3c2350" }}
-        className="bg-violet-400 text-white flex text-sm py-2 px-4 rounded-3xl cursor-pointer items-center justify-center"
+        className="flex items-center justify-center px-4 py-2 text-sm text-white cursor-pointer bg-violet-400 rounded-3xl"
       >
         <BsFileEarmarkPdf className={"h-4 w-4 mr-1"} />
         Export PDF
@@ -20,7 +20,7 @@ export function ExportButton() {
       <motion.button
         whileTap={{ scale: 0.9, backgroundColor: "#6d00c5" }}
         whileHover={{ scale: 1.05, backgroundColor: "#3c2350" }}
-        className=" bg-violet-400 text-white flex text-sm  py-2 px-4 rounded-3xl cursor-pointer  items-center justify-center"
+        className="flex items-center justify-center px-4 py-2 text-sm text-white cursor-pointer bg-violet-400 rounded-3xl"
       >
         <BsFileEarmarkExcel className={"h-4 w-4 mr-1"} />
         Export Excel
@@ -32,7 +32,7 @@ export function ExportButton() {
 //Action table buttons
 export function Action({ buttons = [] }) {
   return (
-    <div className="flex justify-center items-center gap-4 ">
+    <div className="flex items-center justify-center gap-4 ">
       {buttons.map((btn, index) => {
         const buttonLayout = (
           <motion.button

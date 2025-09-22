@@ -5,11 +5,10 @@ import { Link } from "react-router-dom";
 import {
   Layout,
   MainWrapper,
-  ButtonLayout,
   ControlLayout,
 } from "../../../components/Layouts/Layout.jsx";
+import ButtonLayout from "@/components/Layouts/pageControlButtons.jsx";
 import { useMediaQuery } from "react-responsive";
-import { ExportButton } from "../../../components/ui/buttons.jsx";
 import Searchbar from "../../../components/ui/Searchbar.jsx";
 import BatchControl from "../../../components/Layouts/BatchControl.jsx";
 
@@ -19,8 +18,6 @@ import MobileTable from "../../../components/ui/MobileTable.jsx";
 import { OrderManagementStatus } from "../../../components/ui/Status.jsx";
 
 import { Action } from "../../../components/ui/buttons.jsx";
-//Animation
-import { motion, AnimatePresence } from "framer-motion";
 
 //Icons
 import {
@@ -31,7 +28,7 @@ import {
   ClipboardClock,
 } from "lucide-react";
 
-export default function PromoManagement() {
+export default function ProductOrders() {
   //Selected Id
   const [selectedID, setSelectedID] = useState([]);
 
@@ -68,6 +65,16 @@ export default function PromoManagement() {
       color: "bg-[#910B0B]/[0.69]",
       icon: X,
       padding: "py-2 px-6",
+    },
+  ];
+
+  //Page Controls
+  const PageBtnControls = [
+    { BtnLabel: "Create", iconControl: Package, to: "/create-order" },
+    {
+      BtnLabel: "Records",
+      iconControl: ClipboardClock,
+      to: "/order-history/all",
     },
   ];
 
@@ -251,37 +258,7 @@ export default function PromoManagement() {
         >
           {/* Control Section */}
           <ControlLayout>
-            <ButtonLayout>
-              <div className="flex items-center justify-between gap-3 w-1/1 ">
-                <div className="flex items-center justify-center gap-2 align-middle"></div>
-                <div className="flex items-end justify-center gap-3 ">
-                  <Link to={"/create-order"}>
-                    <motion.button
-                      whileTap={{ scale: 0.9, backgroundColor: "#6d00c5" }}
-                      whileHover={{ scale: 1.05, backgroundColor: "#3c2350" }}
-                      className="flex px-4 py-2 text-sm text-white cursor-pointer bg-violet-400 rounded-3xl"
-                    >
-                      <Package className={"h-5 w-5 mr-1"} />
-                      Create
-                    </motion.button>
-                  </Link>
-
-                  <Link to={"/order-history/all"}>
-                    <motion.button
-                      whileTap={{ scale: 0.9, backgroundColor: "#6d00c5" }}
-                      whileHover={{ scale: 1.05, backgroundColor: "#3c2350" }}
-                      className="flex px-4 py-2 text-sm text-white cursor-pointer bg-violet-400 rounded-3xl"
-                    >
-                      <ClipboardClock className={"h-5 w-5 mr-1"} />
-                      Records
-                    </motion.button>
-                  </Link>
-
-                  {/* Exportation button */}
-                  <ExportButton />
-                </div>
-              </div>
-            </ButtonLayout>
+            <ButtonLayout Buttons={PageBtnControls} hasExport={true} />
             <Searchbar />
           </ControlLayout>
 

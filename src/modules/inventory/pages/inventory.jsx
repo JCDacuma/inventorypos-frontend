@@ -1,13 +1,13 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-
+import NavControl from "@/components/Layouts/pageControlsMobile.jsx";
 // Page Layout component
 import {
   Layout,
   MainWrapper,
-  ButtonLayout,
   ControlLayout,
 } from "../../../components/Layouts/Layout.jsx";
+import ButtonLayout from "@/components/Layouts/pageControlButtons.jsx";
 import { useMediaQuery } from "react-responsive";
 import { ExportButton } from "../../../components/ui/buttons.jsx";
 import Searchbar from "../../../components/ui/Searchbar.jsx";
@@ -33,6 +33,7 @@ export default function Inventory() {
   //Selected Id
   const [selectedID, setSelectedID] = useState([]);
   const openBatchContol = selectedID.length > 0; //Batch Contol Modal State
+  const [pageControl, setPageControl] = useState(false);
 
   const isSmallMobile = useMediaQuery({ maxWidth: 375 });
 
@@ -507,13 +508,7 @@ export default function Inventory() {
         >
           {/* Control Section */}
           <ControlLayout>
-            <ButtonLayout>
-              <div className="flex justify-between gap-3 w-1/1">
-                <div className="flex items-center justify-center align-middle"></div>
-                {/* Exportation button */}
-                <ExportButton />
-              </div>
-            </ButtonLayout>
+            <ButtonLayout hasExport={true} />
             <Searchbar />
           </ControlLayout>
 
@@ -533,6 +528,8 @@ export default function Inventory() {
         openBatchContol={openBatchContol}
         Buttons={BatchControlBtn}
       />
+      {/* Page Controls (Mobile Layout only) */}
+      <NavControl onClosed={() => setPageControl(false)} isOpen={pageControl} />
     </Layout>
   );
 }

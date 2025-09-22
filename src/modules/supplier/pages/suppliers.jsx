@@ -5,11 +5,10 @@ import { Link } from "react-router-dom";
 import {
   Layout,
   MainWrapper,
-  ButtonLayout,
   ControlLayout,
 } from "../../../components/Layouts/Layout.jsx";
+import ButtonLayout from "@/components/Layouts/pageControlButtons.jsx";
 import { useMediaQuery } from "react-responsive";
-import { ExportButton } from "../../../components/ui/buttons.jsx";
 import Searchbar from "../../../components/ui/Searchbar.jsx";
 import BatchControl from "../../../components/Layouts/BatchControl.jsx";
 
@@ -55,6 +54,15 @@ export default function Suppliers() {
       color: "bg-[#910B0B]/[0.69]",
       icon: OctagonMinus,
       padding: "py-2 px-6",
+    },
+  ];
+
+  //Page Controls
+  const PageBtnControls = [
+    {
+      BtnLabel: "Register Supplier",
+      iconControl: TruckElectric,
+      to: "/register-supplier",
     },
   ];
 
@@ -322,26 +330,7 @@ export default function Suppliers() {
         >
           {/* Control Section */}
           <ControlLayout>
-            <ButtonLayout>
-              <div className="flex items-center justify-between gap-3 w-1/1 ">
-                <div className="flex items-center justify-center gap-2 align-middle"></div>
-                <div className="flex items-end justify-center gap-2 ">
-                  <Link to={"/register-supplier"}>
-                    <motion.button
-                      whileTap={{ scale: 0.9, backgroundColor: "#6d00c5" }}
-                      whileHover={{ scale: 1.05, backgroundColor: "#3c2350" }}
-                      className="flex px-4 py-2 text-sm text-white cursor-pointer bg-violet-400 rounded-3xl"
-                    >
-                      <TruckElectric className={"h-5 w-5 mr-1"} />
-                      Register Supplier
-                    </motion.button>
-                  </Link>
-
-                  {/* Exportation button */}
-                  <ExportButton />
-                </div>
-              </div>
-            </ButtonLayout>
+            <ButtonLayout hasExport={true} Buttons={PageBtnControls} />
             <Searchbar />
           </ControlLayout>
 

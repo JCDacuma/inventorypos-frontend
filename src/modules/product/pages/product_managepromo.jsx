@@ -5,9 +5,9 @@ import { Link } from "react-router-dom";
 import {
   Layout,
   MainWrapper,
-  ButtonLayout,
   ControlLayout,
 } from "../../../components/Layouts/Layout.jsx";
+import ButtonLayout from "@/components/Layouts/pageControlButtons.jsx";
 import { useMediaQuery } from "react-responsive";
 import { ExportButton } from "../../../components/ui/buttons.jsx";
 import Searchbar from "../../../components/ui/Searchbar.jsx";
@@ -58,6 +58,14 @@ export default function PromoManagement() {
       color: "bg-[#910B0B]/[0.69]",
       icon: Trash2,
       padding: "py-2 px-6",
+    },
+  ];
+
+  //Page Controls
+  const PageBtnControls = [
+    {
+      BtnLabel: "Add Promo",
+      iconControl: Tag,
     },
   ];
 
@@ -229,32 +237,13 @@ export default function PromoManagement() {
         >
           {/* Control Section */}
           <ControlLayout>
-            <ButtonLayout>
-              <div className="flex justify-between gap-3 w-1/1">
-                {/* Back button */}
-                <Link to={"/product-management"}>
-                  <motion.button
-                    whileTap={{ scale: 0.9 }}
-                    whileHover={{ scale: 1.05, color: "#3c2350" }}
-                    className="items-center justify-center hidden gap-1 mt-2 font-semibold cursor-pointer sm:flex text-violet-500"
-                  >
-                    <Undo2 /> Back
-                  </motion.button>
-                </Link>
-                <div className="flex items-center justify-center gap-2 align-middle">
-                  <motion.button
-                    whileTap={{ scale: 0.9, backgroundColor: "#6d00c5" }}
-                    whileHover={{ scale: 1.05, backgroundColor: "#3c2350" }}
-                    className="flex px-4 py-2 text-sm text-white cursor-pointer bg-violet-400 rounded-3xl"
-                  >
-                    <Tag className={"h-5 w-5 "} />
-                    Add Promo
-                  </motion.button>
-                  {/* Exportation button */}
-                  <ExportButton />
-                </div>
-              </div>
-            </ButtonLayout>
+            <ButtonLayout
+              hasExport={true}
+              hasNavBack={true}
+              BackNavigationLink="/product-management"
+              Buttons={PageBtnControls}
+            />
+
             <Searchbar />
           </ControlLayout>
 

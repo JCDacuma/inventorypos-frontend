@@ -36,7 +36,11 @@ const menuItems = [
     title: "Reports",
     icon: FileText,
     children: [
-      { title: "Sales Report", icon: BanknoteArrowDown, path: "/salesreport" },
+      {
+        title: "Sales Report",
+        icon: BanknoteArrowDown,
+        path: "/sales-reports",
+      },
       {
         title: "Inventory Report",
         icon: NotebookTabs,
@@ -205,10 +209,10 @@ const Sidebar = ({ SideBarMobileState }) => {
           >
             {/* ---- Links ---- */}
             <nav className="flex-1 p-3 space-y-2 text-sm mt-18">
-              <div className="  flex  items-center text-white-50 ">
+              <div className="flex items-center text-white-50">
                 <div className="flex items-center h-10"></div>
               </div>
-              <div className="w-full  mt-5 mb-3"></div>
+              <div className="w-full mt-5 mb-3"></div>
 
               {menuItems.map((item, index) => (
                 <div key={index}>
@@ -237,7 +241,7 @@ const Sidebar = ({ SideBarMobileState }) => {
                     <div>
                       <button
                         onClick={() => toggleMenu(item.title)}
-                        className="group flex items-center justify-between w-full p-2 rounded-lg text-white hover:bg-gray-200 cursor-pointer"
+                        className="flex items-center justify-between w-full p-2 text-white rounded-lg cursor-pointer group hover:bg-gray-200"
                       >
                         <span className="flex items-center gap-3 text-base font-medium text-white group-hover:font-bold group-hover:text-violet-400">
                           <item.icon className="w-5 h-5 text-white group-hover:text-violet-400 group-hover:stroke-3" />
@@ -280,7 +284,7 @@ const Sidebar = ({ SideBarMobileState }) => {
                             </span>
                           </Link>
                         ))}
-                        <div className="w-full border-b-2 border-violet-500 mt-1"></div>
+                        <div className="w-full mt-1 border-b-2 border-violet-500"></div>
                       </div>
                     </div>
                   )}
@@ -296,7 +300,7 @@ const Sidebar = ({ SideBarMobileState }) => {
           >
             {/* ---- Links ---- */}
             <nav className={`flex-1 py-4 px-4  text-sm mt-18 `}>
-              <div className=" flex ml-4">
+              <div className="flex ml-4 ">
                 {showFullSidebar ? (
                   ""
                 ) : (
@@ -308,7 +312,7 @@ const Sidebar = ({ SideBarMobileState }) => {
                 <div key={index}>
                   {/* ---- If there is  no dropdown ---- */}
                   {!item.children ? (
-                    <div className=" flex group mt-1 hover:font-bold">
+                    <div className="flex mt-1 group hover:font-bold">
                       <Link
                         to={item.path}
                         className={`group flex items-center gap-3 rounded-lg hover:bg-gray-200  cursor-pointer p-4  ${
@@ -327,7 +331,7 @@ const Sidebar = ({ SideBarMobileState }) => {
                         />
                       </Link>
                       {/* Tooltip (shows on hover) */}
-                      <span className="absolute top-20 left-26 px-2 py-1 text-sm text-white bg-gray-800 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap  pointer-events-none">
+                      <span className="absolute px-2 py-1 text-sm text-white transition-opacity bg-gray-800 rounded-lg opacity-0 pointer-events-none top-20 left-26 group-hover:opacity-100 whitespace-nowrap">
                         {item.title}
                       </span>
                     </div>
@@ -336,7 +340,7 @@ const Sidebar = ({ SideBarMobileState }) => {
                     <div>
                       <button
                         onClick={() => toggleMenu(item.title)}
-                        className="group  flex items-center justify-between w-full px-4 py-4 rounded-lg hover:bg-gray-200 hover:font-bold  cursor-pointer mt-2"
+                        className="flex items-center justify-between w-full px-4 py-4 mt-2 rounded-lg cursor-pointer group hover:bg-gray-200 hover:font-bold"
                       >
                         <span className="flex items-center gap-3">
                           <item.icon className="w-5 h-5 text-white group-hover:text-violet-400 group-hover:stroke-2" />
@@ -350,7 +354,7 @@ const Sidebar = ({ SideBarMobileState }) => {
                           <ChevronRight className="w-4 h-4 text-white group-hover:w-5 group-hover:h-5 group-hover:text-violet-400 group-hover:stroke-3" />
                         </span>
                         {/* Tooltip */}
-                        <span className="absolute top-20 left-26 px-2 py-1 text-sm text-white bg-gray-800 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none">
+                        <span className="absolute px-2 py-1 text-sm text-white transition-opacity bg-gray-800 rounded-lg opacity-0 pointer-events-none top-20 left-26 group-hover:opacity-100 whitespace-nowrap">
                           {item.title}
                         </span>
                       </button>
@@ -377,7 +381,7 @@ const Sidebar = ({ SideBarMobileState }) => {
                                 } items-center justify-between w-full p-4 rounded-lg hover:bg-gray-200`}
                               >
                                 {/* Tooltip */}
-                                <span className="absolute top-20 left-26  px-2 py-1 text-sm text-white bg-gray-800 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none">
+                                <span className="absolute px-2 py-1 text-sm text-white transition-opacity bg-gray-800 rounded-lg opacity-0 pointer-events-none top-20 left-26 group-hover:opacity-100 whitespace-nowrap">
                                   {child.title}
                                 </span>
                                 <span className="flex items-center gap-3">
@@ -386,7 +390,7 @@ const Sidebar = ({ SideBarMobileState }) => {
                               </Link>
                             );
                           })}
-                          <div className="w-1/1 border-b-2 border-violet-500 mt-1"></div>
+                          <div className="mt-1 border-b-2 w-1/1 border-violet-500"></div>
                         </div>
                       }
                     </div>
@@ -410,7 +414,7 @@ const Sidebar = ({ SideBarMobileState }) => {
         >
           {/* ---- Links ---- */}
           <nav className="flex-1 p-3 space-y-2 text-sm mt-13">
-            <div className="w-full border-b-2 border-violet-500 mt-5 mb-3"></div>
+            <div className="w-full mt-5 mb-3 border-b-2 border-violet-500"></div>
 
             {menuItems.map((item, index) => (
               <div key={index}>
@@ -439,7 +443,7 @@ const Sidebar = ({ SideBarMobileState }) => {
                   <div>
                     <button
                       onClick={() => toggleMenu(item.title)}
-                      className="group flex items-center justify-between w-full p-2 rounded-lg text-white hover:bg-gray-200 cursor-pointer"
+                      className="flex items-center justify-between w-full p-2 text-white rounded-lg cursor-pointer group hover:bg-gray-200"
                     >
                       <span className="flex items-center gap-3 text-base font-medium text-white group-hover:font-bold group-hover:text-violet-400">
                         <item.icon className="w-5 h-5 text-white group-hover:text-violet-400 group-hover:stroke-3" />
@@ -482,7 +486,7 @@ const Sidebar = ({ SideBarMobileState }) => {
                           </span>
                         </Link>
                       ))}
-                      <div className="w-full border-b-2 border-violet-500 mt-1"></div>
+                      <div className="w-full mt-1 border-b-2 border-violet-500"></div>
                     </div>
                   </div>
                 )}

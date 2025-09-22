@@ -5,9 +5,9 @@ import { Link, useParams } from "react-router-dom";
 import {
   Layout,
   MainWrapper,
-  ButtonLayout,
   ControlLayout,
 } from "../../../components/Layouts/Layout.jsx";
+import ButtonLayout from "@/components/Layouts/pageControlButtons.jsx";
 import { useMediaQuery } from "react-responsive";
 import { ExportButton } from "../../../components/ui/buttons.jsx";
 import Searchbar from "../../../components/ui/Searchbar.jsx";
@@ -23,7 +23,7 @@ import { motion, AnimatePresence } from "framer-motion";
 //Icons
 import { PackageSearch, Undo2 } from "lucide-react";
 
-export default function Suppliers() {
+export default function SupplierHistory() {
   const id = useParams(); //Id selected
 
   //Mobile Layout breakpoint
@@ -159,6 +159,9 @@ export default function Suppliers() {
     },
   ];
 
+  //Page Controls
+  const NavigationBack = id.id === "all" ? "/product-orders" : "/suppliers";
+
   //DataTableShowing
   const orderShowing =
     id.id === "all"
@@ -175,25 +178,12 @@ export default function Suppliers() {
         >
           {/* Control Section */}
           <ControlLayout>
-            <ButtonLayout>
-              <Link to={id.id === "all" ? "/product-orders" : "/suppliers"}>
-                <motion.button
-                  whileTap={{ scale: 0.9 }}
-                  whileHover={{ scale: 1.05, color: "#3c2350" }}
-                  className="items-center justify-center hidden gap-1 mt-2 font-semibold cursor-pointer  sm:flex text-violet-500"
-                >
-                  <Undo2 /> Back
-                </motion.button>
-              </Link>
+            <ButtonLayout
+              hasExport={true}
+              hasNavBack={true}
+              BackNavigationLink={NavigationBack}
+            />
 
-              <div className="flex items-center justify-between gap-3 w-1/1 ">
-                <div className="flex items-center justify-center gap-2 align-middle"></div>
-                <div className="flex items-end justify-center gap-2 ">
-                  {/* Exportation button */}
-                  <ExportButton />
-                </div>
-              </div>
-            </ButtonLayout>
             <Searchbar />
           </ControlLayout>
 
