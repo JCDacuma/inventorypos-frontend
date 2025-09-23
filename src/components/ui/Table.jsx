@@ -51,7 +51,7 @@ export default function DesktopTable({
   return (
     <>
       {isDesktop ? (
-        <div className="h-1/1">
+        <div className="h-1/1 z-35">
           <div className="h-1/1 w-1/1 overflow-y-auto z-29 rounded-t-[0.3rem]">
             <table
               className={`border-collapse  ${
@@ -59,24 +59,24 @@ export default function DesktopTable({
               } table-auto text-sm`}
             >
               {/* Table Header */}
-              <thead className="sticky top-0 bg-violet-400 text-white z-20">
+              <thead className="sticky top-0 z-20 text-white bg-violet-400">
                 <tr>
                   {columns.map((col) => (
                     <th
                       key={col.key}
-                      className="px-4 py-3 text-center font-semibold bg-violet-400"
+                      className="px-4 py-3 font-semibold text-center bg-violet-400"
                     >
                       {col.key === "Select" ? (
                         <div className="inline-flex items-center">
-                          <label className="flex items-center cursor-pointer relative">
+                          <label className="relative flex items-center cursor-pointer">
                             <input
                               type="checkbox"
-                              className="peer h-5 w-5 cursor-pointer transition-all appearance-none rounded shadow hover:shadow-md border border-slate-300 checked:bg-purple-600 checked:border-purple-600"
+                              className="w-5 h-5 transition-all border rounded shadow appearance-none cursor-pointer peer hover:shadow-md border-slate-300 checked:bg-purple-600 checked:border-purple-600"
                               id="check7"
                               checked={isAllChecked}
                               onChange={HandleAllSelect}
                             />
-                            <span className="absolute text-white opacity-0 peer-checked:opacity-100 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+                            <span className="absolute text-white transform -translate-x-1/2 -translate-y-1/2 opacity-0 peer-checked:opacity-100 top-1/2 left-1/2">
                               <svg
                                 xmlns="http://www.w3.org/2000/svg"
                                 className="h-3.5 w-3.5"
@@ -112,15 +112,15 @@ export default function DesktopTable({
                           {/* If it's the Select column, render a checkbox */}
                           {col.key === "Select" ? (
                             <div className="inline-flex items-center">
-                              <label className="flex items-center cursor-pointer relative z-4">
+                              <label className="relative flex items-center cursor-pointer z-4">
                                 <input
                                   type="checkbox"
-                                  className="peer h-5 w-5 cursor-pointer transition-all appearance-none rounded shadow hover:shadow-md border border-slate-300 checked:bg-purple-600 checked:border-purple-600"
+                                  className="w-5 h-5 transition-all border rounded shadow appearance-none cursor-pointer peer hover:shadow-md border-slate-300 checked:bg-purple-600 checked:border-purple-600"
                                   id="check7"
                                   checked={isChecked.includes(row.id)}
                                   onChange={() => HandleSelectItem(row.id)}
                                 />
-                                <span className="absolute text-white opacity-0 peer-checked:opacity-100 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+                                <span className="absolute text-white transform -translate-x-1/2 -translate-y-1/2 opacity-0 peer-checked:opacity-100 top-1/2 left-1/2">
                                   <svg
                                     xmlns="http://www.w3.org/2000/svg"
                                     className="h-3.5 w-3.5"
@@ -158,7 +158,7 @@ export default function DesktopTable({
               </tbody>
             </table>
           </div>
-          <div className="flex items-center justify-end pr-15 h-10 w-full rounded-b-lg ">
+          <div className="flex items-center justify-end w-full h-10 rounded-b-lg pr-15 ">
             <div className="flex items-center justify-center gap-3">
               <button className="flex text-violet-500 ">
                 <ChevronsRight className="rotate-180 cursor-pointer" />

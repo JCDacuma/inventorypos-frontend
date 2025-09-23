@@ -13,31 +13,36 @@ export default function ButtonLayout({
   hasExport = false,
   hasNavBack = false,
   BackNavigationLink = "",
+  isOpenMobile = false,
+  OpenMobileControl,
 }) {
   const isDesktop = useMediaQuery({ minWidth: 968 });
   const isSmallDesktop = useMediaQuery({ minWidth: 768 });
   const isXSmallMobile = useMediaQuery({ maxWidth: 500 });
   return (
     <div
-      className={`flex gap-3 justify-end pr-1 ${
+      className={`flex items-center justify-between pr-1 ${
         isXSmallMobile ? `w-1/5` : isSmallDesktop ? `w-1/1` : `w-1/1`
       }`}
     >
+      {hasNavBack ? (
+        <Link to={BackNavigationLink} className="cursor-pointer">
+          <motion.button
+            whileTap={{ scale: 0.9 }}
+            whileHover={{ scale: 1.05, color: "#3c2350" }}
+            className={`items-center justify-center  gap-1  font-semibold ${
+              isXSmallMobile ? `hidden` : `flex`
+            } text-violet-500`}
+          >
+            <Undo2 /> Back
+          </motion.button>
+        </Link>
+      ) : (
+        ""
+      )}
+
       {isDesktop ? (
-        <div className={"flex items-center justify-between gap-3 w-1/1 "}>
-          {hasNavBack ? (
-            <Link to={BackNavigationLink} className="cursor-pointer">
-              <motion.button
-                whileTap={{ scale: 0.9 }}
-                whileHover={{ scale: 1.05, color: "#3c2350" }}
-                className="items-center justify-center hidden gap-1 mb-2 font-semibold sm:flex text-violet-500"
-              >
-                <Undo2 /> Back
-              </motion.button>
-            </Link>
-          ) : (
-            ""
-          )}
+        <div className={"flex items-center justify-end gap-3 w-1/1  "}>
           <div className={`flex items-end justify-center gap-3 `}>
             {Buttons.map((btn, index) => {
               const btnControl = (
@@ -63,11 +68,12 @@ export default function ButtonLayout({
           </div>
         </div>
       ) : (
-        <div className={"flex justify-center items-center"}>
+        <div className={"flex justify-end items-center w-full"}>
           <button
-            className={`bg-violet-400 text-white flex text-sm py-3 px-4 rounded-lg`}
+            onClick={OpenMobileControl}
+            className={`bg-violet-400 text-white flex text-xs font-semibold py-[0.9rem] px-4 justify-center items-center gap-1 rounded-2xl`}
           >
-            <Settings2 className={"h-4 w-4 "} />{" "}
+            <Settings2 className={"h-4 w-4"} />{" "}
             {isSmallDesktop ? `Controls` : ``}
           </button>
         </div>

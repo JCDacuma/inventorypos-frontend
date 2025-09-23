@@ -12,6 +12,7 @@ import { useMediaQuery } from "react-responsive";
 import { ExportButton } from "../../../components/ui/buttons.jsx";
 import Searchbar from "../../../components/ui/Searchbar.jsx";
 import BatchControl from "../../../components/Layouts/BatchControl.jsx";
+import NavControl from "@/components/Layouts/pageControlsMobile.jsx";
 
 //Table Layout component
 import Table from "../../../components/ui/Table.jsx";
@@ -30,6 +31,7 @@ export default function PromoManagement() {
 
   //Batch Contol Modal State
   const openBatchContol = selectedID.length > 0;
+  const [pageControl, setPageControl] = useState(false); //Page control mobile state modal
 
   const isSmallMobile = useMediaQuery({ maxWidth: 375 });
 
@@ -242,6 +244,9 @@ export default function PromoManagement() {
               hasNavBack={true}
               BackNavigationLink="/product-management"
               Buttons={PageBtnControls}
+              //Mobile page control state
+              isOpenMobile={pageControl}
+              OpenMobileControl={() => setPageControl(true)}
             />
 
             <Searchbar />
@@ -262,6 +267,16 @@ export default function PromoManagement() {
         Count={selectedID.length}
         openBatchContol={openBatchContol}
         Buttons={BatchControlBtn}
+      />
+
+      {/* Page Controls (Mobile Layout only) */}
+      <NavControl
+        onClosed={() => setPageControl(false)}
+        isOpen={pageControl}
+        hasExport={true}
+        Buttons={PageBtnControls}
+        hasNavBack={true}
+        BackNavigationLink={"/product-management"}
       />
     </Layout>
   );

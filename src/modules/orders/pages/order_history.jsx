@@ -11,7 +11,7 @@ import ButtonLayout from "@/components/Layouts/pageControlButtons.jsx";
 import { useMediaQuery } from "react-responsive";
 import { ExportButton } from "../../../components/ui/buttons.jsx";
 import Searchbar from "../../../components/ui/Searchbar.jsx";
-
+import NavControl from "@/components/Layouts/pageControlsMobile.jsx";
 //Table Layout component
 import Table from "../../../components/ui/Table.jsx";
 import MobileTable from "../../../components/ui/MobileTable.jsx";
@@ -28,7 +28,7 @@ export default function SupplierHistory() {
 
   //Mobile Layout breakpoint
   const isSmallMobile = useMediaQuery({ maxWidth: 375 });
-
+  const [pageControl, setPageControl] = useState(false); //Page control mobile state modal
   //Handle View Product functionality Action
   const HandleViewProduct = (items, id) => {
     alert(`Edit ${items} id: ${id}`);
@@ -182,6 +182,9 @@ export default function SupplierHistory() {
               hasExport={true}
               hasNavBack={true}
               BackNavigationLink={NavigationBack}
+              //Mobile page control state
+              isOpenMobile={pageControl}
+              OpenMobileControl={() => setPageControl(true)}
             />
 
             <Searchbar />
@@ -196,6 +199,15 @@ export default function SupplierHistory() {
           <Table columns={columns} data={orderShowing} setSelectedId={null} />
         </div>
       </MainWrapper>
+
+      {/* Page Controls (Mobile Layout only) */}
+      <NavControl
+        onClosed={() => setPageControl(false)}
+        isOpen={pageControl}
+        hasExport={true}
+        hasNavBack={true}
+        BackNavigationLink={NavigationBack}
+      />
     </Layout>
   );
 }

@@ -8,6 +8,7 @@ import {
   ControlLayout,
 } from "../../../components/Layouts/Layout.jsx";
 import ButtonLayout from "@/components/Layouts/pageControlButtons.jsx";
+import NavControl from "@/components/Layouts/pageControlsMobile.jsx";
 import { useMediaQuery } from "react-responsive";
 import { ExportButton } from "../../../components/ui/buttons.jsx";
 import Searchbar from "../../../components/ui/Searchbar.jsx";
@@ -40,6 +41,7 @@ export default function BatchInventory() {
   //Item Selected
   const [selectedID, setSelectedID] = useState([]);
   const openBatchContol = selectedID.length > 0; //Batch Contol Modal State
+  const [pageControl, setPageControl] = useState(false); //Page control mobile state modal
 
   const HandleStockIn = (items, id) => {
     alert(`stockIn ${items} id: ${id}`);
@@ -924,6 +926,9 @@ export default function BatchInventory() {
               hasNavBack={true}
               BackNavigationLink="/inventory"
               Buttons={PageBtnControls}
+              //Mobile page control state
+              isOpenMobile={pageControl}
+              OpenMobileControl={() => setPageControl(true)}
             />
 
             <Searchbar />
@@ -947,6 +952,16 @@ export default function BatchInventory() {
         Count={selectedID.length}
         openBatchContol={openBatchContol}
         Buttons={BatchControlBtn}
+      />
+
+      {/* Page Controls (Mobile Layout only) */}
+      <NavControl
+        onClosed={() => setPageControl(false)}
+        isOpen={pageControl}
+        hasExport={true}
+        Buttons={PageBtnControls}
+        hasNavBack={true}
+        BackNavigationLink="/inventory"
       />
     </Layout>
   );

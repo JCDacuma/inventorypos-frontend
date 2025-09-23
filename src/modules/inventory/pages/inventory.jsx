@@ -26,6 +26,7 @@ import {
   PackageMinus,
   PackageOpen,
   Trash2,
+  Blocks,
 } from "lucide-react";
 
 //Functionality Action buttons
@@ -33,7 +34,7 @@ export default function Inventory() {
   //Selected Id
   const [selectedID, setSelectedID] = useState([]);
   const openBatchContol = selectedID.length > 0; //Batch Contol Modal State
-  const [pageControl, setPageControl] = useState(false);
+  const [pageControl, setPageControl] = useState(false); //Page control mobile state modal
 
   const isSmallMobile = useMediaQuery({ maxWidth: 375 });
 
@@ -508,7 +509,11 @@ export default function Inventory() {
         >
           {/* Control Section */}
           <ControlLayout>
-            <ButtonLayout hasExport={true} />
+            <ButtonLayout
+              hasExport={true}
+              isOpenMobile={pageControl}
+              OpenMobileControl={() => setPageControl(true)}
+            />
             <Searchbar />
           </ControlLayout>
 
@@ -529,7 +534,11 @@ export default function Inventory() {
         Buttons={BatchControlBtn}
       />
       {/* Page Controls (Mobile Layout only) */}
-      <NavControl onClosed={() => setPageControl(false)} isOpen={pageControl} />
+      <NavControl
+        onClosed={() => setPageControl(false)}
+        isOpen={pageControl}
+        hasExport={true}
+      />
     </Layout>
   );
 }

@@ -12,7 +12,7 @@ export function Modal({
       {isOpen && (
         <motion.div
           key="modal-wrapper"
-          className={`fixed inset-0 z-10 flex items-center justify-center w-full px-0 pointer-events-none `}
+          className={`fixed inset-0 z-40 flex items-center justify-center w-full px-0 pointer-events-none `}
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}

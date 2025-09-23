@@ -37,7 +37,7 @@ export const ControlLayout = ({ children }) => {
       <header
         className={`flex
          ${isSmallMobile ? `  flex-row` : `flex-row`}
-         gap-1 w-full mb-5 justify-end `}
+         gap-1 w-full mb-5 justify-end px-2`}
       >
         {children}
       </header>

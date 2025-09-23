@@ -11,7 +11,7 @@ import ButtonLayout from "@/components/Layouts/pageControlButtons.jsx";
 import { useMediaQuery } from "react-responsive";
 import Searchbar from "../../../components/ui/Searchbar.jsx";
 import BatchControl from "../../../components/Layouts/BatchControl.jsx";
-
+import NavControl from "@/components/Layouts/pageControlsMobile.jsx";
 //Table Layout component
 import Table from "../../../components/ui/Table.jsx";
 import MobileTable from "../../../components/ui/MobileTable.jsx";
@@ -32,8 +32,8 @@ export default function ProductOrders() {
   //Selected Id
   const [selectedID, setSelectedID] = useState([]);
 
-  //Batch Contol Modal State
-  const openBatchContol = selectedID.length > 0;
+  const openBatchContol = selectedID.length > 0; //Batch Contol Modal State
+  const [pageControl, setPageControl] = useState(false); //Page control mobile state modal
   //Mobile Layout breakpoint
   const isSmallMobile = useMediaQuery({ maxWidth: 375 });
 
@@ -258,7 +258,13 @@ export default function ProductOrders() {
         >
           {/* Control Section */}
           <ControlLayout>
-            <ButtonLayout Buttons={PageBtnControls} hasExport={true} />
+            <ButtonLayout
+              Buttons={PageBtnControls}
+              hasExport={true}
+              //Mobile page control state
+              isOpenMobile={pageControl}
+              OpenMobileControl={() => setPageControl(true)}
+            />
             <Searchbar />
           </ControlLayout>
 
@@ -281,6 +287,14 @@ export default function ProductOrders() {
         Count={selectedID.length}
         openBatchContol={openBatchContol}
         Buttons={BatchControlBtn}
+      />
+
+      {/* Page Controls (Mobile Layout only) */}
+      <NavControl
+        onClosed={() => setPageControl(false)}
+        isOpen={pageControl}
+        hasExport={true}
+        Buttons={PageBtnControls}
       />
     </Layout>
   );
