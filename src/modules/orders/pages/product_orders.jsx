@@ -70,9 +70,9 @@ export default function ProductOrders() {
 
   //Page Controls
   const PageBtnControls = [
-    { BtnLabel: "Create", iconControl: Package, to: "/create-order" },
+    { BtnLabel: "Create Order", iconControl: Package, to: "/create-order" },
     {
-      BtnLabel: "Records",
+      BtnLabel: "Order Records",
       iconControl: ClipboardClock,
       to: "/order-history/all",
     },

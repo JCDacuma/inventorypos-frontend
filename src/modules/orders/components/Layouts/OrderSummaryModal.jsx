@@ -41,7 +41,7 @@ export default function OrderSummaryMobile({
   };
   return (
     <Modal isOpen={isOpen} onClosed={onClosed} ModalTitle="Order Summary">
-      <div className=" overflow-auto h-[calc(100vh-140px)] 2xl:h-[calc(100vh-200px)] px-2 pt-1 ">
+      <div className=" overflow-auto h-[calc(100vh-195px)] 2xl:h-[calc(100vh-200px)] px-2 pt-1 ">
         {order.length > 0 ? (
           <div className="flex flex-col gap-2 overflow-auto h-[calc(100vh-370px)] 2xl:h-[calc(100vh-440px)] ">
             {orders.map((item, index) => (

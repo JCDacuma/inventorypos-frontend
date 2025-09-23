@@ -1,12 +1,20 @@
 import { motion, AnimatePresence, scale } from "framer-motion";
+import { useMediaQuery } from "react-responsive";
 
 export function Modal({
   isOpen,
   onClosed,
   children,
   ModalTitle = "",
-  margin = "mt-15",
+  margin = "mt-21 sm:mt-15",
 }) {
+  const isTablet = useMediaQuery({ minWidth: 668, maxWidth: 768 });
+  const MarginLeft = margin?.includes("ml-")
+    ? margin
+    : isTablet
+    ? "ml-[5.5rem]"
+    : "ml-0";
+
   return (
     <AnimatePresence>
       {isOpen && (
@@ -25,7 +33,7 @@ export function Modal({
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.3 }}
-            className="absolute inset-0 bg-black/40 backdrop-blur-sm"
+            className="absolute inset-0 pointer-events-none bg-black/40 backdrop-blur-sm"
             onClick={onClosed}
           />
 
@@ -39,7 +47,7 @@ export function Modal({
               duration: 0.35,
               ease: [0.4, 0, 0.2, 1],
             }}
-            className={`relative bg-white rounded-2xl shadow-xl w-[95%] max-w-xl z-20 ${margin} pointer-events-auto`}
+            className={`relative bg-white rounded-2xl shadow-xl w-[95%] max-w-xl z-20 ${margin} ${MarginLeft} pointer-events-auto`}
           >
             {/* Header */}
             <div className="flex items-center justify-between w-full px-4 py-3 border-b shadow-sm rounded-t-2xl bg-gradient-to-r from-violet-300 to-violet-400 border-violet-200">

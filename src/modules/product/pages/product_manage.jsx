@@ -24,7 +24,7 @@ import { Action } from "../../../components/ui/buttons.jsx";
 import { motion, AnimatePresence } from "framer-motion";
 
 //Icons
-import { SquarePen, Trash2, Megaphone } from "lucide-react";
+import { SquarePen, Trash2, Megaphone, CirclePlus } from "lucide-react";
 
 export default function ProductManagement() {
   //Selected Id
@@ -72,9 +72,14 @@ export default function ProductManagement() {
   //Page Controls
   const PageBtnControls = [
     {
-      BtnLabel: "Product Promo",
+      BtnLabel: "Promo",
       iconControl: Megaphone,
       to: "/promo-management",
+    },
+    {
+      BtnLabel: "Add Product",
+      iconControl: CirclePlus,
+      to: "/product-add",
     },
   ];
 

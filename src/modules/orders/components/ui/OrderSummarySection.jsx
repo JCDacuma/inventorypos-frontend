@@ -37,7 +37,7 @@ export default function OrderCreationSummary({
             </h2>
           </div>
 
-          <div className="overflow-auto h-[calc(100vh-390px)] min-h-[200px] 2xl:h-[calc(100vh-410px)]">
+          <div className="overflow-auto h-[calc(100vh-440px)] min-h-[200px] 2xl:h-[calc(100vh-480px)]">
             {/* Scrollable product list */}
             <div className="flex flex-col items-center justify-center flex-1 gap-4 pr-1">
               {productOrdering.length > 0 ? (

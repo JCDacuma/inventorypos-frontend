@@ -10,20 +10,33 @@ export function ExportButton() {
   return (
     <div className="flex items-center justify-center gap-3 ">
       <motion.button
-        whileTap={{ scale: 0.9, backgroundColor: "#6d00c5" }}
-        whileHover={{ scale: 1.05, backgroundColor: "#3c2350" }}
-        className="flex items-center justify-center px-4 py-2 text-sm text-white cursor-pointer bg-violet-400 rounded-3xl"
+        whileTap={{ scale: 0.92 }}
+        whileHover={{ scale: 1.05 }}
+        transition={{ duration: 0.09, ease: "easeInOut" }}
+        className="flex items-center gap-2 px-3 py-2 text-sm font-medium text-white 
+             transition-all duration-300 ease-in-out rounded-full shadow-md  
+             bg-gradient-to-r from-violet-500 to-violet-600 
+             hover:from-violet-600 hover:to-violet-900 active:from-violet-700 active:to-violet-800 
+             focus:outline-none focus:ring-2 focus:ring-violet-300
+             will-change-transform [backface-visibility:hidden] [transform:translateZ(0)] cursor-pointer"
       >
-        <BsFileEarmarkPdf className={"h-4 w-4 mr-1"} />
-        Export PDF
+        <BsFileEarmarkPdf className="w-4 h-4" />
+        <span>Export PDF</span>
       </motion.button>
+
       <motion.button
-        whileTap={{ scale: 0.9, backgroundColor: "#6d00c5" }}
-        whileHover={{ scale: 1.05, backgroundColor: "#3c2350" }}
-        className="flex items-center justify-center px-4 py-2 text-sm text-white cursor-pointer bg-violet-400 rounded-3xl"
+        whileTap={{ scale: 0.92 }}
+        whileHover={{ scale: 1.05 }}
+        transition={{ duration: 0.09, ease: "easeInOut" }}
+        className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-white 
+             transition-all duration-300 ease-in-out rounded-full shadow-md  
+             bg-gradient-to-r from-violet-500 to-violet-600 
+             hover:from-violet-600 hover:to-violet-900 active:from-violet-700 active:to-violet-800 
+             focus:outline-none focus:ring-2 focus:ring-violet-300
+             will-change-transform [backface-visibility:hidden] [transform:translateZ(0)] cursor-pointer"
       >
-        <BsFileEarmarkExcel className={"h-4 w-4 mr-1"} />
-        Export Excel
+        <BsFileEarmarkExcel className="w-4 h-4" />
+        <span>Export Excel</span>
       </motion.button>
     </div>
   );

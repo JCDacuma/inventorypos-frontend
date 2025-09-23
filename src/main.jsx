@@ -20,6 +20,7 @@ import Suppliers from "./modules/supplier/pages/suppliers.jsx";
 import SupplierHistory from "./modules/orders/pages/order_history.jsx";
 import RegisterSupplier from "./modules/supplier/pages/register_supplier.jsx";
 import ProductManagement from "./modules/product/pages/product_manage.jsx";
+import AddProduct from "./modules/product/pages/product_add.jsx";
 import PromoManagement from "./modules/product/pages/product_managepromo.jsx";
 import PointofSale from "./modules/pos/pages/point_of_sale.jsx";
 import ConfigAccount from "./modules/account/pages/config_acc.jsx";
@@ -51,6 +52,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
           path="/product-management"
           element={<ProductManagement />}
         ></Route>
+        <Route path="/product-add" element={<AddProduct />}></Route>
         <Route path="/promo-management" element={<PromoManagement />}></Route>
         <Route path="/point-of-sale" element={<PointofSale />}></Route>
         <Route path="/config-accounts" element={<ConfigAccount />}></Route>

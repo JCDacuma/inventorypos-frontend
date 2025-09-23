@@ -49,9 +49,15 @@ export default function ButtonLayout({
                 <motion.button
                   onClick={btn.onClick}
                   key={index}
-                  whileTap={{ scale: 0.9, backgroundColor: "#6d00c5" }}
-                  whileHover={{ scale: 1.05, backgroundColor: "#3c2350" }}
-                  className="flex px-4 py-2 text-sm text-white cursor-pointer bg-violet-400 rounded-3xl"
+                  whileTap={{ scale: 0.92 }}
+                  whileHover={{ scale: 1.05 }}
+                  transition={{ duration: 0.09, ease: "easeInOut" }}
+                  className="flex items-center gap-2 px-3 py-2 text-sm font-medium text-white 
+             transition-all duration-300 ease-in-out rounded-full shadow-md  
+             bg-gradient-to-r from-violet-500 to-violet-600 
+             hover:from-violet-600 hover:to-violet-900 active:from-violet-700 active:to-violet-800 
+             focus:outline-none focus:ring-2 focus:ring-violet-300
+             will-change-transform [backface-visibility:hidden] [transform:translateZ(0)] cursor-pointer"
                 >
                   <btn.iconControl className={"h-5 w-5 mr-1"} />
                   {btn.BtnLabel}
