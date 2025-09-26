@@ -52,7 +52,7 @@ export default function ButtonLayout({
                   whileTap={{ scale: 0.92 }}
                   whileHover={{ scale: 1.05 }}
                   transition={{ duration: 0.09, ease: "easeInOut" }}
-                  className="flex items-center gap-2 px-3 py-2 text-sm font-medium text-white 
+                  className="flex items-center gap-[0.1rem] px-3 py-2 text-sm font-medium text-white 
              transition-all duration-300 ease-in-out rounded-full shadow-md  
              bg-gradient-to-r from-violet-500 to-violet-600 
              hover:from-violet-600 hover:to-violet-900 active:from-violet-700 active:to-violet-800 
@@ -75,13 +75,16 @@ export default function ButtonLayout({
         </div>
       ) : (
         <div className={"flex justify-end items-center w-full"}>
-          <button
+          <motion.button
             onClick={OpenMobileControl}
-            className={`bg-violet-400 text-white flex text-xs font-semibold py-[0.9rem] px-4 justify-center items-center gap-1 rounded-2xl`}
+            whileTap={{ scale: 0.92 }}
+            whileHover={{ scale: 1.05 }}
+            transition={{ duration: 0.25, ease: "easeInOut" }}
+            className="flex items-center justify-center gap-2 px-4 py-3 text-sm font-medium text-white shadow-md sm:py-2 rounded-xl bg-gradient-to-r from-violet-500 to-violet-600 hover:from-violet-600 hover:to-violet-700 focus:outline-none focus:ring-2 focus:ring-violet-300"
           >
-            <Settings2 className={"h-4 w-4"} />{" "}
-            {isSmallDesktop ? `Controls` : ``}
-          </button>
+            <Settings2 className="w-4 h-4" />
+            {isSmallDesktop && <span>Controls</span>}
+          </motion.button>
         </div>
       )}
     </div>

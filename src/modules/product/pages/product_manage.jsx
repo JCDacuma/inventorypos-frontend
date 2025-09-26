@@ -72,14 +72,14 @@ export default function ProductManagement() {
   //Page Controls
   const PageBtnControls = [
     {
-      BtnLabel: "Promo",
-      iconControl: Megaphone,
-      to: "/promo-management",
-    },
-    {
       BtnLabel: "Add Product",
       iconControl: CirclePlus,
       to: "/product-add",
+    },
+    {
+      BtnLabel: "Promo",
+      iconControl: Megaphone,
+      to: "/promo-management",
     },
   ];
 

@@ -61,7 +61,7 @@ const menuItems = [
         title: "Manage Product",
         icon: Boxes,
         path: "/product-management",
-        secondPath: "/promo-management",
+        secondPath: ["/promo-management", "/product-add"],
       },
       {
         title: "Inventory",
@@ -73,13 +73,13 @@ const menuItems = [
         title: "Product Order",
         icon: ClipboardList,
         path: "/product-orders",
-        secondPath: "/order-history",
+        secondPath: ["/order-history"],
       },
       {
         title: "Supplier",
         icon: Truck,
         path: "/suppliers",
-        secondPath: "/register-supplier",
+        secondPath: ["/register-supplier"],
       },
     ],
   },
@@ -145,7 +145,8 @@ const Sidebar = ({ SideBarMobileState }) => {
         item.children.some(
           (child) =>
             child.path === location.pathname ||
-            child.secondPath === secondLocation
+            (Array.isArray(child.secondPath) &&
+              child.secondPath.includes(secondLocation))
         )
     )
 
@@ -165,6 +166,23 @@ const Sidebar = ({ SideBarMobileState }) => {
   //Check if the menu is in acitve state
   const isMenuOpen = (menu) =>
     openMenu.includes(menu) || forcedOpenMenus.includes(menu);
+
+  //Active
+  const isActive = (child, location, secondLocation) => {
+    if (child.path === location.pathname) return true;
+
+    if (Array.isArray(child.secondPath)) {
+      return (
+        child.secondPath.includes(location.pathname) ||
+        child.secondPath.includes(secondLocation)
+      );
+    }
+
+    return (
+      child.secondPath === location.pathname ||
+      child.secondPath === secondLocation
+    );
+  };
 
   return (
     <div
@@ -221,8 +239,7 @@ const Sidebar = ({ SideBarMobileState }) => {
                     <Link
                       to={item.path}
                       className={`group flex items-center gap-2 p-2  rounded-lg cursor-pointer text-base ${
-                        item.path === location.pathname ||
-                        item.secondPath === secondLocation
+                        item.path === location.pathname
                           ? "bg-gray-400/70 font-semibold text-white hover:bg-gray-200 hover:text-violet-400 hover:font-bold"
                           : "font-medium text-white hover:text-violet-400 hover:font-bold hover:bg-gray-200"
                       }`}
@@ -272,8 +289,7 @@ const Sidebar = ({ SideBarMobileState }) => {
                             key={i}
                             to={child.path}
                             className={`flex items-center gap-3 p-2 text-white rounded-lg cursor-pointer text-base ${
-                              child.path === location.pathname ||
-                              child.secondPath === secondLocation
+                              isActive(child, location, secondLocation)
                                 ? "bg-gray-400/70 font-semibold text-white hover:bg-gray-200 hover:text-violet-400 hover:font-bold"
                                 : "font-medium text-white hover:text-violet-400 hover:font-bold hover:bg-gray-200"
                             }`}
@@ -374,9 +390,8 @@ const Sidebar = ({ SideBarMobileState }) => {
                                 key={i}
                                 to={child.path}
                                 className={`group block ${
-                                  child.path === location.pathname ||
-                                  child.secondPath === secondLocation
-                                    ? "bg-gray-400/70 font-medium text-white hover:bg-gray-200 hover:text-violet-400 hover:font-bold"
+                                  isActive(child, location, secondLocation)
+                                    ? "bg-gray-400/70 font-semibold text-white hover:bg-gray-200 hover:text-violet-400 hover:font-bold"
                                     : "font-medium text-white hover:text-violet-400 hover:font-bold hover:bg-gray-200"
                                 } items-center justify-between w-full p-4 rounded-lg hover:bg-gray-200`}
                               >
@@ -423,8 +438,7 @@ const Sidebar = ({ SideBarMobileState }) => {
                   <Link
                     to={item.path}
                     className={`group flex items-center gap-2 p-2  rounded-lg cursor-pointer text-base ${
-                      item.path === location.pathname ||
-                      item.secondPath === secondLocation
+                      item.path === location.pathname
                         ? "bg-gray-400/70 font-semibold text-white hover:bg-gray-200 hover:text-violet-400 hover:font-bold"
                         : "font-medium text-white hover:text-violet-400 hover:font-bold hover:bg-gray-200"
                     }`}
@@ -474,8 +488,7 @@ const Sidebar = ({ SideBarMobileState }) => {
                           key={i}
                           to={child.path}
                           className={`flex items-center gap-3 p-2 text-white rounded-lg cursor-pointer text-base ${
-                            child.path === location.pathname ||
-                            child.secondPath === secondLocation
+                            isActive(child, location, secondLocation)
                               ? "bg-gray-400/70 font-semibold text-white hover:bg-gray-200 hover:text-violet-400 hover:font-bold"
                               : "font-medium text-white hover:text-violet-400 hover:font-bold hover:bg-gray-200"
                           }`}

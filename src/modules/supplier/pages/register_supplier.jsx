@@ -69,7 +69,7 @@ export default function RegisterSupplier() {
                     value={supplierName}
                     onChange={setSupplierName}
                     placeholder={"Enter supplier"}
-                    icons={<TruckElectric />}
+                    icons={TruckElectric}
                   />
                 </div>
                 <div className="flex flex-col">
@@ -78,7 +78,7 @@ export default function RegisterSupplier() {
                     value={supplierAdress}
                     onChange={setsupplierAdress}
                     placeholder={"Enter Supplier Address"}
-                    icons={<MapPinned />}
+                    icons={MapPinned}
                   />
                 </div>
                 <div className="flex flex-col">
@@ -87,7 +87,7 @@ export default function RegisterSupplier() {
                     value={shippingFee}
                     onChange={setShippingFee}
                     placeholder={"Enter Shipping Fee"}
-                    icons={<PackageOpen />}
+                    icons={PackageOpen}
                   />
                 </div>
                 <div
@@ -202,7 +202,7 @@ export default function RegisterSupplier() {
                     value={firstName}
                     onChange={setfirstName}
                     placeholder={"Enter First Name"}
-                    icons={<User />}
+                    icons={User}
                   />
                 </div>
                 <div className="flex flex-col">
@@ -211,7 +211,7 @@ export default function RegisterSupplier() {
                     value={lastName}
                     onChange={setlastName}
                     placeholder={"Enter Last Name"}
-                    icons={<User />}
+                    icons={User}
                   />
                 </div>
                 <div className="flex flex-col">
@@ -220,7 +220,7 @@ export default function RegisterSupplier() {
                     value={phoneNumber}
                     onChange={setphoneNumber}
                     placeholder={"Enter Phone Number"}
-                    icons={<Phone />}
+                    icons={Phone}
                   />
                 </div>
                 <div className="flex flex-col">
@@ -229,7 +229,7 @@ export default function RegisterSupplier() {
                     value={email}
                     onChange={setemail}
                     placeholder={"Enter Email Address"}
-                    icons={<Mail />}
+                    icons={Mail}
                   />
                 </div>
               </div>

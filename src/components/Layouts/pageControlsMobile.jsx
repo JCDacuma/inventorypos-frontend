@@ -57,7 +57,7 @@ export default function NavControl({
                   whileTap={{ scale: 0.92 }}
                   whileHover={{ scale: 1.05 }}
                   transition={{ duration: 0.09, ease: "easeInOut" }}
-                  className="flex items-center gap-2 px-3 py-2 text-sm font-medium text-white 
+                  className="flex items-center justify-center gap-1 px-2 py-2 text-sm font-medium text-white 
              transition-all duration-300 ease-in-out rounded-full shadow-md  
              bg-gradient-to-r from-violet-500 to-violet-600 
              hover:from-violet-600 hover:to-violet-900 active:from-violet-700 active:to-violet-800 
