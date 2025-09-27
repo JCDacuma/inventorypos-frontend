@@ -50,7 +50,7 @@ export function DefaultDropDown({
       {/* Dropdown Button */}
       <div className="flex w-full">
         <div
-          className={`w-full flex px-4 py-3 select-none text-left bg-white border border-violet-300 shadow-sm cursor-pointer  hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${
+          className={`w-full flex px-4 py-3 lg:py-[1rem] select-none text-left bg-white border border-violet-300 shadow-sm cursor-pointer  hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${
             BtnIcons === null || BtnIcons === undefined
               ? `rounded-2xl`
               : `rounded-l-2xl`

@@ -20,7 +20,7 @@ export function Modal({
       {isOpen && (
         <motion.div
           key="modal-wrapper"
-          className={`fixed inset-0 z-40 flex items-center justify-center w-full px-0 pointer-events-none `}
+          className={`fixed inset-0 z-40 flex items-center justify-center w-full px-0 select-none`}
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
@@ -33,8 +33,7 @@ export function Modal({
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.3 }}
-            className="absolute inset-0 pointer-events-none bg-black/40 backdrop-blur-sm"
-            onClick={onClosed}
+            className="absolute inset-0 select-none bg-black/40 backdrop-blur-sm"
           />
 
           {/* Modal Card */}

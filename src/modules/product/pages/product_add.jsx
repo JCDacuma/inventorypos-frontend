@@ -1,9 +1,10 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Layout } from "@/components/Layouts/Layout.jsx";
 import AddCategoryModal from "@/modules/product/components/Layouts/productCategoryModal.jsx";
-import { Input, RadioGroup } from "@/components/ui/input.jsx";
+import { Input } from "@/components/ui/input.jsx";
+import { RadioGroup } from "@/components/ui/radioGroup.jsx";
 import { DefaultDropDown } from "@/components/ui/dropdown.jsx";
 import { motion } from "framer-motion";
 //icon
@@ -23,10 +24,11 @@ import {
   Warehouse,
   ShoppingCart,
   Notebook,
-  PlusCircle,
 } from "lucide-react";
 export default function AddProduct() {
   const [productImage, setProductImage] = useState(null);
+  const imageRef = useRef(null);
+
   const [imagePreview, setImagePreview] = useState(null);
   const [productname, setProductName] = useState("");
   const [category, setCategory] = useState({});
@@ -158,6 +160,14 @@ export default function AddProduct() {
     }
   }, [productImage]);
 
+  const HandleRemoveImage = () => {
+    setProductImage(null);
+    setImagePreview(null);
+
+    if (imageRef.current !== null || imageRef.current !== undefined) {
+      imageRef.current.value = null;
+    }
+  };
   return (
     <Layout currentWebPage="Register Product">
       <div className="w-full h-full px-1 pt-16 pb-2 bg-white ">
@@ -187,8 +197,8 @@ export default function AddProduct() {
             </div>
           </div>
 
-          <div className="flex flex-col w-full h-[100vh] gap-5 mt-10  sm:mt-2 lg:flex-row">
-            <div className="relative flex flex-col w-full h-full gap-5 py-5 lg:gap-8 lg:pr-5 xl:pl-10 2xl:pl-20">
+          <div className="flex flex-col w-full gap-0 mt-10 lg:gap-5 sm:mt-2 lg:flex-row">
+            <div className="relative flex flex-col w-full h-full gap-3 py-5 lg:gap-5 lg:pr-5 xl:pl-10 2xl:pl-20">
               <div className="relative flex items-center justify-center gap-3 ">
                 <div className="items-center justify-center hidden h-32 p-1 border-2 border-dashed w-42 md:flex bg-violet-50 border-violet-300 rounded-2xl">
                   {productImage === undefined || productImage === null ? (
@@ -210,6 +220,8 @@ export default function AddProduct() {
                   haveBtn={true}
                   buttonIcon={Trash}
                   icons={ImageDown}
+                  OnClick={HandleRemoveImage}
+                  Ref={imageRef}
                 />
               </div>
               <div>
@@ -248,7 +260,7 @@ export default function AddProduct() {
                   icons={PhilippinePeso}
                 />
               </div>
-              <div className="flex w-full gap-1">
+              <div className="flex flex-col items-center justify-center w-full gap-3 sm:gap-1 sm:flex-row ">
                 <Input
                   placeholder={"mark up price"}
                   value={markUpPrice}
@@ -263,7 +275,7 @@ export default function AddProduct() {
                 />
               </div>
             </div>
-            <div className="relative flex flex-col w-full h-full gap-5 py-5 lg:gap-8 lg:pl-5 xl:pr-10 2xl:pr-20 ">
+            <div className="relative flex flex-col w-full h-full gap-3 py-5 lg:gap-5 lg:pl-5 xl:pr-10 2xl:pr-20 ">
               <div className="flex flex-col w-full gap-2">
                 <div className="flex gap-1 text-violet-500">
                   <HandCoins />
