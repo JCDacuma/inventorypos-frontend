@@ -123,7 +123,7 @@ export const Layout = ({ currentWebPage = "", children, style = "" }) => {
   };
 
   return (
-    <div className={`bg-gray-100 w-1/1 h-screen flex ${style}`}>
+    <div className={`bg-gray-100 w-full h-screen flex ${style}`}>
       <Navbar
         page={currentWebPage}
         setSideBarMobile={HandleMobileSideBar}

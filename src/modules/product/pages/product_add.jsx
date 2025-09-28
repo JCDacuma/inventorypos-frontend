@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { useState, useEffect, useRef } from "react";
 import { Layout } from "@/components/Layouts/Layout.jsx";
 import AddCategoryModal from "@/modules/product/components/Layouts/productCategoryModal.jsx";
-import { Input } from "@/components/ui/input.jsx";
+import { Input } from "@/components/ui/Input.jsx";
 import { RadioGroup } from "@/components/ui/radioGroup.jsx";
 import { DefaultDropDown } from "@/components/ui/dropdown.jsx";
 import { motion } from "framer-motion";

@@ -6,20 +6,12 @@ export default function Searchbar() {
   const SmallDesktop = useMediaQuery({ maxWidth: 868 });
   return (
     <div
-      className={` relative flex ${
-        isMobile
-          ? `w-1/1` /* Mobile 667 device and below */
-          : BigDesktop
-          ? `w-1/5` /* BigDesktop 1468 device and above*/
-          : SmallDesktop
-          ? `w-1/1` /* Small Desktop 868 and below but not below 667 */
-          : `w-1/3` /* 868 and above but not above 1468  */
-      } `}
+      className={` relative flex w-full sm:w-[90%] md:w-[50%] lg:w-[35%] 2xl:w-[25%]`}
     >
       {<Search className="absolute mt-[0.7rem] ml-2 text-violet-200" />}
       <input
         placeholder="   Search here..."
-        className="py-3 text-sm bg-white border shadow-sm outline-none  w-1/1 rounded-2xl pl-9 border-slate-300 ring-0 placeholder:text-slate-400 focus:border-slate-400 focus:ring-2 focus:ring-slate-200"
+        className="py-3 text-sm bg-white border shadow-sm outline-none rounded-[100rem] w-1/1 pl-9 border-slate-300 ring-0 placeholder:text-slate-400 focus:border-slate-400 focus:ring-2 focus:ring-slate-200"
       />
     </div>
   );
