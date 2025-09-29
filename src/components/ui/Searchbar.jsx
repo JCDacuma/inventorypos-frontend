@@ -1,17 +1,19 @@
-import { Search, Funnel } from "lucide-react";
-import { useMediaQuery } from "react-responsive";
+import { useState } from "react";
+import { Search, X } from "lucide-react";
+import { AnimatePresence } from "framer-motion";
+
 export default function Searchbar() {
-  const isMobile = useMediaQuery({ maxWidth: 667 });
-  const BigDesktop = useMediaQuery({ minWidth: 1468 });
-  const SmallDesktop = useMediaQuery({ maxWidth: 868 });
   return (
-    <div
-      className={` relative flex w-full sm:w-[90%] md:w-[50%] lg:w-[35%] 2xl:w-[25%]`}
-    >
-      {<Search className="absolute mt-[0.7rem] ml-2 text-violet-200" />}
+    <div className="relative flex w-full sm:w-[90%] md:w-[50%] lg:w-[35%] 2xl:w-[25%]">
+      {/* Search icon (left) */}
+      <Search className="absolute -translate-y-1/2 left-3 top-1/2 text-violet-400" />
+
+      {/* Clear icon (right) */}
+      <X className="absolute -translate-y-1/2 cursor-pointer right-3 top-1/2 text-violet-400" />
+
       <input
-        placeholder="   Search here..."
-        className="py-3 text-sm bg-white border shadow-sm outline-none rounded-[100rem] w-1/1 pl-9 border-slate-300 ring-0 placeholder:text-slate-400 focus:border-slate-400 focus:ring-2 focus:ring-slate-200"
+        placeholder="Search here..."
+        className="w-full py-3 pl-10 pr-10 text-sm bg-white border rounded-full shadow-sm outline-none sm:py-4 border-slate-300 placeholder:text-slate-400 focus:border-slate-400 focus:ring-2 focus:ring-slate-200"
       />
     </div>
   );

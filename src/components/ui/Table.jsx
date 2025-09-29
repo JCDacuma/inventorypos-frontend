@@ -108,7 +108,10 @@ export default function DesktopTable({
                   data.map((row, i) => (
                     <tr key={i} className="odd:bg-white even:bg-violet-100">
                       {columns.map((col) => (
-                        <td key={col.key} className="px-4 py-4 text-center">
+                        <td
+                          key={col.key}
+                          className="px-4 py-4 text-center whitespace-nowrap"
+                        >
                           {/* If it's the Select column, render a checkbox */}
                           {col.key === "Select" ? (
                             <div className="inline-flex items-center">
