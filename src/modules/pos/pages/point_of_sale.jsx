@@ -1,5 +1,6 @@
 import React from "react";
 import { useState, useEffect, useRef } from "react";
+import CheckOut from "@/modules/pos/components/Layouts/checkOutModal.jsx";
 import { Layout } from "@/components/Layouts/Layout";
 import { HorizontalSlider } from "@/utils/slider.jsx";
 import Searchbar from "@/components/ui/Searchbar.jsx";
@@ -139,9 +140,12 @@ export default function PointofSale() {
   //Cart Mobile state
   const [isCartOpen, setOpenCart] = useState(false);
 
+  //Checkout Modal
+  const [isCheckOutOpen, setCheckoutOpen] = useState(false);
+
   return (
     <Layout currentWebPage="Point of Sale" style="items-center">
-      <div className="flex w-full h-[99%] pt-15 ">
+      <div className="flex w-full h-full pt-16 ">
         <div className="relative flex w-full h-full">
           <div className="flex flex-col w-full lg:w-3/4 ">
             {/* category */}
@@ -248,6 +252,12 @@ export default function PointofSale() {
             isCartOpen={isCartOpen}
             setOpenCart={setOpenCart}
             Product={ProductBuying}
+            openCheckOut={setCheckoutOpen}
+          />
+          {/* checkout section */}
+          <CheckOut
+            isOpen={isCheckOutOpen}
+            onClosed={() => setCheckoutOpen(false)}
           />
         </div>
       </div>

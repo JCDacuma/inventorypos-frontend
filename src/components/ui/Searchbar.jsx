@@ -4,7 +4,7 @@ import { AnimatePresence } from "framer-motion";
 
 export default function Searchbar() {
   return (
-    <div className="relative flex w-full sm:w-[90%] md:w-[50%] lg:w-[35%] 2xl:w-[25%]">
+    <div className="relative flex w-full sm:w-[90%] md:w-[50%] lg:w-[35%] 2xl:w-[25%] select-none">
       {/* Search icon (left) */}
       <Search className="absolute -translate-y-1/2 left-3 top-1/2 text-violet-400" />
 

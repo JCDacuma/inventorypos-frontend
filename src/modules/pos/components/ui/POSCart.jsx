@@ -5,7 +5,12 @@ import { motion, AnimatePresence } from "framer-motion";
 import { ShoppingBasket, ArrowRightFromLine, Trash2 } from "lucide-react";
 
 import {} from "lucide-react";
-export default function POSCart({ isCartOpen, setOpenCart, Product }) {
+export default function POSCart({
+  isCartOpen,
+  setOpenCart,
+  Product,
+  openCheckOut,
+}) {
   const isLargeScreen = useMediaQuery({ minWidth: 1024 });
   const totalItem = 2;
   const TotatQuantity = 0;
@@ -72,14 +77,17 @@ export default function POSCart({ isCartOpen, setOpenCart, Product }) {
                   <p> Total Quantity: {TotatQuantity}</p>
                   <p>Vat: {vat}</p>
                 </div>
-                <div className="flex items-center justify-start w-full h-[88%] gap-3 px-5">
+                <div className="flex items-center justify-start w-full h-[80%] gap-3 px-5">
                   {/* Clear cart button */}
                   <button className="flex items-center justify-center p-3 transition-all duration-200 text-violet-600 bg-violet-100 rounded-xl hover:bg-violet-200 hover:text-violet-800">
                     <Trash2 size={22} />
                   </button>
 
                   {/* Checkout button */}
-                  <button className="flex items-center justify-between w-full px-6 py-4 font-bold text-white transition-all duration-300 rounded-xl shadow-lg bg-[#8568EF] hover:bg-[#6f4ed9] hover:shadow-xl active:scale-95">
+                  <button
+                    onClick={() => openCheckOut(true)}
+                    className="flex items-center justify-between w-full px-6 py-4 font-bold text-white transition-all duration-300 rounded-xl shadow-lg bg-[#8568EF] hover:bg-[#6f4ed9] hover:shadow-xl active:scale-95"
+                  >
                     <span className="text-sm xl:text-lg">Checkout</span>
                     <span className="text-sm xl:text-lg">₱ {totalPrice}</span>
                   </button>
