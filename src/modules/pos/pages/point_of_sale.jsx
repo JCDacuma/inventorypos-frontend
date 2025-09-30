@@ -13,13 +13,13 @@ import {
   DragControls,
 } from "framer-motion";
 
-import { ShoppingBasket } from "lucide-react";
+import { ShoppingBasket, PackageSearch } from "lucide-react";
 export default function PointofSale() {
   // sample grocery products
   const product = [
     {
       id: 1,
-      item: "Fresh Milk",
+      itemName: "Fresh Milk",
       sku: "MLK-001",
       CurrentStock: 20,
       Unit: "bottles",
@@ -31,7 +31,7 @@ export default function PointofSale() {
     },
     {
       id: 2,
-      item: "Brown Bread",
+      itemName: "Brown Bread",
       sku: "BRD-001",
       CurrentStock: 15,
       Unit: "loaves",
@@ -43,7 +43,7 @@ export default function PointofSale() {
     },
     {
       id: 3,
-      item: "Chicken Breast",
+      itemName: "Chicken Breast",
       sku: "MT-CHK-001",
       CurrentStock: 10,
       Unit: "packs",
@@ -55,7 +55,7 @@ export default function PointofSale() {
     },
     {
       id: 4,
-      item: "Apples - Red Delicious",
+      itemName: "Apples - Red Delicious",
       sku: "FRU-APL-001",
 
       CurrentStock: 25,
@@ -68,7 +68,7 @@ export default function PointofSale() {
     },
     {
       id: 5,
-      item: "Rice",
+      itemName: "Rice",
       sku: "GRN-RCE-001",
       CurrentStock: 30,
       Unit: "sacks",
@@ -99,34 +99,8 @@ export default function PointofSale() {
     { categoryId: 15, categoryName: "Household Essentials" },
   ];
 
-  const ProductBuying = [
-    {
-      id: 1,
-      item: "Fresh Milk",
-      sku: "MLK-001",
-      Category: "Dairy",
-      CurrentStock: 20,
-      Unit: "bottles",
-      MinStock: 5,
-      category: 1,
-      itemprice: 65.0,
-      taxable: true,
-      status: "Active",
-    },
-    {
-      id: 2,
-      item: "Brown Bread",
-      sku: "BRD-001",
-      Category: "Bakery",
-      CurrentStock: 15,
-      Unit: "loaves",
-      MinStock: 3,
-      category: 2,
-      itemprice: 55.0,
-      taxable: false,
-      status: "Active",
-    },
-  ];
+  const [ProductDisplay, setProductDisplay] = useState([]); //Product Display
+  const [ProductBuying, setProductBuying] = useState([]); //Item to buy
 
   //CategoryDisplay for each item
   const HandleItemCategory = (value) => {
@@ -137,8 +111,37 @@ export default function PointofSale() {
   //Selected Category to show
   const [selctdCtgry, setselctdCtgry] = useState(null);
 
+  //Show item via category
+  useEffect(() => {
+    if (selctdCtgry === null || selctdCtgry === undefined) {
+      setProductDisplay(product);
+    } else {
+      const productCtgryFiltered = product?.filter(
+        (item) => item.category === selctdCtgry
+      );
+      setProductDisplay(productCtgryFiltered);
+    }
+  }, [selctdCtgry]);
+
   //Cart Mobile state
   const [isCartOpen, setOpenCart] = useState(false);
+
+  //Add Items to cart functionality
+  const HandleAddItems = (itemId) => {
+    const itms = product.find((item) => item.id === itemId);
+    if (!itms) return;
+    setProductBuying((prev) => {
+      const exist = prev.find((item) => item.id === itemId);
+
+      if (exist) {
+        return prev.map((prod) =>
+          prod.id === itemId ? { ...prod, qtyToBuy: prod.qtyToBuy + 1 } : prod
+        );
+      } else {
+        return [...prev, { ...itms, qtyToBuy: 1 }];
+      }
+    });
+  };
 
   //Checkout Modal
   const [isCheckOutOpen, setCheckoutOpen] = useState(false);
@@ -175,7 +178,6 @@ export default function PointofSale() {
                   <motion.button
                     whileHover={{
                       scale: 1.05,
-
                       color: "#fff",
                       boxShadow: "0px 8px 20px rgba(104, 55, 196, 0.35)",
                     }}
@@ -219,31 +221,45 @@ export default function PointofSale() {
                 </motion.button>
               </div>
 
+              {/*----- Product item -----*/}
               <div className="grid grid-cols-1 gap-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 ">
-                {product.map((item) => (
-                  <div
-                    key={item.id}
-                    className="flex flex-col overflow-hidden transition-transform transform bg-white border border-gray-300 shadow-lg cursor-pointer select-none shadow-gray-300 rounded-xl hover:shadow-xl hover:scale-105"
-                  >
-                    {/* Image placeholder */}
-                    <div className="flex items-center justify-center w-full h-40 font-semibold text-gray-500 border-dashed bg-violet-200 border-violet-600">
-                      <p>Image Show here</p>
-                    </div>
+                {ProductDisplay.length > 0 ? (
+                  ProductDisplay.map((item) => (
+                    <div
+                      onClick={() => HandleAddItems(item.id)}
+                      key={item.id}
+                      className="flex flex-col overflow-hidden transition-transform transform bg-white border border-gray-300 shadow-lg cursor-pointer select-none shadow-gray-300 rounded-xl hover:shadow-xl hover:scale-105"
+                    >
+                      {/* Image placeholder */}
+                      <div className="flex items-center justify-center w-full h-40 font-semibold text-gray-500 border-dashed bg-violet-200 border-violet-600">
+                        <p>Image Show here</p>
+                      </div>
 
-                    {/* Content */}
-                    <div className="flex flex-col justify-between flex-1 p-4">
-                      <p className="font-semibold text-gray-800 text-md">
-                        {item.item}
-                      </p>
-                      <p className="mt-1 text-xs text-gray-500">
-                        {HandleItemCategory(item.category)}
-                      </p>
-                      <p className="mt-1 text-sm font-bold text-black">
-                        ₱{item.itemprice}
-                      </p>
+                      {/* Content */}
+                      <div className="flex flex-col justify-between flex-1 p-4">
+                        <p className="font-semibold text-gray-800 text-md">
+                          {item.itemName}
+                        </p>
+                        <p className="mt-1 text-xs text-gray-500">
+                          {HandleItemCategory(item.category)}
+                        </p>
+                        <p className="mt-1 text-sm font-bold text-black">
+                          ₱{item.itemprice}
+                        </p>
+                      </div>
                     </div>
+                  ))
+                ) : (
+                  <div className="flex flex-col items-center justify-center w-full p-6 text-center border-2 border-dashed h-60 rounded-xl border-violet-300 bg-violet-50 col-span-full">
+                    <PackageSearch className="w-12 h-12 mb-3 text-violet-500" />
+                    <p className="text-lg font-semibold text-gray-700">
+                      No items found
+                    </p>
+                    <p className="text-sm text-gray-500">
+                      Try selecting a different category or reset your filter
+                    </p>
                   </div>
-                ))}
+                )}
               </div>
             </div>
           </div>

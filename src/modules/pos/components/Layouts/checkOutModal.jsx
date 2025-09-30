@@ -5,7 +5,7 @@ import { Input } from "@/components/ui/Input.jsx";
 import { useMediaQuery } from "react-responsive";
 import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { TicketPercent } from "lucide-react";
+import { TicketPercent, HandCoins } from "lucide-react";
 
 export default function CheckOut({ isOpen, onClosed }) {
   const totalItem = 2;
@@ -14,7 +14,7 @@ export default function CheckOut({ isOpen, onClosed }) {
 
   return (
     <Modal isOpen={isOpen} onClosed={onClosed} ModalTitle="Checkout">
-      <div className="w-full h-[calc(100vh-230px)] p-2">
+      <div className="w-full h-[calc(100vh-210px)] p-2">
         <div className="w-full h-full px-2 overflow-auto">
           {/* Checkout Summary */}
           <section className="flex flex-col justify-start w-full gap-1 py-2 border-b-2 border-gray-400">
@@ -62,7 +62,37 @@ export default function CheckOut({ isOpen, onClosed }) {
             </div>
           </section>
           {/* Payment method */}
-          <section></section>
+          <section className="px-4 py-4 border-b-2 border-gray-400">
+            <strong className="text-gray-500">Payment method</strong>
+            <div className="flex flex-col w-full py-2">
+              <DefaultDropDown
+                placeholder="Select payment method"
+                icons={HandCoins}
+              />
+              <div className="flex items-center justify-start w-full gap-2 py-3">
+                <strong className="text-sm text-gray-500">
+                  Amount recieved:{" "}
+                </strong>
+                <input
+                  className="px-3 py-2 border shadow-lg border-violet-300 rounded-xl shadow-gray-300"
+                  placeholder="Enter amount recieved"
+                />
+              </div>
+              <div className="flex flex-col gap-1">
+                <div className="flex items-center w-full gap-2 text-sm text-gray-500">
+                  <strong>Change:</strong> <strong>0</strong>
+                </div>
+                <div className="flex items-center w-full gap-2 text-sm text-black">
+                  <strong>Final total:</strong> <strong>₱4000</strong>
+                </div>
+              </div>
+            </div>
+          </section>
+          {/* Confirm checkout button */}
+
+          <button className="flex items-center justify-center w-full px-5 py-3 mt-4 text-white rounded-lg bg-violet-500">
+            Confirm Checkout
+          </button>
         </div>
       </div>
     </Modal>
