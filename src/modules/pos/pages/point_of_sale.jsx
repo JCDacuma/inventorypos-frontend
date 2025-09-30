@@ -269,6 +269,7 @@ export default function PointofSale() {
             setOpenCart={setOpenCart}
             Product={ProductBuying}
             openCheckOut={setCheckoutOpen}
+            setProductBuying={setProductBuying}
           />
           {/* checkout section */}
           <CheckOut

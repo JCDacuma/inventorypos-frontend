@@ -60,4 +60,18 @@ export const SweetAlert = {
       },
     });
   },
+
+  // Confirmation helper
+  Confirm: (title = "", text = "") => {
+    return Swal.fire({
+      title: title,
+      text: text,
+      icon: "question",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes",
+      cancelButtonText: "No",
+    });
+  },
 };
