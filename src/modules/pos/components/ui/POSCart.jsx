@@ -21,10 +21,15 @@ export default function POSCart({
   setProductBuying,
 }) {
   const isLargeScreen = useMediaQuery({ minWidth: 1024 });
-  const totalItem = 2;
-  const TotatQuantity = 0;
+
+  //Summary Total Cart item
+  const totalItem = Product.length;
+  const TotatQuantity = Product.reduce((acc, curr) => acc + curr.qtyToBuy, 0);
+  const totalPrice = Product.reduce(
+    (acc, curr) => acc + curr.qtyToBuy * curr.itemprice,
+    0
+  );
   const vat = 200;
-  const totalPrice = 20000;
 
   //Handle item removal functionality
   const RemoveItem = (value) => {
@@ -102,9 +107,9 @@ export default function POSCart({
               {!isLargeScreen ? (
                 <motion.button
                   onClick={() => setOpenCart(false)}
-                  className="flex items-center justify-center gap-1 px-3 py-2 text-sm bg-white border border-gray-200 rounded-lg shadow-lg cursor-pointer text-violet-400 shadow-gray-300"
+                  className="flex items-center justify-center gap-1 px-3 py-2 text-sm bg-white border border-gray-200 shadow-lg cursor-pointer rounded-2xl text-violet-400 shadow-gray-300"
                 >
-                  Close <ArrowRightFromLine size={20} />
+                  <ArrowRightFromLine size={20} />
                 </motion.button>
               ) : null}
             </div>
@@ -177,7 +182,7 @@ export default function POSCart({
                 )}
               </section>
               <section className="relative w-full h-30 border-t-1 border-violet-400 ">
-                <div className="flex gap-5 pt-1 ml-2 text-xs font-semibold text-gray-500 xl:text-sm">
+                <div className="flex w-[97%] gap-5 pt-1 ml-2 text-xs font-semibold text-gray-500 xl:text-sm">
                   <p>Total Item: {totalItem}</p>
                   <p> Total Quantity: {TotatQuantity}</p>
                   <p>Vat: {vat}</p>

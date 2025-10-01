@@ -2,21 +2,16 @@ import { useState } from "react";
 import { Link, useParams } from "react-router-dom";
 
 // Page Layout component
-import {
-  Layout,
-  MainWrapper,
-  ControlLayout,
-} from "../../../components/Layouts/Layout.jsx";
-import ButtonLayout from "@/components/Layouts/pageControlButtons.jsx";
+import { Layout } from "@/components/Layouts/Layout.jsx";
+
 import { useMediaQuery } from "react-responsive";
-import { ExportButton } from "../../../components/ui/buttons.jsx";
-import Searchbar from "../../../components/ui/Searchbar.jsx";
 import NavControl from "@/components/Layouts/pageControlsMobile.jsx";
 //Table Layout component
-import Table from "../../../components/ui/Table.jsx";
-import MobileTable from "../../../components/ui/MobileTable.jsx";
-import { OrderHistoryStatus } from "../../../components/ui/Status.jsx";
-import { Action } from "../../../components/ui/buttons.jsx";
+import Table from "@/components/Layouts/table.jsx";
+import TableHeader from "@/components/Layouts/tableHeader.jsx";
+import MobileTable from "@/components/ui/MobileTable.jsx";
+import { OrderHistoryStatus } from "@/components/ui/Status.jsx";
+import { Action } from "@/components/ui/buttons.jsx";
 //Animation
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -170,35 +165,29 @@ export default function SupplierHistory() {
 
   return (
     <Layout currentWebPage="Order History">
-      <MainWrapper>
-        <div
-          className={` relative flex-column h-full m-0 md:block rounded-2xl pb-27 bg-white shadow-md py-5  ${
-            isSmallMobile ? `px-1` : `px-5`
-          }`}
-        >
-          {/* Control Section */}
-          <ControlLayout>
-            <ButtonLayout
-              hasExport={true}
-              hasNavBack={true}
-              BackNavigationLink={NavigationBack}
-              //Mobile page control state
-              isOpenMobile={pageControl}
-              OpenMobileControl={() => setPageControl(true)}
-            />
+      <div className="relative flex flex-col w-full px-5 pt-20 overflow-auto">
+        {/* Control Section */}
 
-            <Searchbar />
-          </ControlLayout>
-
-          {/* Table Section */}
+        <TableHeader
+          pageControl={pageControl}
+          setPageControl={() => setPageControl(true)}
+          hasFilter={true}
+          hasExport={true}
+          hasNavBack={true}
+          BackNavigationLink={NavigationBack}
+        />
+        {/* Table Section */}
+        <div className="block md:hidden">
           <MobileTable
             columns={columns}
             data={orderShowing}
             setSelectedId={null}
           />
+        </div>
+        <div className="hidden md:block">
           <Table columns={columns} data={orderShowing} setSelectedId={null} />
         </div>
-      </MainWrapper>
+      </div>
 
       {/* Page Controls (Mobile Layout only) */}
       <NavControl

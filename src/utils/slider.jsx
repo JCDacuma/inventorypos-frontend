@@ -32,7 +32,7 @@ export function HorizontalSlider({ children, className = "" }) {
       onMouseLeave={handleMouseLeave}
       onMouseUp={handleMouseUp}
       onMouseMove={handleMouseMove}
-      className={`flex items-center gap-3 overflow-x-auto scrollbar-hide cursor-grab active:cursor-grabbing ${className}`}
+      className={` ${className}`}
     >
       {children}
     </div>

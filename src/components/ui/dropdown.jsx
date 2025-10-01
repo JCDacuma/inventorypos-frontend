@@ -1,17 +1,23 @@
 import { useState, useEffect, useRef } from "react";
 import { motion } from "framer-motion";
-export function DefaultDropDown({
-  items = [],
+import { HorizontalSlider } from "@/utils/slider.jsx";
+import { useMediaQuery } from "react-responsive";
 
+export function DefaultDropDown({
+  items = ["dsadsadsadsadsadasd"],
   SetSelected = () => {},
   placeholder = "Select an option",
   maxHeight = "200px",
   selectedValue = "",
+  CharacterShow = 30,
   //Layout
   icons = null,
+  showDropicon = true,
+  selectedDisplay = true,
   BtnIcons = null,
   OnClick = () => {},
 }) {
+  const isMobile = useMediaQuery({ maxWidth: 468 });
   const [isOpen, setIsOpen] = useState(false);
   const [selectedItem, setSelectedItem] = useState("");
   const dropDown = useRef(null);
@@ -50,7 +56,7 @@ export function DefaultDropDown({
       {/* Dropdown Button */}
       <div className="flex w-full">
         <div
-          className={`w-full flex px-4 py-3 lg:py-[0.7rem] select-none text-left bg-white border border-violet-300 shadow-sm cursor-pointer  hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${
+          className={`w-full flex px-4 py-[0.7rem] lg:py-[0.75rem] select-none text-left bg-white border border-violet-300 shadow-sm cursor-pointer  hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${
             BtnIcons === null || BtnIcons === undefined
               ? `rounded-2xl`
               : `rounded-l-2xl`
@@ -58,32 +64,40 @@ export function DefaultDropDown({
           onClick={toggleDropdown}
         >
           <div className="flex items-center justify-between w-full">
-            <div className="flex gap-[0.8rem]">
+            <div className="flex justify-center gap-[0.8rem]">
               {icons !== null && icons !== undefined
-                ? Icons && <Icons className="text-violet-500" />
+                ? Icons && <Icons className="text-violet-500" size={20} />
                 : null}
-              <span
-                className={selectedItem ? "text-gray-900" : "text-gray-500"}
-              >
-                {selectedItem || placeholder}
-              </span>
+              {selectedDisplay ? (
+                <span
+                  className={selectedItem ? "text-gray-900" : "text-gray-500"}
+                >
+                  {selectedItem
+                    ? selectedItem.length > 4
+                      ? selectedItem.slice(0, CharacterShow)
+                      : selectedItem
+                    : placeholder}
+                </span>
+              ) : null}
             </div>
 
-            <svg
-              className={`w-5 h-5 text-gray-400 transition-transform duration-200 ${
-                isOpen ? "transform rotate-180" : ""
-              }`}
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M19 9l-7 7-7-7"
-              />
-            </svg>
+            {showDropicon ? (
+              <svg
+                className={`w-5 h-5 text-gray-400 transition-transform duration-200 ${
+                  isOpen ? "transform rotate-180" : ""
+                }`}
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M19 9l-7 7-7-7"
+                />
+              </svg>
+            ) : null}
           </div>
         </div>
         {ButtoIcons ? (
@@ -105,18 +119,24 @@ export function DefaultDropDown({
 
       {/* Dropdown Menu */}
       {isOpen && (
-        <div className="absolute z-50 w-full mt-1 bg-white border border-gray-300 rounded-md shadow-lg">
-          <div className="py-1 overflow-y-auto" style={{ maxHeight }}>
+        <div
+          className={`  absolute z-50 mt-2 max-h-60 overflow-auto min-w-[220px] bg-white border border-gray-300 rounded-md shadow-lg `}
+        >
+          <HorizontalSlider
+            className="py-1 overflow-y-auto"
+            style={{ maxHeight }}
+          >
             {items.length > 0 ? (
               items.map((item, index) => (
                 <div
                   key={index}
-                  className={`px-4 py-2 text-sm cursor-pointer transition-colors duration-150 ${
+                  className={`px-4 py-2 select-none text-sm cursor-pointer transition-colors duration-150 truncate max-w-[220px] ${
                     selectedItem === item
                       ? "bg-blue-100 text-blue-900"
                       : "text-gray-700 hover:bg-blue-50 hover:text-blue-900"
                   }`}
                   onClick={() => handleItemSelect(item)}
+                  title={item} // Tooltip for full value
                 >
                   {item}
                 </div>
@@ -126,7 +146,7 @@ export function DefaultDropDown({
                 No items available
               </div>
             )}
-          </div>
+          </HorizontalSlider>
         </div>
       )}
     </div>

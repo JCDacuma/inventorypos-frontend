@@ -2,19 +2,16 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 
 // Page Layout component
-import {
-  Layout,
-  MainWrapper,
-  ControlLayout,
-} from "../../../components/Layouts/Layout.jsx";
-import ButtonLayout from "@/components/Layouts/pageControlButtons.jsx";
+import { Layout } from "@/components/Layouts/Layout.jsx";
+
 import { useMediaQuery } from "react-responsive";
-import Searchbar from "../../../components/ui/Searchbar.jsx";
+
 import BatchControl from "../../../components/Layouts/BatchControl.jsx";
 import NavControl from "@/components/Layouts/pageControlsMobile.jsx";
 
 //Table Layout component
-import Table from "../../../components/ui/Table.jsx";
+import Table from "@/components/Layouts/table.jsx";
+import TableHeader from "@/components/Layouts/tableHeader.jsx";
 import MobileTable from "../../../components/ui/MobileTable.jsx";
 import { SupplierStatus } from "../../../components/ui/Status.jsx";
 import { Action } from "../../../components/ui/buttons.jsx";
@@ -323,38 +320,35 @@ export default function Suppliers() {
   ];
 
   return (
-    <Layout currentWebPage="Manage Supplier">
-      <MainWrapper>
-        <div
-          className={` relative flex-column h-full m-0 md:block rounded-2xl pb-27 bg-white shadow-md py-5  ${
-            isSmallMobile ? `px-1` : `px-5`
-          }`}
-        >
-          {/* Control Section */}
-          <ControlLayout>
-            <ButtonLayout
-              hasExport={true}
-              Buttons={PageBtnControls}
-              //Mobile page control state
-              isOpenMobile={pageControl}
-              OpenMobileControl={() => setPageControl(true)}
-            />
-            <Searchbar />
-          </ControlLayout>
+    <Layout currentWebPage="Supplier">
+      <div className="relative flex flex-col w-full px-5 pt-20 overflow-auto">
+        {/* Control Section */}
 
-          {/* Table Section */}
+        <TableHeader
+          pageControl={pageControl}
+          setPageControl={() => setPageControl(true)}
+          hasFilter={true}
+          hasExport={true}
+          Buttons={PageBtnControls}
+        />
+
+        {/* Table Section */}
+        <div className="block md:hidden">
           <MobileTable
             columns={columns}
             data={supplierData}
             setSelectedId={setSelectedID}
           />
+        </div>
+
+        <div className="hidden md:block">
           <Table
             columns={columns}
             data={supplierData}
             setSelectedId={setSelectedID}
           />
         </div>
-      </MainWrapper>
+      </div>
 
       {/* Batch Contol */}
       <BatchControl

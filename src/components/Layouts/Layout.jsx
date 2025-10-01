@@ -37,7 +37,7 @@ export const ControlLayout = ({ children }) => {
       <header
         className={`flex
          ${isSmallMobile ? `  flex-row` : `flex-row`}
-         gap-1 w-full mb-5 justify-end px-2`}
+         gap-1 w-full mb-5 justify-end px-2 `}
       >
         {children}
       </header>
@@ -57,12 +57,12 @@ export const ButtonLayout = ({
   const isXSmallMobile = useMediaQuery({ maxWidth: 500 });
   return (
     <div
-      className={`flex gap-3 justify-end pr-1 ${
+      className={`flex gap-3 justify-end pr-1 items-center ${
         isXSmallMobile ? `w-1/5` : isSmallDesktop ? `w-1/1` : `w-1/1`
       }`}
     >
       {isDesktop ? (
-        <div className={"flex items-center justify-between gap-3 w-1/1 "}>
+        <div className={"flex items-center justify-between gap-3 w-1/1  "}>
           {hasNavBack ? (
             <Link to={BackNavigationLink} className="cursor-pointer">
               <motion.button
@@ -76,7 +76,7 @@ export const ButtonLayout = ({
           ) : (
             ""
           )}
-          <div className={`flex items-end justify-center gap-3 `}>
+          <div className={`flex items-center border-1 justify-center gap-3 `}>
             {Buttons.map((btn, index) => {
               const btnControl = (
                 <motion.button

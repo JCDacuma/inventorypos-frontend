@@ -2,19 +2,15 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import NavControl from "@/components/Layouts/pageControlsMobile.jsx";
 // Page Layout component
-import {
-  Layout,
-  MainWrapper,
-  ControlLayout,
-} from "../../../components/Layouts/Layout.jsx";
-import ButtonLayout from "@/components/Layouts/pageControlButtons.jsx";
+import { Layout } from "@/components/Layouts/Layout.jsx";
+
 import { useMediaQuery } from "react-responsive";
-import { ExportButton } from "../../../components/ui/buttons.jsx";
-import Searchbar from "../../../components/ui/Searchbar.jsx";
-import BatchControl from "../../../components/Layouts/BatchControl.jsx";
+
+import BatchControl from "@/components/Layouts/BatchControl.jsx";
 
 //Table Layout component
-import Table from "../../../components/ui/Table.jsx";
+import TableHeader from "@/components/Layouts/tableHeader.jsx";
+import Table from "@/components/Layouts/table.jsx";
 import MobileTable from "../../../components/ui/MobileTable.jsx";
 import { InventoryStatus } from "../../../components/ui/Status.jsx";
 import { Action } from "../../../components/ui/buttons.jsx";
@@ -36,7 +32,7 @@ export default function Inventory() {
   const openBatchContol = selectedID.length > 0; //Batch Contol Modal State
   const [pageControl, setPageControl] = useState(false); //Page control mobile state modal
 
-  const isSmallMobile = useMediaQuery({ maxWidth: 375 });
+  const isSmallMobile = useMediaQuery({ maxWidth: 668 });
 
   //Action Table functionality
   const HandleStockIn = (items, id) => {
@@ -501,43 +497,40 @@ export default function Inventory() {
   };
   return (
     <Layout currentWebPage="Inventory">
-      <MainWrapper>
-        <div
-          className={` relative flex-column h-full m-0 md:block rounded-2xl pb-27 bg-white shadow-md py-5  ${
-            isSmallMobile ? `px-1` : `px-5`
-          }`}
-        >
-          {/* Control Section */}
-          <ControlLayout>
-            <ButtonLayout
-              hasExport={true}
-              isOpenMobile={pageControl}
-              OpenMobileControl={() => setPageControl(true)}
-            />
-            <Searchbar />
-          </ControlLayout>
+      <div className="relative flex flex-col w-full px-5 pt-20 overflow-auto">
+        <TableHeader
+          pageControl={pageControl}
+          setPageControl={() => setPageControl(true)}
+          hasFilter={true}
+          hasExport={true}
+        />
 
-          {/* Table Section */}
+        {/* Table Section */}
+        <div className="block md:hidden">
           <MobileTable
             columns={columns}
             data={data}
             setSelectedId={setSelectedID}
           />
+        </div>
+        <div className="hidden md:block">
           <Table columns={columns} data={data} setSelectedId={setSelectedID} />
         </div>
-      </MainWrapper>
+      </div>
 
-      {/* Batch Contol */}
+      {/* Batch Control (floating) */}
       <BatchControl
         Count={selectedID.length}
         openBatchContol={openBatchContol}
         Buttons={BatchControlBtn}
+        className="fixed bottom-4 right-4"
       />
+
       {/* Page Controls (Mobile Layout only) */}
       <NavControl
         onClosed={() => setPageControl(false)}
         isOpen={pageControl}
-        hasExport={true}
+        hasExport
       />
     </Layout>
   );

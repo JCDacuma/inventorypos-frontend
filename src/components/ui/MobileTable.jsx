@@ -31,23 +31,23 @@ export default function MobileTable({
     <>
       {isMobile ? (
         <>
-          <div className="flex flex-col gap-2 h-full mb-0 ">
-            <div className="h-full flex flex-col px-3  overflow-auto gap-2">
+          <div className="flex flex-col h-full gap-2 mb-0 ">
+            <div className="flex flex-col h-full gap-2 overflow-auto">
               {data.length > 0 ? (
                 data.map((row, i) => (
                   <div
-                    className="rounded-2xl border border-slate-200 p-4 bg-white shadow-sm"
+                    className="p-4 bg-white border shadow-sm rounded-2xl border-slate-200"
                     key={i}
                   >
-                    <label className="flex items-center cursor-pointer relative z-4 w-6 h-6">
+                    <label className="relative flex items-center w-6 h-6 cursor-pointer z-4">
                       <input
                         type="checkbox"
-                        className="peer h-6 w-6 cursor-pointer transition-all appearance-none rounded shadow hover:shadow-md border border-slate-300 checked:bg-purple-600 checked:border-purple-600"
+                        className="w-6 h-6 transition-all border rounded shadow appearance-none cursor-pointer peer hover:shadow-md border-slate-300 checked:bg-purple-600 checked:border-purple-600"
                         checked={selectedId.includes(row.id)}
                         onChange={() => HandleSelect(row.id)}
                         id="check7"
                       />
-                      <span className="absolute text-white opacity-0 peer-checked:opacity-100 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+                      <span className="absolute text-white transform -translate-x-1/2 -translate-y-1/2 opacity-0 peer-checked:opacity-100 top-1/2 left-1/2">
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
                           className="h-3.5 w-3.5"
@@ -81,14 +81,14 @@ export default function MobileTable({
                   </div>
                 ))
               ) : (
-                <div className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
+                <div className="p-4 bg-white border shadow-sm rounded-2xl border-slate-200">
                   <p className="text-center text-slate-500">No data found</p>
                 </div>
               )}
             </div>
           </div>
-          <div className="flex items-center justify-center h-10 w-full rounded-b-lg ">
-            <div className="flex items-center   justify-center gap-3">
+          <div className="flex items-center justify-center w-full h-10 rounded-b-lg ">
+            <div className="flex items-center justify-center gap-3">
               <button className="flex text-violet-500 ">
                 <ChevronsRight className="rotate-180 cursor-pointer" />
                 <span className="cursor-pointer">Prev</span>
