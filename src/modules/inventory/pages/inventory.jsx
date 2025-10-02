@@ -11,9 +11,9 @@ import BatchControl from "@/components/Layouts/BatchControl.jsx";
 //Table Layout component
 import TableHeader from "@/components/Layouts/tableHeader.jsx";
 import Table from "@/components/Layouts/table.jsx";
-import MobileTable from "../../../components/ui/MobileTable.jsx";
-import { InventoryStatus } from "../../../components/ui/Status.jsx";
-import { Action } from "../../../components/ui/buttons.jsx";
+import MobileTable from "@/components/ui/MobileTable.jsx";
+import { InventoryStatus } from "@/modules/inventory/components/ui/inventoryStatus.jsx";
+import { Action } from "@/components/ui/buttons.jsx";
 
 //Icons
 import {
@@ -22,7 +22,6 @@ import {
   PackageMinus,
   PackageOpen,
   Trash2,
-  Blocks,
 } from "lucide-react";
 
 //Functionality Action buttons

@@ -3,19 +3,19 @@ import { Search, X, Funnel } from "lucide-react";
 import { DefaultDropDown } from "@/components/ui/dropdown.jsx";
 import { useMediaQuery } from "react-responsive";
 
-export default function Searchbar({ hasFilter = false }) {
+export default function Searchbar({ hasFilter = false, searchLayout = "" }) {
   const isDesktop = useMediaQuery({ minWidth: 668 });
 
   const filterSizing = hasFilter
-    ? "lg:w-[70%] 2xl:w-[30%] justify-between"
-    : " lg:w-[38%] 2xl:w-[25%] justify-end";
+    ? `xl:w-[60%] 2xl:w-[30%] ${searchLayout}`
+    : ` 2xl:w-[25%] ${searchLayout}`;
 
   const [query, setQuery] = useState("");
   const [category, setCategory] = useState("");
 
   return (
     <div
-      className={`flex items-center  w-full sm:w-[100%] md:w-[100%] ${filterSizing} gap-2 `}
+      className={`flex items-center w-full sm:w-[100%]  md:w-[100%]  ${filterSizing} gap-2`}
     >
       {/* Category Filter */}
       {hasFilter ? (
@@ -33,7 +33,7 @@ export default function Searchbar({ hasFilter = false }) {
       ) : null}
 
       {/* Search Box */}
-      <div className="relative flex w-full sm:w-[90%] md:w-[50%] lg:w-[100%] 2xl:w-[100%] ">
+      <div className="relative flex w-full sm:w-70 md:w-80 lg:w-90 2xl:w-[100%] ">
         <Search className="absolute -translate-y-1/2 left-3 top-1/2 text-violet-400" />
 
         {query && (

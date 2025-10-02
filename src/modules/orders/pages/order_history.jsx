@@ -10,13 +10,13 @@ import NavControl from "@/components/Layouts/pageControlsMobile.jsx";
 import Table from "@/components/Layouts/table.jsx";
 import TableHeader from "@/components/Layouts/tableHeader.jsx";
 import MobileTable from "@/components/ui/MobileTable.jsx";
-import { OrderHistoryStatus } from "@/components/ui/Status.jsx";
+import { OrderHistoryStatus } from "@/modules/orders/components/ui/OrderStatus.jsx";
 import { Action } from "@/components/ui/buttons.jsx";
 //Animation
 import { motion, AnimatePresence } from "framer-motion";
 
 //Icons
-import { PackageSearch, Undo2 } from "lucide-react";
+import { PackageSearch } from "lucide-react";
 
 export default function SupplierHistory() {
   const id = useParams(); //Id selected

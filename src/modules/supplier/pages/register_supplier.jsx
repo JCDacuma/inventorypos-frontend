@@ -45,13 +45,19 @@ export default function RegisterSupplier() {
     <Layout currentWebPage={"Register Supplier"}>
       <form className="w-full h-auto px-2 overflow-auto bg-white mt-15 py-0s 2xl:px-10 ">
         {/* Back button */}
+
         <Link to={"/suppliers"}>
           <motion.button
-            whileTap={{ scale: 0.9 }}
-            whileHover={{ scale: 1.05, color: "#3c2350" }}
-            className="flex items-center justify-center mt-10 ml-3 font-semibold cursor-pointer text-violet-500 sm:ml-10 "
+            whileHover={{
+              backgroundColor: "#4E1CA6",
+              color: "#fff",
+              scale: 1.05,
+            }}
+            whileTap={{ scale: 0.95 }}
+            transition={{ duration: 0.15, ease: "easeInOut" }}
+            className="relative z-10 px-5 py-2 ml-3 text-sm font-semibold border border-gray-200 shadow-md cursor-pointer mt-7 text-violet-600 rounded-xl hover:shadow-lg"
           >
-            <Undo2 /> Back
+            Back
           </motion.button>
         </Link>
         <div className="flex flex-col items-center justify-center w-full h-auto gap-5 mb-10 2xl:mb-20 ">

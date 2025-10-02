@@ -17,8 +17,15 @@ export default function ButtonLayout({
   OpenMobileControl,
 }) {
   const isDesktop = useMediaQuery({ minWidth: 768 });
-  const isSmallDesktop = useMediaQuery({ minWidth: 768 });
-  const isXSmallMobile = useMediaQuery({ maxWidth: 500 });
+  const isSmallDesktop = useMediaQuery({ minWidth: 1200 });
+
+  const BtnPositioning =
+    Buttons.length > 1 || hasNavBack
+      ? isSmallDesktop
+        ? "justify-start"
+        : "justify-end"
+      : "justify-end lg:justify-start";
+
   return (
     <div className={`flex items-center   w-full gap-2 pr-1 `}>
       {hasNavBack ? (
@@ -38,26 +45,21 @@ export default function ButtonLayout({
       )}
 
       {isDesktop ? (
-        <div
-          className={
-            "flex items-center justify-end lg:justify-start gap-3 w-1/1  "
-          }
-        >
+        <div className={`flex items-center ${BtnPositioning} gap-3 w-1/1  `}>
           <div className={`flex items-center justify-center gap-3 `}>
             {Buttons.map((btn, index) => {
               const btnControl = (
                 <motion.button
                   onClick={btn.onClick}
-                  key={index}
                   whileTap={{ scale: 0.92 }}
                   whileHover={{ scale: 1.05 }}
                   transition={{ duration: 0.09, ease: "easeInOut" }}
                   className="flex items-center gap-[0.1rem] px-3 py-2 text-sm font-medium text-white 
-             transition-all duration-300 ease-in-out rounded-full shadow-md  
-             bg-gradient-to-r from-violet-500 to-violet-600 
-             hover:from-violet-600 hover:to-violet-900 active:from-violet-700 active:to-violet-800 
-             focus:outline-none focus:ring-2 focus:ring-violet-300
-             will-change-transform [backface-visibility:hidden] [transform:translateZ(0)] cursor-pointer"
+          transition-all duration-300 ease-in-out rounded-full shadow-md  
+          bg-gradient-to-r from-violet-500 to-violet-600 
+          hover:from-violet-600 hover:to-violet-900 active:from-violet-700 active:to-violet-800 
+          focus:outline-none focus:ring-2 focus:ring-violet-300
+          will-change-transform [backface-visibility:hidden] [transform:translateZ(0)] cursor-pointer"
                 >
                   <btn.iconControl className={"h-5 w-5 mr-1"} />
                   {btn.BtnLabel}
@@ -65,11 +67,14 @@ export default function ButtonLayout({
               );
 
               return btn.to ? (
-                <Link to={btn.to}>{btnControl}</Link>
+                <Link key={btn.to || index} to={btn.to}>
+                  {btnControl}
+                </Link>
               ) : (
-                btnControl
+                <div key={index}>{btnControl}</div>
               );
             })}
+
             {hasExport ? <ExportButton /> : ""}
           </div>
         </div>

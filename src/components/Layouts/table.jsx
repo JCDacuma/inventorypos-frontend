@@ -48,10 +48,10 @@ export default function Table({ columns = [], data = [], setSelectedId }) {
   return (
     <>
       {isDesktop ? (
-        <div className="flex flex-col items-center justify-center w-full h-full mb-5 bg-white rounded-lg z-35">
+        <div className="flex flex-col items-center justify-center w-full h-full bg-white rounded-lg z-35">
           <HorizontalSlider
             className={
-              "w-full h-full overflow-x-auto overflow-y-auto cursor-grab active:cursor-grabbing rounded-lg"
+              "w-full max-h-[calc(100vh-140px)] min-h-[calc(100vh-300px)] overflow-x-auto overflow-y-auto cursor-grab active:cursor-grabbing rounded-lg"
             }
           >
             <table

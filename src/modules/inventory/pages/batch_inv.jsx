@@ -11,7 +11,7 @@ import BatchControl from "@/components/Layouts/BatchControl.jsx";
 import Table from "@/components/Layouts/table.jsx";
 import TableHeader from "@/components/Layouts/tableHeader.jsx";
 import MobileTable from "@/components/ui/MobileTable.jsx";
-import { BatchStockStatus } from "@/components/ui/Status.jsx";
+import { BatchStockStatus } from "@/modules/inventory/components/ui/inventoryStatus.jsx";
 import { Action } from "@/components/ui/buttons.jsx";
 
 //Animation
@@ -389,7 +389,7 @@ export default function BatchInventory() {
       Location: "Warehouse Dairy-1",
       Qty: 40,
       Supplier: "Dairy Fresh Ltd.",
-      Status: <BatchStockStatus status="Expiring Soon" />,
+      Status: <BatchStockStatus status="Active" />,
       Action: (
         <Action
           buttons={[
@@ -425,7 +425,7 @@ export default function BatchInventory() {
       Location: "Warehouse Dairy-2",
       Qty: 35,
       Supplier: "Happy Cows Dairy",
-      Status: <BatchStockStatus status="Expiring Soon" />,
+      Status: <BatchStockStatus status="Active" />,
       Action: (
         <Action
           buttons={[

@@ -12,7 +12,7 @@ import NavControl from "@/components/Layouts/pageControlsMobile.jsx";
 import Table from "@/components/Layouts/table.jsx";
 import TableHeader from "@/components/Layouts/tableHeader.jsx";
 import MobileTable from "@/components/ui/MobileTable.jsx";
-import { ProductStatus } from "@/components/ui/Status.jsx";
+import { ProductStatus } from "@/modules/product/components/ui/productStatus.jsx";
 import { Action } from "@/components/ui/buttons.jsx";
 
 //Animation

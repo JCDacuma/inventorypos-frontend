@@ -6,15 +6,15 @@ import { Layout } from "@/components/Layouts/Layout.jsx";
 
 import { useMediaQuery } from "react-responsive";
 
-import BatchControl from "../../../components/Layouts/BatchControl.jsx";
+import BatchControl from "@/components/Layouts/BatchControl.jsx";
 import NavControl from "@/components/Layouts/pageControlsMobile.jsx";
 
 //Table Layout component
 import Table from "@/components/Layouts/table.jsx";
 import TableHeader from "@/components/Layouts/tableHeader.jsx";
-import MobileTable from "../../../components/ui/MobileTable.jsx";
-import { SupplierStatus } from "../../../components/ui/Status.jsx";
-import { Action } from "../../../components/ui/buttons.jsx";
+import MobileTable from "@/components/ui/MobileTable.jsx";
+import { SupplierStatus } from "@/modules/supplier/components/ui/supplier.status.jsx";
+import { Action } from "@/components/ui/buttons.jsx";
 
 //Animation
 import { motion, AnimatePresence } from "framer-motion";
@@ -323,7 +323,6 @@ export default function Suppliers() {
     <Layout currentWebPage="Supplier">
       <div className="relative flex flex-col w-full px-5 pt-20 overflow-auto">
         {/* Control Section */}
-
         <TableHeader
           pageControl={pageControl}
           setPageControl={() => setPageControl(true)}
