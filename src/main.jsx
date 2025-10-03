@@ -13,7 +13,7 @@ import Inventory from "./modules/inventory/pages/inventory.jsx";
 import BatchInventory from "./modules/inventory/pages/batch_inv.jsx";
 import ProductOrders from "./modules/orders/pages/product_orders.jsx";
 import CreateOrder from "./modules/orders/pages/order_create.jsx";
-import RegisterAccount from "./modules/account/pages/register_acc.jsx";
+import RegisterUser from "./modules/account/pages/registerAccount.jsx";
 import SalesReport from "./modules/pos/pages/sales_report.jsx";
 import Settings from "./page/settings.jsx";
 import Suppliers from "./modules/supplier/pages/suppliers.jsx";
@@ -42,7 +42,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
         <Route path="/batch-inventory/:id" element={<BatchInventory />}></Route>
         <Route path="/product-orders" element={<ProductOrders />}></Route>
         <Route path="/create-order" element={<CreateOrder />}></Route>
-        <Route path="/register-account" element={<RegisterAccount />}></Route>
+        <Route path="/register-account" element={<RegisterUser />}></Route>
         <Route path="/sales-reports" element={<SalesReport />}></Route>
         <Route path="/settings" element={<Settings />}></Route>
         <Route path="/suppliers" element={<Suppliers />}></Route>

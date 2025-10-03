@@ -36,7 +36,7 @@ export function Input({
           <div className="w-full">
             <input
               type={type}
-              value={value}
+              value={value ?? ""}
               ref={Ref}
               onChange={HandleChange}
               onFocus={() => setFocused(true)}

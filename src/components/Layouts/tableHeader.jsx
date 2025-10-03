@@ -14,14 +14,14 @@ export default function TableHeader({
 }) {
   const isSmallDesktop = useMediaQuery({ minWidth: 1200 });
   const HeaderLayout =
-    Buttons.length > 1 || hasNavBack
+    Buttons.length > 2 || hasNavBack
       ? isSmallDesktop
         ? "flex-row items-center "
         : "flex-col items-end "
       : " flex-col lg:flex-row";
 
   const searchLayout =
-    Buttons.length > 1
+    Buttons.length > 2
       ? hasFilter
         ? isSmallDesktop
           ? "justify-end lg:w-[40%]"

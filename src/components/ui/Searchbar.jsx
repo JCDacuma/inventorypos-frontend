@@ -8,7 +8,7 @@ export default function Searchbar({ hasFilter = false, searchLayout = "" }) {
 
   const filterSizing = hasFilter
     ? `xl:w-[60%] 2xl:w-[30%] ${searchLayout}`
-    : ` 2xl:w-[25%] ${searchLayout}`;
+    : `lg:w-90 2xl:w-[25%] ${searchLayout}`;
 
   const [query, setQuery] = useState("");
   const [category, setCategory] = useState("");
@@ -33,7 +33,7 @@ export default function Searchbar({ hasFilter = false, searchLayout = "" }) {
       ) : null}
 
       {/* Search Box */}
-      <div className="relative flex w-full sm:w-70 md:w-80 lg:w-90 2xl:w-[100%] ">
+      <div className="relative flex w-full sm:w-70 md:w-80 lg:w-[100%] 2xl:w-[100%] ">
         <Search className="absolute -translate-y-1/2 left-3 top-1/2 text-violet-400" />
 
         {query && (

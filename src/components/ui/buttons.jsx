@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 //Animation
 import { motion } from "framer-motion";
 
-import { BsFileEarmarkPdf, BsFileEarmarkExcel } from "react-icons/bs";
+import { ListEnd } from "lucide-react";
 
 //Export buttons
 export function ExportButton() {
@@ -20,23 +20,8 @@ export function ExportButton() {
              focus:outline-none focus:ring-2 focus:ring-violet-300
              will-change-transform [backface-visibility:hidden] [transform:translateZ(0)] cursor-pointer"
       >
-        <BsFileEarmarkPdf className="w-4 h-4" />
-        <span>Export PDF</span>
-      </motion.button>
-
-      <motion.button
-        whileTap={{ scale: 0.92 }}
-        whileHover={{ scale: 1.05 }}
-        transition={{ duration: 0.09, ease: "easeInOut" }}
-        className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-white 
-             transition-all duration-300 ease-in-out rounded-full shadow-md  
-             bg-gradient-to-r from-violet-500 to-violet-600 
-             hover:from-violet-600 hover:to-violet-900 active:from-violet-700 active:to-violet-800 
-             focus:outline-none focus:ring-2 focus:ring-violet-300
-             will-change-transform [backface-visibility:hidden] [transform:translateZ(0)] cursor-pointer"
-      >
-        <BsFileEarmarkExcel className="w-4 h-4" />
-        <span>Export Excel</span>
+        <ListEnd className="w-4 h-4" />
+        <span>Export</span>
       </motion.button>
     </div>
   );

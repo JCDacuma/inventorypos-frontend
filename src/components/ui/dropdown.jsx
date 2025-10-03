@@ -136,7 +136,7 @@ export function DefaultDropDown({
                       : "text-gray-700 hover:bg-blue-50 hover:text-blue-900"
                   }`}
                   onClick={() => handleItemSelect(item)}
-                  title={item} // Tooltip for full value
+                  title={item}
                 >
                   {item}
                 </div>

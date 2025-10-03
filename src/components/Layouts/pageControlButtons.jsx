@@ -20,14 +20,14 @@ export default function ButtonLayout({
   const isSmallDesktop = useMediaQuery({ minWidth: 1200 });
 
   const BtnPositioning =
-    Buttons.length > 1 || hasNavBack
+    Buttons.length > 2 || hasNavBack
       ? isSmallDesktop
         ? "justify-start"
         : "justify-end"
       : "justify-end lg:justify-start";
 
   return (
-    <div className={`flex items-center   w-full gap-2 pr-1 `}>
+    <div className={`flex items-center w-full gap-2 pr-1 `}>
       {hasNavBack ? (
         <Link to={BackNavigationLink} className="cursor-pointer">
           <motion.button
