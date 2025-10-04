@@ -35,27 +35,29 @@ export default function RegisterUser() {
   const [Roles, setRoles] = useState([]);
 
   //Fetch role
-  useEffect(() => {
-    const fetchRoles = async () => {
-      try {
-        const res = await api.get("/roles");
-        const assignedDataRole = res.data.map((data) => ({
-          id: data.id,
-          roleName: data.role_name,
-          canEditPrice: data.can_edit_price,
-          canEditItemInfo: data.can_edit_item_info,
-          canEditStocks: data.can_edit_stocks,
-          canOrderSupplies: data.can_order_supplies,
-          canDelete: data.can_delete,
-          isAdmin: data.is_admin,
-        }));
-        setRoles(assignedDataRole);
-        console.log(res.data);
-      } catch (err) {
-        console.log("error fetching data", err);
-      }
-    };
 
+  const fetchRoles = async () => {
+    try {
+      const res = await api.get("/roles");
+      const assignedDataRole = res.data.map((data) => ({
+        id: data.id,
+        roleName: data.role_name,
+        canEditPrice: data.can_edit_price,
+        canEditItemInfo: data.can_edit_item_info,
+        canEditStocks: data.can_edit_stocks,
+        canOrderSupplies: data.can_order_supplies,
+        canDelete: data.can_delete,
+        isAdmin: data.is_admin,
+        Status: data.status,
+      }));
+
+      setRoles(assignedDataRole);
+    } catch (err) {
+      console.log("error fetching data", err);
+    }
+  };
+
+  useEffect(() => {
     fetchRoles();
   }, []);
 
@@ -190,6 +192,7 @@ export default function RegisterUser() {
       <UserRole
         onClosed={() => setAddModalRoles(false)}
         isOpen={openAddModalRoles}
+        fetchRole={fetchRoles}
         Roles={Roles}
       />
     </Layout>
