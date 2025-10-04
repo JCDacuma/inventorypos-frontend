@@ -1,4 +1,5 @@
 import React from "react";
+import api from "@/api/axiosInstance.js";
 import { Link } from "react-router-dom";
 import { useState, useEffect, useRef } from "react";
 import { Layout } from "@/components/Layouts/Layout.jsx";
@@ -28,32 +29,35 @@ export default function RegisterUser() {
   const [phoneNum, setPhoneNum] = useState(null);
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const [roles, setRoles] = useState({});
+  const [selectedRoles, setSlctdRoles] = useState({});
 
   const [openAddModalRoles, setAddModalRoles] = useState(false);
+  const [Roles, setRoles] = useState([]);
 
-  const Roles = [
-    {
-      roleId: 1,
-      roleName: "Default Admin",
-      canEditPrice: true,
-      canEditItemInfo: true,
-      canEditStocks: true,
-      canDelete: true,
-      canOrderSupplies: true,
-      isAdmin: true,
-    },
-    {
-      roleId: 2,
-      roleName: "Cashier",
-      canEditPrice: false,
-      canEditItemInfo: false,
-      canEditStocks: false,
-      canDelete: false,
-      canOrderSupplies: false,
-      isAdmin: false,
-    },
-  ];
+  //Fetch role
+  useEffect(() => {
+    const fetchRoles = async () => {
+      try {
+        const res = await api.get("/roles");
+        const assignedDataRole = res.data.map((data) => ({
+          id: data.id,
+          roleName: data.role_name,
+          canEditPrice: data.can_edit_price,
+          canEditItemInfo: data.can_edit_item_info,
+          canEditStocks: data.can_edit_stocks,
+          canOrderSupplies: data.can_order_supplies,
+          canDelete: data.can_delete,
+          isAdmin: data.is_admin,
+        }));
+        setRoles(assignedDataRole);
+        console.log(res.data);
+      } catch (err) {
+        console.log("error fetching data", err);
+      }
+    };
+
+    fetchRoles();
+  }, []);
 
   //Select roles
   const RolesSelect = (value) => {
@@ -62,7 +66,7 @@ export default function RegisterUser() {
     if (roleSelected === undefined || roleSelected === null) {
       return;
     } else {
-      setRoles(roleSelected);
+      setSlctdRoles(roleSelected);
     }
   };
 
@@ -122,15 +126,17 @@ export default function RegisterUser() {
             </div>
             <div className="relative flex flex-col w-full h-full gap-3 py-5 lg:gap-5 lg:pl-5 xl:pr-10 2xl:pr-50 ">
               <div className="mt-2">
-                <DefaultDropDown
-                  placeholder={"Select Role"}
-                  items={RoleName}
-                  selectedValue={roles.roleId}
-                  onChange={RolesSelect}
-                  icons={BriefcaseBusiness}
-                  BtnIcons={Plus}
-                  OnClick={() => setAddModalRoles(true)}
-                />
+                {
+                  <DefaultDropDown
+                    placeholder={"Select Role"}
+                    items={RoleName}
+                    selectedValue={selectedRoles.roleId}
+                    onChange={RolesSelect}
+                    icons={BriefcaseBusiness}
+                    BtnIcons={Plus}
+                    OnClick={() => setAddModalRoles(true)}
+                  />
+                }
               </div>
               <div>
                 <Input

@@ -1,9 +1,11 @@
 import React from "react";
+import api from "@/api/axiosInstance.js";
 import { useState, useEffect } from "react";
 import { Modal } from "@/components/Layouts/modal.jsx";
 import { UserRoundPen, ListRestart, BriefcaseBusiness } from "lucide-react";
 import { RadioGroup } from "@/components/ui/radioGroup.jsx";
 import { Input } from "@/components/ui/Input.jsx";
+import { SweetAlert } from "@/utils/sweetalert.jsx";
 
 export default function UserRole({ isOpen, onClosed, Roles = [] }) {
   const [openRoleEdit, setOpenRoleEdit] = useState(null); //CurrentRole
@@ -72,7 +74,32 @@ export default function UserRole({ isOpen, onClosed, Roles = [] }) {
     },
   ];
 
-  const SubmitNewRole = () => {};
+  //Handle Submit new Role
+  const SubmitNewRole = async (e) => {
+    e.preventDefault();
+
+    const form = {
+      role_name: roleName,
+      can_edit_price: canEditPrice,
+      can_edit_item_info: canEditItem,
+      can_edit_stocks: canEditStocks,
+      can_order_supplies: canOrderSupplies,
+      can_delete: canDelete,
+      is_admin: isAdmin,
+    };
+
+    try {
+      const res = await api.post("/roles", form);
+      console.log("Role created:", res.data);
+      SweetAlert.success(
+        "Added Roles",
+        "New Roles has been successfully added"
+      );
+    } catch (err) {
+      console.error(err.response?.data || err);
+      alert("Failed to create role");
+    }
+  };
 
   //Edit Role
   const SetCurrentRole = () => {
@@ -174,7 +201,10 @@ export default function UserRole({ isOpen, onClosed, Roles = [] }) {
                 </button>
               </header>
 
-              <form className="flex flex-col items-center flex-1 w-full gap-4 mt-1 overflow-y-auto ">
+              <form
+                onSubmit={SubmitNewRole}
+                className="flex flex-col items-center flex-1 w-full gap-4 mt-1 overflow-y-auto "
+              >
                 {/* Role name input */}
                 <div className="w-full px-3">
                   <label className="text-sm font-medium text-gray-700">

@@ -4,7 +4,7 @@ import { HorizontalSlider } from "@/utils/slider.jsx";
 import { useMediaQuery } from "react-responsive";
 
 export function DefaultDropDown({
-  items = ["dsadsadsadsadsadasd"],
+  items = [],
   SetSelected = () => {},
   placeholder = "Select an option",
   maxHeight = "200px",
@@ -120,7 +120,7 @@ export function DefaultDropDown({
       {/* Dropdown Menu */}
       {isOpen && (
         <div
-          className={`  absolute z-50 mt-2 max-h-60 overflow-auto min-w-[220px] bg-white border border-gray-300 rounded-md shadow-lg `}
+          className={`  absolute z-50 mt-2 max-h-80 w-full overflow-auto min-w-[220px] bg-white border border-gray-300 rounded-md shadow-lg `}
         >
           <HorizontalSlider
             className="py-1 overflow-y-auto"
@@ -130,7 +130,7 @@ export function DefaultDropDown({
               items.map((item, index) => (
                 <div
                   key={index}
-                  className={`px-4 py-2 select-none text-sm cursor-pointer transition-colors duration-150 truncate max-w-[220px] ${
+                  className={`px-4 py-2 select-none text-sm cursor-pointer transition-colors duration-150 truncate w-full ${
                     selectedItem === item
                       ? "bg-blue-100 text-blue-900"
                       : "text-gray-700 hover:bg-blue-50 hover:text-blue-900"
