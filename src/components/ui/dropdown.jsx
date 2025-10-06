@@ -16,6 +16,7 @@ export function DefaultDropDown({
   selectedDisplay = true,
   BtnIcons = null,
   OnClick = () => {},
+  validated = true,
 }) {
   const isMobile = useMediaQuery({ maxWidth: 468 });
   const [isOpen, setIsOpen] = useState(false);
@@ -56,7 +57,9 @@ export function DefaultDropDown({
       {/* Dropdown Button */}
       <div className="flex w-full">
         <div
-          className={`w-full flex px-4 py-[0.7rem] lg:py-[0.75rem] select-none text-left bg-white border border-violet-300 shadow-sm cursor-pointer  hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${
+          className={`w-full flex px-4 py-[0.7rem] lg:py-[0.75rem] select-none text-left bg-white border ${
+            validated ? `border-violet-300` : `border-red-700`
+          } shadow-sm cursor-pointer  hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${
             BtnIcons === null || BtnIcons === undefined
               ? `rounded-2xl`
               : `rounded-l-2xl`
@@ -120,7 +123,7 @@ export function DefaultDropDown({
       {/* Dropdown Menu */}
       {isOpen && (
         <div
-          className={`  absolute z-50 mt-2 max-h-80 w-full overflow-auto min-w-[220px] bg-white border border-gray-300 rounded-md shadow-lg `}
+          className={`  absolute z-30 mt-2 max-h-80 w-full overflow-auto min-w-[220px] bg-white border border-gray-300 rounded-md shadow-lg `}
         >
           <HorizontalSlider
             className="py-1 overflow-y-auto"

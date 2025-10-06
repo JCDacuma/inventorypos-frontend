@@ -13,6 +13,7 @@ export function Input({
   haveBtn = false,
   buttonIcon = null,
   OnClick,
+  validated = true,
 }) {
   const [focused, setFocused] = useState(false);
 
@@ -44,7 +45,14 @@ export function Input({
               placeholder={placeholder}
               className={`w-full px-4 select-none py-[1rem]  lg:py-[1.05rem] text-sm text-gray-800 placeholder-transparent transition-all duration-200 ease-in-out bg-white border shadow-md ${
                 haveBtn ? `rounded-l-2xl` : `rounded-2xl`
-              }  border-violet-300 focus:border-violet-500 focus:ring-2 focus:ring-violet-400 focus:outline-none focus:shadow-lg`}
+              }  ${
+                validated ||
+                value === null ||
+                value === undefined ||
+                value === ""
+                  ? `border-violet-300`
+                  : `border-red-700`
+              } focus:border-violet-500 focus:ring-2 focus:ring-violet-400 focus:outline-none focus:shadow-lg`}
             />
 
             <motion.label

@@ -7,28 +7,45 @@ import { RadioGroup } from "@/components/ui/radioGroup.jsx";
 import { Input } from "@/components/ui/Input.jsx";
 import { Trash } from "lucide-react";
 import { SweetAlert } from "@/utils/sweetalert.jsx";
+import {
+  SubmitNewRole,
+  DeleteRole,
+  EditRole,
+  CheckRoleName,
+} from "@/modules/account/api/roleAPI.jsx";
 
-export default function UserRole({ isOpen, onClosed, Roles = [], fetchRole }) {
-  const [openRoleEdit, setOpenRoleEdit] = useState(null); //CurrentRoleEditing
-  const [openAdd, setOpenAdd] = useState(false);
+export default function UserRole({
+  isOpen,
+  onClosed,
+  Roles = [],
+  RoleAPIFetch,
+}) {
+  const [openRoleEdit, setOpenRoleEdit] = useState(null); //CurrentRoleEditing object
+  const [openAdd, setOpenAdd] = useState(false); // boolean
+  const [submitting, setIsSubmitting] = useState(false); //boolean button state
 
   //For Adding Role
-  const [roleName, setRoleName] = useState("");
+  const [roleName, setRoleName] = useState(""); // string
+  const [canEditPrice, setCanEditPrice] = useState(null); // boolean
+  const [canEditItem, setCanEditItem] = useState(null); //boolean
+  const [canEditStocks, setCanEditStocks] = useState(null); //boolean
+  const [canDelete, setCanDelete] = useState(null); //boolean
+  const [canOrderSupplies, setCanOrderSupplies] = useState(null); //boolean
+  const [isAdmin, setIsAdmin] = useState(null); //boolean
 
-  const [canEditPrice, setCanEditPrice] = useState(null);
-  const [canEditItem, setCanEditItem] = useState(null);
-  const [canEditStocks, setCanEditStocks] = useState(null);
-  const [canDelete, setCanDelete] = useState(null);
-  const [canOrderSupplies, setCanOrderSupplies] = useState(null);
-  const [isAdmin, setIsAdmin] = useState(null);
+  const [ExistRole, setisExistRole] = useState(null); //boolean (api flag)
 
-  const yesNoOptions = [
-    { label: "Yes", value: true },
-    { label: "No", value: false },
-  ];
+  //flagging the input rolename
+  useEffect(() => {
+    const debounce = setTimeout(() => {
+      if (roleName) {
+        CheckRoleName(roleName, setisExistRole);
+      }
+    }, 500);
+    return () => clearTimeout(debounce);
+  }, [roleName]);
 
   const HandleEditRole = (value) => {
-    console.log(`Clicked${value}`);
     const slctdRole = Roles.find((role) => role.id === value);
     if (!slctdRole) {
       SweetAlert.error(`Error `, `Role with ID ${value} not found`);
@@ -37,7 +54,7 @@ export default function UserRole({ isOpen, onClosed, Roles = [], fetchRole }) {
     setOpenRoleEdit(slctdRole);
   };
 
-  //permission fields
+  //permission Boolean only fields
   const permissionFields = [
     {
       label: "Can Edit Price",
@@ -76,6 +93,11 @@ export default function UserRole({ isOpen, onClosed, Roles = [], fetchRole }) {
       name: "isAdmin",
     },
   ];
+  //Option for all radio input
+  const yesNoOptions = [
+    { label: "Yes", value: true },
+    { label: "No", value: false },
+  ];
 
   //Reset Input
   const ResetInputRole = () => {
@@ -88,95 +110,6 @@ export default function UserRole({ isOpen, onClosed, Roles = [], fetchRole }) {
     setIsAdmin(null);
     setOpenRoleEdit(null);
     setOpenAdd(false);
-  };
-
-  //Handle Submit new Role
-  const SubmitNewRole = async () => {
-    const form = {
-      role_name: roleName,
-      can_edit_price: canEditPrice,
-      can_edit_item_info: canEditItem,
-      can_edit_stocks: canEditStocks,
-      can_order_supplies: canOrderSupplies,
-      can_delete: canDelete,
-      is_admin: isAdmin,
-      status: "Active",
-    };
-
-    try {
-      await api.post("/roles", form);
-      await fetchRole();
-      SweetAlert.success(
-        "Added Roles",
-        "New role has been successfully added."
-      );
-      ResetInputRole();
-      onClosed();
-    } catch (err) {
-      SweetAlert.error("Failed to submit");
-    }
-  };
-
-  //Validation
-  const booleanFields = [
-    canEditPrice,
-    canEditItem,
-    canEditStocks,
-    canDelete,
-    canOrderSupplies,
-    isAdmin,
-  ];
-
-  //Submit new role
-  const validateSubmit = (e) => {
-    e.preventDefault();
-
-    const validRoleName = /^(?=.{3,30}$)[A-Za-z0-9]+(?: [A-Za-z0-9]+)*$/;
-
-    const isValidBooleanFields = booleanFields.every(
-      (field) => typeof field === "boolean"
-    );
-    const isExist = Roles.some((rol) => rol.roleName === roleName);
-
-    if (validRoleName.test(roleName) && isValidBooleanFields && !isExist) {
-      SubmitNewRole();
-    } else {
-      if (!validRoleName.test(roleName)) {
-        SweetAlert.error("Invalid role name", "please input valid role name");
-      } else if (!isValidBooleanFields) {
-        SweetAlert.error(
-          "Invalid role permission",
-          "Please set all role permission"
-        );
-      } else if (isExist) {
-        SweetAlert.error(
-          "Role name Exist",
-          "Roles name is already exist please input another role name"
-        );
-      }
-    }
-  };
-
-  // ------ Deleting role -------
-  const HandleRemove = async (id) => {
-    const roleDeleting = Roles.find((rol) => rol.id === id);
-
-    SweetAlert.Confirm(
-      "Are you sure?",
-      `Are you sure you want to delete ${roleDeleting.roleName}`
-    ).then(async (result) => {
-      if (result.isConfirmed) {
-        try {
-          await api.patch(`/roles/${id}`, { status: "Deleted" });
-          SweetAlert.success(
-            "Deleted Successfully",
-            `role ${roleDeleting.roleName} has been deleted`
-          );
-        } catch (err) {
-          console.log(`error: ${err}`);
-        }
-      }
-    });
   };
 
   //Set Input for Role editing
@@ -197,44 +130,78 @@ export default function UserRole({ isOpen, onClosed, Roles = [], fetchRole }) {
     SetCurrentRole();
   }, [openRoleEdit]);
 
-  // ----- Submit Edited Role -----
+  // Handle Submit new Role -------------------------
+  const HandleSubmitNewRole = async (e) => {
+    e.preventDefault();
+
+    // Data to be sent
+    const form = {
+      role_name: roleName,
+      can_edit_price: canEditPrice,
+      can_edit_item_info: canEditItem,
+      can_edit_stocks: canEditStocks,
+      can_order_supplies: canOrderSupplies,
+      can_delete: canDelete,
+      is_admin: isAdmin,
+      status: "Active",
+    };
+
+    // Data to be validated
+    const booleanFields = [
+      canEditPrice,
+      canEditItem,
+      canEditStocks,
+      canDelete,
+      canOrderSupplies,
+      isAdmin,
+    ];
+
+    if (submitting) return;
+    setIsSubmitting(true);
+
+    try {
+      await SubmitNewRole(
+        form, // input data to be sent
+        booleanFields, // boolean input
+        ExistRole, // role name existence check
+        ResetInputRole, // reset role inputs
+        onClosed, // close modal
+        RoleAPIFetch // refetch roles
+      );
+    } finally {
+      setIsSubmitting(false); // ✅ always reset even if error
+    }
+  };
+
+  // Handle Delete Role ------------------------
+  const HandleRemoveRole = async (id) => {
+    await DeleteRole(id, Roles, RoleAPIFetch); //functionality callback delete
+  };
+
+  // Handle Edit Role ------------------------
   const SubmitEditRole = async () => {
-    const isValidBoolean = permissionFields.every(
-      (rol) => typeof rol.value === "boolean"
-    );
+    if (submitting) return;
+    setIsSubmitting(true);
 
-    if (isValidBoolean) {
-      SweetAlert.Confirm(
-        `Role Update`,
-        `Are you sure you want to update ${openRoleEdit.roleName}`
-      ).then(async (result) => {
-        if (result.isConfirmed) {
-          try {
-            await api.patch(`/roles/${openRoleEdit.id}`, {
-              can_edit_price: canEditPrice,
-              can_edit_item_info: canEditItem,
-              can_edit_stocks: canEditStocks,
-              can_order_supplies: canOrderSupplies,
-              can_delete: canDelete,
-              is_admin: isAdmin,
-            });
+    const Editing = {
+      can_edit_price: canEditPrice,
+      can_edit_item_info: canEditItem,
+      can_edit_stocks: canEditStocks,
+      can_order_supplies: canOrderSupplies,
+      can_delete: canDelete,
+      is_admin: isAdmin,
+    };
 
-            SweetAlert.success(
-              "Update Successfuly",
-              `${openRoleEdit.roleName} Role has been updated`
-            );
-
-            ResetInputRole();
-            await fetchRole();
-          } catch (err) {
-            console.log(`error: ${err}`);
-            SweerAlert.error(
-              "Update Failed",
-              "An error occurred while editing the role."
-            );
-          }
-        }
-      });
+    try {
+      await EditRole(
+        permissionFields,
+        openRoleEdit,
+        Editing,
+        ResetInputRole,
+        RoleAPIFetch
+      );
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -242,7 +209,7 @@ export default function UserRole({ isOpen, onClosed, Roles = [], fetchRole }) {
     <Modal ModalTitle="User Role" onClosed={onClosed} isOpen={isOpen}>
       <div className="w-full h-[calc(100vh-180px)] 2xl:h-[calc(100vh-300px)] py-4 px-2 md:px-4 rounded-lg bg-white">
         {
-          /* -------------- User Role ------------ */
+          /* ------------------- User Role Display ----------------- */
           openRoleEdit === null && !openAdd ? (
             <section className="flex flex-col w-full h-full overflow-auto">
               {/* Header */}
@@ -277,7 +244,7 @@ export default function UserRole({ isOpen, onClosed, Roles = [], fetchRole }) {
                           <UserRoundPen className="w-5 h-5 stroke-3" />
                         </button>
                         <button
-                          onClick={() => HandleRemove(role.id)}
+                          onClick={() => HandleRemoveRole(role.id)}
                           className="p-2 text-gray-500 transition rounded-lg cursor-pointer hover:text-violet-600 hover:bg-gray-200"
                           title="Edit"
                         >
@@ -297,7 +264,7 @@ export default function UserRole({ isOpen, onClosed, Roles = [], fetchRole }) {
         }
 
         {
-          /*---------- Add Role ---------- */
+          /*---------------------- Add Role ----------------------- */
           openRoleEdit === null && openAdd ? (
             <section className="flex flex-col w-full h-full overflow-auto ">
               {/* Header */}
@@ -315,7 +282,7 @@ export default function UserRole({ isOpen, onClosed, Roles = [], fetchRole }) {
               </header>
 
               <form
-                onSubmit={validateSubmit}
+                onSubmit={HandleSubmitNewRole}
                 className="flex flex-col items-center flex-1 w-full gap-4 mt-1 overflow-y-auto "
               >
                 {/* Role name input */}
@@ -328,7 +295,15 @@ export default function UserRole({ isOpen, onClosed, Roles = [], fetchRole }) {
                     onChange={setRoleName}
                     icons={BriefcaseBusiness}
                     value={roleName}
+                    validated={ExistRole ? false : true}
                   />
+                  <span className="ml-3 text-sm text-red-900">
+                    {roleName !== ""
+                      ? ExistRole
+                        ? "role name is taken already"
+                        : null
+                      : null}
+                  </span>
                 </div>
 
                 {/* Permissions */}
@@ -354,9 +329,14 @@ export default function UserRole({ isOpen, onClosed, Roles = [], fetchRole }) {
                 {/* Submit button */}
                 <button
                   type="submit"
-                  className="px-4 cursor-pointer py-2 mt-4 font-semibold text-white transition bg-violet-500 rounded-xl shadow-md hover:bg-violet-600 w-[90%] sm:w-[60%]"
+                  disabled={submitting}
+                  className={`px-4 py-2 mt-4 font-semibold text-white transition ${
+                    submitting
+                      ? "bg-gray-400"
+                      : "bg-violet-500 hover:bg-violet-600 cursor-pointer"
+                  } rounded-xl shadow-md w-[90%] sm:w-[60%]`}
                 >
-                  Add Role
+                  {submitting ? "Submitting..." : "Add Role"}
                 </button>
               </form>
             </section>
@@ -383,17 +363,6 @@ export default function UserRole({ isOpen, onClosed, Roles = [], fetchRole }) {
             </header>
             <form className="flex flex-col items-center flex-1 w-full gap-4 mt-1 overflow-y-auto ">
               {/* Permissions */}
-              <div className="w-full px-3">
-                <label className="text-sm font-medium text-gray-700">
-                  Role Name
-                </label>
-                <Input
-                  placeholder="Enter Role Name"
-                  onChange={setRoleName}
-                  icons={BriefcaseBusiness}
-                  value={roleName}
-                />
-              </div>
               <div className="flex flex-col w-full gap-4 px-3">
                 {permissionFields.map((field, index) => (
                   <div
@@ -417,16 +386,22 @@ export default function UserRole({ isOpen, onClosed, Roles = [], fetchRole }) {
             {/* Submit button */}
             <div className="flex w-full gap-1">
               <button
+                disabled={submitting}
                 onClick={SetCurrentRole}
                 className="px-4 flex justify-center items-center cursor-pointer py-2 mt-4 font-semibold text-white transition bg-violet-500 rounded-xl shadow-md hover:bg-violet-600 w-[20%] sm:w-[20%]"
               >
                 <ListRestart />
               </button>
               <button
+                disabled={submitting}
                 onClick={() => SubmitEditRole()}
-                className="w-full px-4 py-2 mt-4 font-semibold text-white transition shadow-md cursor-pointer bg-violet-500 rounded-xl hover:bg-violet-600"
+                className={` ${
+                  submitting
+                    ? "bg-gray-400"
+                    : "bg-violet-500 hover:bg-violet-600 cursor-pointer"
+                } w-full px-4 py-2 mt-4 font-semibold text-white transition shadow-md  rounded-xl `}
               >
-                Edit Role
+                {submitting ? "updating..." : "Edit Role"}
               </button>
             </div>
           </section>
