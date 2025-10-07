@@ -10,13 +10,13 @@ export function DefaultDropDown({
   maxHeight = "200px",
   selectedValue = "",
   CharacterShow = 30,
-  //Layout
   icons = null,
   showDropicon = true,
   selectedDisplay = true,
   BtnIcons = null,
   OnClick = () => {},
   validated = true,
+  disabled = false,
 }) {
   const isMobile = useMediaQuery({ maxWidth: 468 });
   const [isOpen, setIsOpen] = useState(false);
@@ -24,122 +24,142 @@ export function DefaultDropDown({
   const dropDown = useRef(null);
 
   const Icons = icons;
-  const ButtoIcons = BtnIcons;
-  // Sync external selectedValue to internal state
+  const ButtonIcons = BtnIcons;
+
+  // Sync external selected value with internal state
   useEffect(() => {
     setSelectedItem(selectedValue || "");
   }, [selectedValue]);
 
   const toggleDropdown = () => {
-    setIsOpen(!isOpen);
+    if (disabled) return;
+    setIsOpen((prev) => !prev);
   };
 
   const handleItemSelect = (item) => {
+    if (disabled) return;
     setSelectedItem(item);
     setIsOpen(false);
     SetSelected(item);
   };
 
+  // Close dropdown when clicking outside
   useEffect(() => {
-    const HandleClickedOutside = (event) => {
-      if (dropDown.current && !dropDown.current.contains(event.target)) {
+    const handleClickOutside = (e) => {
+      if (dropDown.current && !dropDown.current.contains(e.target)) {
         setIsOpen(false);
       }
     };
-    document.addEventListener("mousedown", HandleClickedOutside);
-
-    return () =>
-      document.removeEventListener("mousedown", HandleClickedOutside);
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
   return (
-    <div className="relative w-full " ref={dropDown}>
-      {/* Dropdown Button */}
+    <div
+      className={`relative w-full ${
+        disabled ? "opacity-60 select-none cursor-not-allowed" : ""
+      }`}
+      ref={dropDown}
+    >
+      {/* Dropdown Trigger */}
       <div className="flex w-full">
         <div
-          className={`w-full flex px-4 py-[0.7rem] lg:py-[0.75rem] select-none text-left bg-white border ${
-            validated ? `border-violet-300` : `border-red-700`
-          } shadow-sm cursor-pointer  hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${
-            BtnIcons === null || BtnIcons === undefined
-              ? `rounded-2xl`
-              : `rounded-l-2xl`
-          }`}
           onClick={toggleDropdown}
+          className={`flex w-full items-center justify-between px-4 py-[0.7rem] lg:py-[0.75rem] bg-white select-none shadow-sm transition-colors duration-200
+            ${validated ? "border border-violet-300" : "border border-red-700"}
+            ${BtnIcons ? "rounded-l-2xl" : "rounded-2xl"}
+            ${
+              disabled
+                ? "bg-gray-100 cursor-not-allowed"
+                : "cursor-pointer hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-violet-500"
+            }`}
         >
-          <div className="flex items-center justify-between w-full">
-            <div className="flex justify-center gap-[0.8rem]">
-              {icons !== null && icons !== undefined
-                ? Icons && <Icons className="text-violet-500" size={20} />
-                : null}
-              {selectedDisplay ? (
-                <span
-                  className={selectedItem ? "text-gray-900" : "text-gray-500"}
-                >
-                  {selectedItem
-                    ? selectedItem.length > 4
-                      ? selectedItem.slice(0, CharacterShow)
-                      : selectedItem
-                    : placeholder}
-                </span>
-              ) : null}
-            </div>
-
-            {showDropicon ? (
-              <svg
-                className={`w-5 h-5 text-gray-400 transition-transform duration-200 ${
-                  isOpen ? "transform rotate-180" : ""
+          {/* Left (icon + text) */}
+          <div className="flex items-center gap-2 truncate">
+            {icons && Icons && <Icons className="text-violet-500" size={20} />}
+            {selectedDisplay && (
+              <span
+                className={`truncate ${
+                  selectedItem ? "text-gray-900" : "text-gray-500"
                 }`}
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
               >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M19 9l-7 7-7-7"
-                />
-              </svg>
-            ) : null}
+                {selectedItem
+                  ? selectedItem.length > CharacterShow
+                    ? selectedItem.slice(0, CharacterShow) + "…"
+                    : selectedItem
+                  : placeholder}
+              </span>
+            )}
           </div>
+
+          {/* Dropdown arrow */}
+          {showDropicon && (
+            <svg
+              className={`w-5 h-5 text-gray-400 transition-transform duration-200 ${
+                isOpen ? "rotate-180" : ""
+              }`}
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M19 9l-7 7-7-7"
+              />
+            </svg>
+          )}
         </div>
-        {ButtoIcons ? (
+
+        {/* Right-side button (optional) */}
+        {ButtonIcons && (
           <motion.div
-            whileHover={{
-              backgroundColor: "#6736C2",
-              color: "#fff",
-              scale: 1.04,
-            }}
-            whileTap={{ scale: 0.9 }}
+            whileHover={
+              disabled
+                ? {}
+                : {
+                    backgroundColor: "#6736C2",
+                    color: "#fff",
+                    scale: 1.04,
+                  }
+            }
+            whileTap={disabled ? {} : { scale: 0.9 }}
             transition={{ duration: 0.2, ease: "easeInOut" }}
-            className="flex items-center justify-center font-bold border cursor-pointer rounded-r-xl w-15 text-violet-500"
-            onClick={OnClick}
+            onClick={(e) => {
+              if (!disabled) OnClick(e);
+            }}
+            className={`flex items-center justify-center w-12 border border-l-0 rounded-r-2xl
+              ${
+                disabled
+                  ? "bg-gray-200 border-gray-300 cursor-not-allowed"
+                  : "cursor-pointer border-violet-300 text-violet-500"
+              }`}
           >
-            {ButtoIcons && <ButtoIcons />}
+            <ButtonIcons />
           </motion.div>
-        ) : null}
+        )}
       </div>
 
-      {/* Dropdown Menu */}
-      {isOpen && (
-        <div
-          className={`  absolute z-30 mt-2 max-h-80 w-full overflow-auto min-w-[220px] bg-white border border-gray-300 rounded-md shadow-lg `}
-        >
+      {/* Floating Dropdown Menu */}
+      {isOpen && !disabled && (
+        <div className="absolute left-0 top-full z-30 mt-2 w-full min-w-[220px] bg-white border border-gray-300 rounded-md shadow-lg">
           <HorizontalSlider
             className="py-1 overflow-y-auto"
-            style={{ maxHeight }}
+            style={{ maxHeight: isMobile ? "180px" : maxHeight }}
           >
             {items.length > 0 ? (
               items.map((item, index) => (
                 <div
                   key={index}
-                  className={`px-4 py-2 select-none text-sm cursor-pointer transition-colors duration-150 truncate w-full ${
-                    selectedItem === item
-                      ? "bg-blue-100 text-blue-900"
-                      : "text-gray-700 hover:bg-blue-50 hover:text-blue-900"
-                  }`}
-                  onClick={() => handleItemSelect(item)}
                   title={item}
+                  onClick={() => handleItemSelect(item)}
+                  className={`px-4 py-2 text-sm truncate select-none transition-colors duration-150
+                    ${
+                      selectedItem === item
+                        ? "bg-violet-100 text-violet-900"
+                        : "text-gray-700 hover:bg-violet-50 hover:text-violet-900 cursor-pointer"
+                    }`}
                 >
                   {item}
                 </div>

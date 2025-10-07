@@ -63,7 +63,7 @@ export default function Table({ columns = [], data = [], setSelectedId }) {
                   {columns.map((col) => (
                     <th
                       key={col.key}
-                      className="px-4 py-3 font-semibold text-center bg-violet-400"
+                      className="flex-shrink-0 px-4 py-3 font-semibold text-center bg-violet-400 whitespace-nowrap"
                     >
                       {col.key === "Select" ? (
                         <div className="inline-flex items-center">

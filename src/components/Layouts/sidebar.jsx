@@ -214,9 +214,7 @@ const Sidebar = ({ SideBarMobileState }) => {
             />
           </motion.div>
         </AnimatePresence>
-      ) : (
-        ""
-      )}
+      ) : null}
 
       {isDesktop ? (
         showFullSidebar ? (

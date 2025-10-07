@@ -25,11 +25,11 @@ export default function Navbar({ page, mobileSideBarState, setSideBarMobile }) {
   ];
 
   return (
-    <nav className="bg-violet-600 fixed top-0 left-0 w-full z-53 shadow-md">
+    <nav className="fixed top-0 left-0 w-full shadow-md bg-violet-600 z-53">
       <div className="">
-        <div className="flex items-center mr-20 justify-between h-16  w-screen">
+        <div className="flex items-center justify-between w-screen h-16 mr-20">
           {/* Logo / Brand */}
-          <div className="flex items-center align-content-center gap-4 ml-5">
+          <div className="flex items-center gap-4 ml-5 align-content-center">
             <div
               className={`${
                 IsSmallMobile ? `h-9 w-10` : `h-10 w-11`
@@ -50,7 +50,7 @@ export default function Navbar({ page, mobileSideBarState, setSideBarMobile }) {
           <div className={`${isDesktop ? `hidden` : ``}`}>
             <button
               onClick={() => setIsOpen(!isOpen)}
-              className="text-white hover:text-violet-200 focus:outline-none mr-2"
+              className="mr-2 text-white hover:text-violet-200 focus:outline-none"
             >
               {
                 <Hamburger

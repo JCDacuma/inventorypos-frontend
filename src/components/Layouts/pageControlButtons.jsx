@@ -79,13 +79,13 @@ export default function ButtonLayout({
           </div>
         </div>
       ) : (
-        <div className="flex items-center justify-end w-full">
+        <div className="flex items-center justify-end w-full ">
           <motion.button
             onClick={OpenMobileControl}
             whileTap={{ scale: 0.94 }}
             whileHover={{ scale: 1.05 }}
             transition={{ type: "spring", stiffness: 300, damping: 20 }}
-            className="fixed flex items-center justify-center w-10 h-10 text-white rounded-full shadow-lg top-3 right-17 sm:right-3 z-150 bg-gradient-to-r from-violet-300 to-violet-500 hover:from-violet-600 hover:to-violet-700 focus:outline-none focus:ring-2 focus:ring-violet-300"
+            className="fixed flex items-center justify-center w-10 h-10 text-white rounded-full shadow-lg top-3 right-17 sm:right-17 z-150 bg-gradient-to-r from-violet-300 to-violet-500 hover:from-violet-600 hover:to-violet-700 focus:outline-none focus:ring-2 focus:ring-violet-300"
           >
             <Joystick className="w-5 h-5" />
           </motion.button>

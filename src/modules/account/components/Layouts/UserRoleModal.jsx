@@ -169,7 +169,7 @@ export default function UserRole({
         RoleAPIFetch // refetch roles
       );
     } finally {
-      setIsSubmitting(false); // ✅ always reset even if error
+      setIsSubmitting(false); // always reset even if error
     }
   };
 
@@ -283,7 +283,7 @@ export default function UserRole({
 
               <form
                 onSubmit={HandleSubmitNewRole}
-                className="flex flex-col items-center flex-1 w-full gap-4 mt-1 overflow-y-auto "
+                className="flex flex-col items-center flex-1 w-full mt-1 overflow-y-auto "
               >
                 {/* Role name input */}
                 <div className="w-full px-3">
@@ -296,6 +296,7 @@ export default function UserRole({
                     icons={BriefcaseBusiness}
                     value={roleName}
                     validated={ExistRole ? false : true}
+                    disabled={submitting}
                   />
                   <span className="ml-3 text-sm text-red-900">
                     {roleName !== ""
@@ -321,6 +322,7 @@ export default function UserRole({
                         value={field.value}
                         onChange={field.setter}
                         name={field.name}
+                        disabled={submitting}
                       />
                     </div>
                   ))}
@@ -375,6 +377,7 @@ export default function UserRole({
                     <RadioGroup
                       options={yesNoOptions}
                       value={field.value}
+                      disabled={submitting}
                       onChange={field.setter}
                       name={field.name}
                     />
