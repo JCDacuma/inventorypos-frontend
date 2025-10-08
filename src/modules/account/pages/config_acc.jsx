@@ -89,7 +89,7 @@ export default function ProductManagement() {
           {
             onClick: () => UpdateStatus(account),
             icon: account.status === "Active" ? UserLock : UserRoundCheck,
-            tooltip: "Deactivate",
+            tooltip: account.status === "Active" ? "Deactivate" : "Activate",
             iconSize: `h-[1.2rem] w-[1.2rem]`,
           },
         ]}

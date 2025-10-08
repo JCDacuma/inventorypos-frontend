@@ -11,7 +11,7 @@ export function ActionStatus({ status }) {
           text: "text-green-700",
           dot: "bg-green-600",
         },
-        Deactivated: {
+        Inactive: {
           bg: "bg-yellow-100",
           text: "text-yellow-700",
           dot: "bg-yellow-600",

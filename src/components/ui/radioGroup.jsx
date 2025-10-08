@@ -8,6 +8,7 @@ export function RadioGroup({
   value,
   disabled = false,
   onChange,
+  passNameValue = false
 }) {
   return (
     <div

@@ -17,6 +17,7 @@ export function DefaultDropDown({
   OnClick = () => {},
   validated = true,
   disabled = false,
+  name=""
 }) {
   const isMobile = useMediaQuery({ maxWidth: 468 });
   const [isOpen, setIsOpen] = useState(false);
@@ -60,12 +61,13 @@ export function DefaultDropDown({
         disabled ? "opacity-60 select-none cursor-not-allowed" : ""
       }`}
       ref={dropDown}
+      data-name={name}
     >
       {/* Dropdown Trigger */}
       <div className="flex w-full">
         <div
           onClick={toggleDropdown}
-          className={`flex w-full items-center justify-between px-4 py-[0.7rem] lg:py-[0.75rem] bg-white select-none shadow-sm transition-colors duration-200
+          className={`flex w-full items-center justify-between px-4 py-[0.7rem] lg:py-[0.85rem] bg-white select-none shadow-sm transition-colors duration-200
             ${validated ? "border border-violet-300" : "border border-red-700"}
             ${BtnIcons ? "rounded-l-2xl" : "rounded-2xl"}
             ${

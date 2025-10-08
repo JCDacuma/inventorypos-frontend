@@ -1,5 +1,5 @@
 import React from "react";
-import { validationField } from "@/modules/account/utils/validation.jsx";
+import { validationField } from "@/utils/validation.jsx";
 import { Link } from "react-router-dom";
 import { useState, useEffect, useRef } from "react";
 import { Layout } from "@/components/Layouts/Layout.jsx";
@@ -43,6 +43,7 @@ export default function RegisterUser() {
   const [openAddModalRoles, setAddModalRoles] = useState(false);
 
   //api
+  const [isSubmitting, setIsSubmitting] = useState(false); //Button submition state
   const [Roles, setRoles] = useState([]); // fetched data roles
   const [emailExist, setEmailExist] = useState(null); //api flag for email , boolean
   const [usernameExist, setUserNameExist] = useState(null); //api flag for username , boolean
@@ -130,7 +131,7 @@ export default function RegisterUser() {
           break;
         case "password":
           updated[field] = validationField.password.test(value);
-          // also revalidate confirmPassword if it has value
+
           if (confirmPassword !== "") {
             updated.confirmPassword = value === confirmPassword;
           }
@@ -150,7 +151,6 @@ export default function RegisterUser() {
   };
 
   //Handle Account Submition
-  const [isSubmitting, setIsSubmitting] = useState(false); //Button submition state
 
   const HandleSubmit = async () => {
     const User = {
@@ -196,6 +196,7 @@ export default function RegisterUser() {
                   }}
                   icons={UserRound}
                   validated={validInputs.firstname}
+                  disabled={isSubmitting}
                 />
               </div>
               <div>
@@ -208,6 +209,7 @@ export default function RegisterUser() {
                   }}
                   icons={UserRound}
                   validated={validInputs.lastname}
+                  disabled={isSubmitting}
                 />
               </div>
               <div>
@@ -220,6 +222,7 @@ export default function RegisterUser() {
                   }}
                   icons={ShieldUser}
                   validated={validInputs.username && !usernameExist}
+                  disabled={isSubmitting}
                 />
                 {userName && usernameExist && (
                   <span className="ml-3 text-sm text-red-900">
@@ -237,6 +240,7 @@ export default function RegisterUser() {
                   }}
                   icons={Mail}
                   validated={validInputs.email && !emailExist}
+                  disabled={isSubmitting}
                 />
                 {email && emailExist && (
                   <span className="ml-3 text-sm text-red-900">
@@ -256,6 +260,7 @@ export default function RegisterUser() {
                     icons={BriefcaseBusiness}
                     BtnIcons={Plus}
                     OnClick={() => setAddModalRoles(true)}
+                    disabled={isSubmitting}
                   />
                 }
               </div>
@@ -270,6 +275,7 @@ export default function RegisterUser() {
                   }}
                   icons={Phone}
                   validated={validInputs.phone}
+                  disabled={isSubmitting}
                 />
               </div>
               <div>
@@ -277,6 +283,7 @@ export default function RegisterUser() {
                   placeholder="Password"
                   type={showPassword ? "text" : "password"}
                   value={password}
+                  disabled={isSubmitting}
                   onChange={(val) => {
                     setPassword(val);
                     handleValidationChange("password", val);
@@ -293,6 +300,7 @@ export default function RegisterUser() {
                   placeholder="Confirm Password"
                   type={showConfrimPass ? "text" : "password"}
                   value={confirmPassword}
+                  disabled={isSubmitting}
                   onChange={(val) => {
                     setConfirmPassword(val);
                     handleValidationChange("confirmPassword", val);
@@ -309,15 +317,35 @@ export default function RegisterUser() {
           <motion.button
             onClick={HandleSubmit}
             disabled={isSubmitting}
-            whileHover={
-              !isSubmitting ? { scale: 1.01, backgroundColor: "#562FA8" } : {}
-            }
+            whileHover={!isSubmitting ? { scale: 1.01 } : {}}
             whileTap={!isSubmitting ? { scale: 0.95 } : {}}
             transition={{ duration: 0.18, ease: "easeInOut" }}
-            className={`py-3 font-bold text-white rounded-2xl w-full md:w-[50%] xl:w-[40%] 2xl:w-[30%] ${
+            className={`flex items-center justify-center gap-2 py-3 font-bold text-white rounded-2xl w-full md:w-[50%] xl:w-[40%] 2xl:w-[30%] ${
               isSubmitting ? "bg-gray-400 cursor-not-allowed" : "bg-violet-500"
             }`}
           >
+            {isSubmitting && (
+              <svg
+                className="w-5 h-5 animate-spin text-white"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+              >
+                <circle
+                  className="opacity-25"
+                  cx="12"
+                  cy="12"
+                  r="10"
+                  stroke="currentColor"
+                  strokeWidth="4"
+                ></circle>
+                <path
+                  className="opacity-75"
+                  fill="currentColor"
+                  d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
+                ></path>
+              </svg>
+            )}
             {isSubmitting ? "Submitting..." : "Register Account"}
           </motion.button>
         </div>

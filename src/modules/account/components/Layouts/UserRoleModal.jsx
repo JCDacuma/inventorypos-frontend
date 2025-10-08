@@ -336,8 +336,30 @@ export default function UserRole({
                     submitting
                       ? "bg-gray-400"
                       : "bg-violet-500 hover:bg-violet-600 cursor-pointer"
-                  } rounded-xl shadow-md w-[90%] sm:w-[60%]`}
+                  } rounded-xl shadow-md items-center justify-center flex w-[90%] sm:w-[60%]`}
                 >
+                  {submitting && (
+                    <svg
+                      className="w-5 h-5 animate-spin text-white"
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                    >
+                      <circle
+                        className="opacity-25"
+                        cx="12"
+                        cy="12"
+                        r="10"
+                        stroke="currentColor"
+                        strokeWidth="4"
+                      ></circle>
+                      <path
+                        className="opacity-75"
+                        fill="currentColor"
+                        d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
+                      ></path>
+                    </svg>
+                  )}
                   {submitting ? "Submitting..." : "Add Role"}
                 </button>
               </form>
@@ -402,8 +424,30 @@ export default function UserRole({
                   submitting
                     ? "bg-gray-400"
                     : "bg-violet-500 hover:bg-violet-600 cursor-pointer"
-                } w-full px-4 py-2 mt-4 font-semibold text-white transition shadow-md  rounded-xl `}
+                } w-full px-4 py-2 mt-4 font-semibold text-white items-center transition shadow-md flex gap-2 justify-center rounded-xl `}
               >
+                {submitting && (
+                  <svg
+                    className="w-5 h-5 animate-spin text-white"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                  >
+                    <circle
+                      className="opacity-25"
+                      cx="12"
+                      cy="12"
+                      r="10"
+                      stroke="currentColor"
+                      strokeWidth="4"
+                    ></circle>
+                    <path
+                      className="opacity-75"
+                      fill="currentColor"
+                      d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
+                    ></path>
+                  </svg>
+                )}
                 {submitting ? "updating..." : "Edit Role"}
               </button>
             </div>

@@ -2,7 +2,7 @@ import api from "@/api/axiosInstance.js";
 import React from "react";
 import { useState, useEffect, useRef } from "react";
 import { SweetAlert } from "@/utils/sweetalert.jsx";
-import { validationField } from "@/modules/account/utils/validation.jsx";
+import { validationField } from "@/utils/validation.jsx";
 
 export async function AccountAPIFetch(setAccount) {
   try {
