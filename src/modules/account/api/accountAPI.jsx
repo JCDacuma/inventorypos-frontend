@@ -39,7 +39,7 @@ export async function AccountSubmit(
   const isFirstNameValid = validationField.name.test(User.firstname);
   const isLastNameValid = validationField.name.test(User.lastname);
   const isUsernameValid = validationField.username.test(User.username);
-  const isRoleValid = validationField.roleSelected.test(User.role_id);
+  const isRoleValid = validationField.SelectedId.test(User.role_id);
   const isEmailValid = validationField.email.test(User.email);
   const isPasswordValid = validationField.password.test(User.password);
   const isConfirmPasswordValid = User.password === User.confirmPass;
@@ -133,7 +133,7 @@ export async function EditAccount(request, userID) {
   }
 
   // Validate Role (if provided)
-  if (form.role_id && !validationField.roleSelected.test(form.role_id)) {
+  if (form.role_id && !validationField.SelectedId.test(form.role_id)) {
     SweetAlert.error("Invalid Role Selected", "Invalid roleSelected");
     return;
   }

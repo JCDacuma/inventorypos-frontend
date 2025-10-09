@@ -140,7 +140,7 @@ export default function RegisterUser() {
           updated[field] = password === value;
           break;
         case "role_id":
-          updated[field] = validationField.roleSelected.test(value);
+          updated[field] = validationField.SelectedId.test(value);
           break;
         default:
           break;

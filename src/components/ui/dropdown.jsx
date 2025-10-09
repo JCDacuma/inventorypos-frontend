@@ -17,7 +17,7 @@ export function DefaultDropDown({
   OnClick = () => {},
   validated = true,
   disabled = false,
-  name=""
+  name = "",
 }) {
   const isMobile = useMediaQuery({ maxWidth: 468 });
   const [isOpen, setIsOpen] = useState(false);
@@ -145,7 +145,7 @@ export function DefaultDropDown({
 
       {/* Floating Dropdown Menu */}
       {isOpen && !disabled && (
-        <div className="absolute left-0 top-full z-30 mt-2 w-full min-w-[220px] bg-white border border-gray-300 rounded-md shadow-lg">
+        <div className="absolute left-0 top-full z-30 mt-2 w-full min-w-[220px] max-h-50 overflow-auto bg-white border border-gray-300 rounded-md shadow-lg">
           <HorizontalSlider
             className="py-1 overflow-y-auto"
             style={{ maxHeight: isMobile ? "180px" : maxHeight }}

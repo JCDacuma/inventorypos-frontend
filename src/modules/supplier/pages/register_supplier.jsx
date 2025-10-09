@@ -1,12 +1,7 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 // Page Layout component
-import {
-  Layout,
-  MainWrapper,
-  ButtonLayout,
-  ControlLayout,
-} from "../../../components/Layouts/Layout";
+import { Layout } from "../../../components/Layouts/Layout";
 import { Input } from "@/components/ui/Input.jsx";
 import { RadioGroup } from "@/components/ui/radioGroup.jsx";
 import { useMediaQuery } from "react-responsive";
@@ -16,49 +11,70 @@ import { motion } from "framer-motion";
 
 //icons
 import {
-  User,
-  UserRoundSearch,
   Truck,
   MapPinned,
   TruckElectric,
   HandCoins,
   ThumbsUp,
-  Phone,
-  Mail,
   PackageOpen,
-  Check,
   Contact,
   ListFilterPlus,
 } from "lucide-react";
 
 //api
 import { FetchContact } from "@/modules/supplier/api/ContactApi.jsx";
-import { SubmitSupplier } from "@/modules/supplier/api/SupplierApi.jsx";
-
+import {
+  SubmitSupplier,
+  CheckSupplier,
+} from "@/modules/supplier/api/SupplierApi.jsx";
+import { validationField } from "@/utils/validation.jsx";
+import ContactModal from "@/modules/supplier/components/Layouts/registerContactModal.jsx";
 export default function RegisterSupplier() {
   const isMobile = useMediaQuery({ maxWidth: 568 });
+  const [isContactOpen, setIsContactOpen] = useState(false); //add contact modal
 
+  //supplier
   const [supplier, setSupplier] = useState({
     suppliername: "",
     supplierAdress: "",
-    shippingFee: "",
+    shippingFee: null,
     isVatRegistered: null,
     SelectedContact: null,
     status: "",
   });
 
-  const [selectedContact, setSelectedContact] = useState(null);
+  //supplier Validation
+  const [validInputs, setValidInputs] = useState({
+    suppliername: true,
+    supplierAdress: true,
+    shippingFee: true,
+    isVatRegistered: true,
+    SelectedContact: true,
+    status: true,
+  });
+
   //api
   const [onSubmit, setOnSubmit] = useState(false); //boolean
   const [fetchedContact, setFetchedContact] = useState([]); //object
+  const [supplierExist, setSupplierExist] = useState(null);
 
+  //fetching contact
   const HandleContactFetch = () => {
     FetchContact(setFetchedContact);
   };
 
+  //fetching contact trigger
   useEffect(() => {
     HandleContactFetch();
   }, []);
+
+  //checking supplien availability
+  useEffect(() => {
+    const TimerCheck = setTimeout(() => {
+      CheckSupplier(supplier.suppliername, setSupplierExist);
+    }, 300);
+    return () => clearTimeout(TimerCheck);
+  }, [supplier.suppliername]);
 
   const HandleInputChange = (value, name) => {
     setSupplier((sup) => ({
@@ -76,6 +92,16 @@ export default function RegisterSupplier() {
   //Status Option
   const StatusOption = ["Active", "Inactive"];
 
+  //Sync Selected Contact
+  const HandleSyncContact = () => {
+    const contact = fetchedContact.find(
+      (cont) => supplier.SelectedContact === cont.id
+    );
+    if (!contact) return "";
+
+    return `${contact.firstname} ${contact.lastname}`;
+  };
+
   const ContactOption = fetchedContact.map(
     (contact) => `${contact.firstname} ${contact.lastname}`
   );
@@ -86,6 +112,38 @@ export default function RegisterSupplier() {
     );
 
     HandleInputChange(selectedContact.id, name);
+  };
+
+  //Validation -------
+  const HandleValidationChange = (value, field) => {
+    setValidInputs((prev) => {
+      const updated = { ...prev };
+
+      switch (field) {
+        case "suppliername":
+          updated[field] = validationField.suppliername.test(value);
+          break;
+        case "status":
+          updated[field] = validationField.name.test(value);
+          break;
+        case "supplierAdress":
+          updated[field] = validationField.address.test(value);
+          break;
+        case "SelectedContact":
+          updated[field] = validationField.SelectedId.test(value);
+          break;
+        case "shippingFee":
+          updated[field] = validationField.shippingFee.test(value);
+          break;
+        case "isVatRegistered":
+          updated[field] = validationField.boolean.test(value);
+          break;
+        default:
+          break;
+      }
+
+      return updated;
+    });
   };
 
   //Submit ---------
@@ -102,17 +160,9 @@ export default function RegisterSupplier() {
     };
 
     try {
-      await SubmitSupplier(supplierSubmit);
+      await SubmitSupplier(supplierSubmit, setSupplier, supplierExist);
     } finally {
       setOnSubmit(false);
-      setSupplier({
-        suppliername: "",
-        supplierAdress: "",
-        shippingFee: "",
-        isVatRegistered: null,
-        SelectedContact: null,
-        status: "",
-      });
     }
   };
 
@@ -151,7 +201,13 @@ export default function RegisterSupplier() {
                     value={supplier.suppliername}
                     placeholder={"Enter supplier"}
                     icons={TruckElectric}
-                    onChange={(e) => HandleInputChange(e, "suppliername")}
+                    validated={
+                      validInputs.suppliername && !supplierExist ? true : false
+                    }
+                    onChange={(e) => {
+                      HandleInputChange(e, "suppliername");
+                      HandleValidationChange(e, "suppliername");
+                    }}
                     disabled={onSubmit}
                   />
                 </div>
@@ -160,7 +216,11 @@ export default function RegisterSupplier() {
                   <Input
                     value={supplier.supplierAdress}
                     name={"supplierAdress"}
-                    onChange={(e) => HandleInputChange(e, "supplierAdress")}
+                    validated={validInputs.supplierAdress}
+                    onChange={(e) => {
+                      HandleInputChange(e, "supplierAdress");
+                      HandleValidationChange(e, "supplierAdress");
+                    }}
                     placeholder={"Enter Supplier Address"}
                     icons={MapPinned}
                     disabled={onSubmit}
@@ -170,8 +230,12 @@ export default function RegisterSupplier() {
                   <label>Supplier Default Shipping fee</label>
                   <Input
                     value={supplier.shippingFee}
+                    validated={validInputs.shippingFee}
                     name={"shippingFee"}
-                    onChange={(e) => HandleInputChange(e, "shippingFee")}
+                    onChange={(e) => {
+                      HandleInputChange(e, "shippingFee");
+                      HandleValidationChange(e, "shippingFee");
+                    }}
                     placeholder={"Enter Shipping Fee"}
                     icons={PackageOpen}
                     disabled={onSubmit}
@@ -181,17 +245,20 @@ export default function RegisterSupplier() {
                 <div className="flex flex-col w-full gap-2 ">
                   <label className="flex items-center font-semibold text-gray-800 gap-2text-sm">
                     <Contact className="ml-2 text-violet-600" />
-                    Status
+                    Contact
                   </label>
                   <DefaultDropDown
-                    placeholder={"select supplier"}
+                    placeholder={"select Contact"}
                     icons={Contact}
                     BtnIcons={ListFilterPlus}
                     items={ContactOption}
-                    SetSelected={(e) =>
-                      HandleSelectContact(e, "SelectedContact")
-                    }
+                    validated={validInputs.SelectedContact}
+                    SetSelected={(e) => {
+                      HandleSelectContact(e, "SelectedContact");
+                    }}
                     disabled={onSubmit}
+                    selectedValue={HandleSyncContact}
+                    OnClick={() => setIsContactOpen(true)}
                   />
                 </div>
                 <div
@@ -231,6 +298,7 @@ export default function RegisterSupplier() {
                         items={StatusOption}
                         SetSelected={(e) => HandleInputChange(e, "status")}
                         disabled={onSubmit}
+                        selectedValue={supplier.status}
                       />
                     </div>
                   </div>
@@ -252,7 +320,7 @@ export default function RegisterSupplier() {
                 >
                   {onSubmit && (
                     <svg
-                      className="w-5 h-5 animate-spin text-white"
+                      className="w-5 h-5 text-white animate-spin"
                       xmlns="http://www.w3.org/2000/svg"
                       fill="none"
                       viewBox="0 0 24 24"
@@ -279,6 +347,12 @@ export default function RegisterSupplier() {
           </div>
         </div>
       </div>
+      <ContactModal
+        isOpen={isContactOpen}
+        onClosed={() => setIsContactOpen(false)}
+        FetchContact={HandleContactFetch}
+        Contact={fetchedContact}
+      />
     </Layout>
   );
 }

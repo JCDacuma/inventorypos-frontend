@@ -17,3 +17,5 @@ export async function FetchContact(setFetchedContact) {
     console.log(`There is error: ${err}`);
   }
 }
+
+export async function SubmitContact() {}
