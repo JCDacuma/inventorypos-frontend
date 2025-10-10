@@ -5,7 +5,7 @@ export const validationField = {
   name: /^[A-Za-zÀ-ÿ\s'-]{2,}$/, // Allows names with accents, spaces, apostrophes, hyphens
   suppliername: /^[A-Za-z0-9À-ÿ\s&.'-]{3,}$/,
   username: /^[A-Za-z0-9_]{4,}$/, // Min 4 chars, letters/numbers/underscore only
-  email: /^[^\s@]+@[^\s@]+\.[^\s@]+$/, // Basic email structure
+  email: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/, // Basic email structure
   password:
     /^(?=.{8,})(?:(?=(?:.*[A-Z].*[0-9]|.*[0-9].*[A-Z]))|(?=(?:.*[A-Z].*[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]|.*[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?].*[A-Z]))|(?=(?:.*[0-9].*[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]|.*[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?].*[0-9]))).*$/,
   // Strong password
