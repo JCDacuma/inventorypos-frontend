@@ -1,11 +1,11 @@
-import { useState } from "react";
-import { Link } from "react-router-dom";
+import { useState, useEffect, useMemo } from "react";
+import { Link, useNavigate } from "react-router-dom";
 
 // Page Layout component
 import { Layout } from "@/components/Layouts/Layout.jsx";
 
-import { useMediaQuery } from "react-responsive";
-
+import { BatchEditModal } from "@/modules/supplier/components/Layouts/supplierUpdateBatchModal.jsx";
+import ContactModal from "@/modules/supplier/components/Layouts/registerContactModal.jsx";
 import BatchControl from "@/components/Layouts/BatchControl.jsx";
 import NavControl from "@/components/Layouts/pageControlsMobile.jsx";
 
@@ -20,24 +20,60 @@ import { Action } from "@/components/ui/buttons.jsx";
 import { motion, AnimatePresence } from "framer-motion";
 
 //Icons
-import { SquarePen, Eye, OctagonMinus, TruckElectric } from "lucide-react";
+import {
+  SquarePen,
+  Archive,
+  OctagonMinus,
+  TruckElectric,
+  ClipboardClock,
+  PhoneCall,
+} from "lucide-react";
+import { FetchSupplier } from "@/modules/supplier/api/SupplierApi.jsx";
+import { FetchContact } from "@/modules/supplier/api/ContactApi.jsx";
 
 export default function Suppliers() {
   //Selected Id
   const [selectedID, setSelectedID] = useState([]);
 
   //Batch Contol Modal State
-  const openBatchContol = selectedID.length > 0;
   const [pageControl, setPageControl] = useState(false); //Page control mobile state modal
+  //BatchUpdate modal state
+  const [batchUpdateModal, setBatchUpdateModal] = useState(false);
+  const [supplier, setSupplier] = useState([]); //supplier fetched
+  const [addContactModal, setContactModal] = useState(false);
+  const [fetchedContact, setFectchedContact] = useState([]);
+  const navigation = useNavigate();
 
-  const isSmallMobile = useMediaQuery({ maxWidth: 375 });
-
-  const HandleEdit = (items, id) => {
-    alert(`Edit ${items} id: ${id}`);
+  //api fetch contact functionality
+  const HandleContactFetch = async () => {
+    await FetchContact(setFectchedContact);
   };
 
-  const HandleInactive = (items, id) => {
-    alert(`UpdateInactive ${items} id: ${id}`);
+  //Trigger fetch
+  useEffect(() => {
+    HandleContactFetch();
+  }, []);
+
+  //Batch Control ----------------------
+  const HandleBatchUpdate = () => {
+    setBatchUpdateModal(true);
+  };
+
+  const HandleBatchArchive = () => {};
+
+  //Active Table Button  ----------------------
+
+  //Archiving functionality for selected id
+  const HandleArchieve = (id) => {};
+
+  //Edit functionality for selected id
+  const HandleEdit = (id) => {
+    navigation(`/register-supplier/${id}`);
+  };
+
+  //Action Header Button ------------------------
+  const HandleOpenContactModal = () => {
+    setContactModal(true);
   };
 
   //BatchControls
@@ -47,12 +83,14 @@ export default function Suppliers() {
       color: "bg-violet-500 ",
       icon: SquarePen,
       padding: "py-2 px-6",
+      function: () => HandleBatchUpdate(),
     },
     {
-      btnLabel: "Remove",
+      btnLabel: "Archive",
       color: "bg-[#910B0B]/[0.69]",
-      icon: OctagonMinus,
+      icon: Archive,
       padding: "py-2 px-6",
+      function: () => HandleBatchArchive(),
     },
   ];
 
@@ -61,263 +99,71 @@ export default function Suppliers() {
     {
       BtnLabel: "Register Supplier",
       iconControl: TruckElectric,
-      to: "/register-supplier",
+      to: "/register-supplier/register",
+    },
+    {
+      BtnLabel: "Contact",
+      iconControl: PhoneCall,
+      onClick: () => HandleOpenContactModal(),
     },
   ];
 
+  //table column
   const columns = [
     { key: "Select", label: "" },
-    { key: "suppliername", label: "Supplier" },
-    { key: "contactperson", label: "Contact" },
-    { key: "phonenumber", label: "Phone" },
-    { key: "vatregistered", label: "VatRegister" },
-    { key: "shippingfee", label: "ShippingFee" },
+    { key: "suppliername", label: "Supplier Name" },
+    { key: "contactperson", label: "Contact Person" },
+    { key: "Address", label: "Adress" },
+    { key: "vatregistered", label: "Vat Register" },
+    { key: "shippingfee", label: "Shipping Fee" },
     { key: "status", label: "Status" },
     { key: "Action", label: "Action" },
   ];
 
-  const supplierData = [
-    {
-      id: 1,
-      suppliername: "Dell Supplier Inc.",
-      contactperson: "John Smith",
-      phonenumber: "+63 912 345 6789",
-      vatregistered: "Yes",
-      shippingfee: "₱2,500",
-      status: <SupplierStatus status="Active" />,
+  //supplier data table
+  const fetchedSupplier = useMemo(() => {
+    return supplier.map((sup) => ({
+      id: sup.id,
+      suppliername: sup.supplierName,
+      contactperson: sup.name_contact,
+      Address: sup.supplier_address,
+      vatregistered: sup.vat_registered ? "Yes" : "No",
+      shippingfee: ` ₱ ${sup.shipping_fee}`,
+      status: <SupplierStatus status={sup.status} />,
       Action: (
         <Action
           buttons={[
             {
-              onClick: () => HandleEdit("Dell Supplier Inc.", 1),
+              onClick: () => HandleEdit(sup.id),
               icon: SquarePen,
               iconSize: "h-[1.2rem] w-[1.2rem]",
-            },
-            {
-              to: "/order-history/1",
-              icon: Eye,
-              iconSize: "h-[1.2rem] w-[1.2rem]",
-            },
-            {
-              onClick: () => HandleInactive("Dell Supplier Inc.", 1),
-              icon: OctagonMinus,
-              iconSize: "h-[1.2rem] w-[1.2rem]",
-            },
-          ]}
-        />
-      ),
-    },
-    {
-      id: 2,
-      suppliername: "Tech Distributors Ltd.",
-      contactperson: "Emily Davis",
-      phonenumber: "+63 917 222 3344",
-      vatregistered: "No",
-      shippingfee: "₱1,800",
-      status: <SupplierStatus status="Inactive" />,
-      Action: (
-        <Action
-          buttons={[
-            {
-              onClick: () => HandleEdit("Tech Distributors Ltd.", 2),
-              icon: SquarePen,
-              iconSize: "h-[1.2rem] w-[1.2rem]",
-            },
-            {
-              to: "/order-history/2",
-              icon: Eye,
-              iconSize: "h-[1.2rem] w-[1.2rem]",
-            },
-            {
-              onClick: () => HandleInactive("Tech Distributors Ltd.", 2),
-              icon: OctagonMinus,
-              iconSize: "h-[1.2rem] w-[1.2rem]",
-            },
-          ]}
-        />
-      ),
-    },
-    {
-      id: 3,
-      suppliername: "Logitech Distribution",
-      contactperson: "Michael Lee",
-      phonenumber: "+63 918 555 7788",
-      vatregistered: "Yes",
-      shippingfee: "₱1,200",
-      status: <SupplierStatus status="Active" />,
-      Action: (
-        <Action
-          buttons={[
-            {
-              onClick: () => HandleEdit("Logitech Distribution", 3),
-              icon: SquarePen,
-              iconSize: "h-[1.2rem] w-[1.2rem]",
-            },
-            {
-              to: "/order-history/3",
-              icon: Eye,
-              iconSize: "h-[1.2rem] w-[1.2rem]",
-            },
-            {
-              onClick: () => HandleInactive("Logitech Distribution", 3),
-              icon: OctagonMinus,
-              iconSize: "h-[1.2rem] w-[1.2rem]",
-            },
-          ]}
-        />
-      ),
-    },
-    {
-      id: 4,
-      suppliername: "Apple Authorized Dist.",
-      contactperson: "Sophia Tan",
-      phonenumber: "+63 915 111 2233",
-      vatregistered: "Yes",
-      shippingfee: "₱3,000",
-      status: <SupplierStatus status="Inactive" />,
-      Action: (
-        <Action
-          buttons={[
-            {
-              onClick: () => HandleEdit("Apple Authorized Dist.", 4),
-              icon: SquarePen,
-              iconSize: "h-[1.2rem] w-[1.2rem]",
-            },
-            {
-              to: "/order-history/4",
-              icon: Eye,
-              iconSize: "h-[1.2rem] w-[1.2rem]",
-            },
-            {
-              onClick: () => HandleInactive("Apple Authorized Dist.", 4),
-              icon: OctagonMinus,
-              iconSize: "h-[1.2rem] w-[1.2rem]",
-            },
-          ]}
-        />
-      ),
-    },
-    {
-      id: 5,
-      suppliername: "Samsung Electronics",
-      contactperson: "David Kim",
-      phonenumber: "+63 916 777 8899",
-      vatregistered: "No",
-      shippingfee: "₱2,200",
-      status: <SupplierStatus status="Active" />,
-      Action: (
-        <Action
-          buttons={[
-            {
-              onClick: () => HandleEdit("Samsung Electronics", 5),
-              icon: SquarePen,
-              iconSize: "h-[1.2rem] w-[1.2rem]",
-            },
-            {
-              to: "/order-history/5",
-              icon: Eye,
-              iconSize: "h-[1.2rem] w-[1.2rem]",
-            },
-            {
-              onClick: () => HandleInactive("Samsung Electronics", 5),
-              icon: OctagonMinus,
-              iconSize: "h-[1.2rem] w-[1.2rem]",
-            },
-          ]}
-        />
-      ),
-    },
-    {
-      id: 6,
-      suppliername: "Grocery Trading Corp.",
-      contactperson: "Maria Lopez",
-      phonenumber: "+63 913 444 5566",
-      vatregistered: "Yes",
-      shippingfee: "₱900",
-      status: <SupplierStatus status="Inactive" />,
-      Action: (
-        <Action
-          buttons={[
-            {
-              onClick: () => HandleEdit("Grocery Trading Corp.", 6),
-              icon: SquarePen,
-              iconSize: "h-[1.2rem] w-[1.2rem]",
-            },
-            {
-              to: "/order-history/6",
-              icon: Eye,
-              iconSize: "h-[1.2rem] w-[1.2rem]",
-            },
-            {
-              onClick: () => HandleInactive("Grocery Trading Corp.", 6),
-              icon: OctagonMinus,
-              iconSize: "h-[1.2rem] w-[1.2rem]",
-            },
-          ]}
-        />
-      ),
-    },
-    {
-      id: 7,
-      suppliername: "Furniture World Supply",
-      contactperson: "James Rodriguez",
-      phonenumber: "+63 919 888 3344",
-      vatregistered: "No",
-      shippingfee: "₱1,500",
-      status: <SupplierStatus status="Active" />,
-      Action: (
-        <Action
-          buttons={[
-            {
-              onClick: () => HandleEdit("Furniture World Supply", 7),
-              icon: SquarePen,
-              iconSize: "h-[1.2rem] w-[1.2rem]",
-            },
-            {
-              to: "/order-history/7",
-              icon: Eye,
-              iconSize: "h-[1.2rem] w-[1.2rem]",
-            },
-            {
-              onClick: () => HandleInactive("Furniture World Supply", 7),
-              icon: OctagonMinus,
-              iconSize: "h-[1.2rem] w-[1.2rem]",
-            },
-          ]}
-        />
-      ),
-    },
-    {
-      id: 8,
-      suppliername: "Clothing Hub Dist.",
-      contactperson: "Anna Garcia",
-      phonenumber: "+63 914 222 7788",
-      vatregistered: "Yes",
-      shippingfee: "₱1,000",
-      status: <SupplierStatus status="Inactive" />,
-      Action: (
-        <Action
-          buttons={[
-            {
-              onClick: () => HandleEdit("Clothing Hub Dist.", 8),
-              icon: SquarePen,
-              iconSize: "h-[1.2rem] w-[1.2rem]",
+              tooltip: "Edit",
             },
             {
               to: "/order-history/8",
-              icon: Eye,
+              icon: ClipboardClock,
               iconSize: "h-[1.2rem] w-[1.2rem]",
+              tooltip: "History",
             },
             {
-              onClick: () => HandleInactive("Clothing Hub Dist.", 8),
-              icon: OctagonMinus,
+              onClick: () => HandleArchieve(sup.id),
+              icon: Archive,
               iconSize: "h-[1.2rem] w-[1.2rem]",
+              tooltip: "Archieve",
             },
           ]}
         />
       ),
-    },
-  ];
+    }));
+  }, [supplier]);
+
+  const HandleFetchSupplier = () => {
+    FetchSupplier(setSupplier);
+  };
+
+  useEffect(() => {
+    HandleFetchSupplier();
+  }, []);
 
   return (
     <Layout currentWebPage="Supplier">
@@ -335,16 +181,16 @@ export default function Suppliers() {
         <div className="block md:hidden">
           <MobileTable
             columns={columns}
-            data={supplierData}
             setSelectedId={setSelectedID}
+            data={fetchedSupplier}
           />
         </div>
 
         <div className="hidden md:block">
           <Table
             columns={columns}
-            data={supplierData}
             setSelectedId={setSelectedID}
+            data={fetchedSupplier}
           />
         </div>
       </div>
@@ -352,7 +198,7 @@ export default function Suppliers() {
       {/* Batch Contol */}
       <BatchControl
         Count={selectedID.length}
-        openBatchContol={openBatchContol}
+        openBatchContol={selectedID.length > 0}
         Buttons={BatchControlBtn}
       />
 
@@ -362,6 +208,22 @@ export default function Suppliers() {
         isOpen={pageControl}
         hasExport={true}
         Buttons={PageBtnControls}
+      />
+
+      {/* Batch Edit modal */}
+      <BatchEditModal
+        id={selectedID}
+        isOpen={batchUpdateModal}
+        onClosed={() => setBatchUpdateModal(false)}
+        contact={fetchedContact}
+      />
+
+      {/* Registerd Contact Modal */}
+      <ContactModal
+        isOpen={addContactModal}
+        onClosed={() => setContactModal(false)}
+        FetchContact={HandleContactFetch}
+        Contact={fetchedContact}
       />
     </Layout>
   );

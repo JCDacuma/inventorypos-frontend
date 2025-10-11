@@ -1,11 +1,12 @@
 import { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useParams, useNavigate } from "react-router-dom";
 // Page Layout component
-import { Layout } from "../../../components/Layouts/Layout";
+import { Layout } from "@/components/Layouts/Layout";
 import { Input } from "@/components/ui/Input.jsx";
 import { RadioGroup } from "@/components/ui/radioGroup.jsx";
 import { useMediaQuery } from "react-responsive";
 import { DefaultDropDown } from "@/components/ui/dropdown.jsx";
+import { SweetAlert } from "@/utils/sweetalert.jsx";
 //Animation
 import { motion } from "framer-motion";
 
@@ -19,21 +20,24 @@ import {
   PackageOpen,
   Contact,
   ListFilterPlus,
+  ListRestart,
 } from "lucide-react";
 
 //api
 import { FetchContact } from "@/modules/supplier/api/ContactApi.jsx";
 import {
   SubmitSupplier,
+  SubmitEditSupplier,
   CheckSupplier,
+  FetchSupplierById,
 } from "@/modules/supplier/api/SupplierApi.jsx";
 import { validationField } from "@/utils/validation.jsx";
 import ContactModal from "@/modules/supplier/components/Layouts/registerContactModal.jsx";
 export default function RegisterSupplier() {
   const isMobile = useMediaQuery({ maxWidth: 568 });
-  const [isContactOpen, setIsContactOpen] = useState(false); //add contact modal
+  const [isContactOpen, setIsContactOpen] = useState(false); //Add new contact modal
 
-  //supplier
+  //supplier input value
   const [supplier, setSupplier] = useState({
     suppliername: "",
     supplierAdress: "",
@@ -54,28 +58,77 @@ export default function RegisterSupplier() {
   });
 
   //api
-  const [onSubmit, setOnSubmit] = useState(false); //boolean
-  const [fetchedContact, setFetchedContact] = useState([]); //object
-  const [supplierExist, setSupplierExist] = useState(null);
+  const [onSubmit, setOnSubmit] = useState(false); //Submit state, boolean
+  const [fetchedContact, setFetchedContact] = useState([]); //populating dropdown, object
+  const [supplierExist, setSupplierExist] = useState(null); //check if supplier already exist, boolean
+  const [fetchedSupplier, setFetchedSupplier] = useState(null); //fetched supplier to edit, object array
+  const [Found, setFound] = useState(null); //checking id if found, boolean
+  const { id } = useParams(); //Page indicator for edit or register
+
+  //Url Functionlity
+  const navigate = useNavigate();
+  const supplierId = Number(id); //Convert url id param
 
   //fetching contact
   const HandleContactFetch = () => {
-    FetchContact(setFetchedContact);
+    FetchContact(setFetchedContact); //api
+  };
+
+  //fetching functionality Supplier to be edit
+  const HandleFetchSupplier = async () => {
+    if (id === "register") return; //register state page
+
+    if (isNaN(supplierId)) {
+      navigate("/suppliers");
+      return;
+    }
+    await FetchSupplierById(
+      supplierId,
+      setFetchedSupplier,
+      setFound,
+      HandleAssignInput
+    ); //fetch supplier to be edit, api
+  };
+
+  //functionality assign input edit
+  const HandleAssignInput = (data = fetchedSupplier) => {
+    setSupplier({
+      suppliername: data.suppliername,
+      supplierAdress: data.supplier_address,
+      shippingFee: data.shipping_fee,
+      isVatRegistered: data.vat_registered,
+      SelectedContact: data.supplier_contact_id,
+      status: data.status,
+    });
   };
 
   //fetching contact trigger
   useEffect(() => {
-    HandleContactFetch();
+    HandleContactFetch(); //api
   }, []);
 
-  //checking supplien availability
+  //fetching supplier
+  useEffect(() => {
+    HandleFetchSupplier();
+  }, [id]);
+
+  //checking if id found
+  useEffect(() => {
+    if (Found === null) return;
+    if (!Found) {
+      navigate("/suppliers");
+    }
+  }, [Found]);
+
+  //checking supplier availability
   useEffect(() => {
     const TimerCheck = setTimeout(() => {
-      CheckSupplier(supplier.suppliername, setSupplierExist);
+      CheckSupplier(supplier.suppliername, setSupplierExist); //Checking contact availability, api , return false or true
     }, 300);
     return () => clearTimeout(TimerCheck);
   }, [supplier.suppliername]);
 
+  //Input Onchange for supplier input
   const HandleInputChange = (value, name) => {
     setSupplier((sup) => ({
       ...sup,
@@ -90,7 +143,7 @@ export default function RegisterSupplier() {
   ];
 
   //Status Option
-  const StatusOption = ["Active", "Inactive"];
+  const StatusOption = ["Active", "Inactive", "Archieved"];
 
   //Sync Selected Contact
   const HandleSyncContact = () => {
@@ -102,10 +155,12 @@ export default function RegisterSupplier() {
     return `${contact.firstname} ${contact.lastname}`;
   };
 
+  //Option contact names dropdown
   const ContactOption = fetchedContact.map(
     (contact) => `${contact.firstname} ${contact.lastname}`
   );
 
+  //contact selected assign to input
   const HandleSelectContact = (value, name) => {
     const selectedContact = fetchedContact.find(
       (person) => value === `${person.firstname} ${person.lastname}`
@@ -114,7 +169,7 @@ export default function RegisterSupplier() {
     HandleInputChange(selectedContact.id, name);
   };
 
-  //Validation -------
+  //Validation Change ddynamically input-------
   const HandleValidationChange = (value, field) => {
     setValidInputs((prev) => {
       const updated = { ...prev };
@@ -146,7 +201,45 @@ export default function RegisterSupplier() {
     });
   };
 
-  //Submit ---------
+  // Submit Edited --------
+  const HandleEditSubmit = async () => {
+    if (onSubmit) return;
+    setOnSubmit(true);
+    if (
+      fetchedSupplier.suppliername === supplier.suppliername &&
+      fetchedSupplier.supplier_address === supplier.supplierAdress &&
+      fetchedSupplier.shipping_fee === supplier.shippingFee &&
+      fetchedSupplier.vat_registered === supplier.isVatRegistered &&
+      fetchedSupplier.supplier_contact_id === supplier.SelectedContact &&
+      fetchedSupplier.status === supplier.status
+    ) {
+      SweetAlert.info(
+        "No Changes Detected",
+        "You haven't made any updates yet."
+      );
+      setOnSubmit(false);
+      return;
+    }
+
+    const request = {
+      id: fetchedSupplier.id,
+      suppliername: supplier.suppliername,
+      supplier_address: supplier.supplierAdress,
+      shipping_fee: supplier.shippingFee,
+      vat_registered: supplier.isVatRegistered,
+      supplier_contact_id: supplier.SelectedContact,
+      status: supplier.status,
+      supplierExist:
+        fetchedSupplier.suppliername !== supplier.suppliername && supplierExist,
+    };
+    try {
+      await SubmitEditSupplier(request, HandleFetchSupplier);
+    } finally {
+      setOnSubmit(false);
+    }
+  };
+
+  //Submit New ---------
   const HandleSubmitSupplier = async () => {
     if (onSubmit) return;
     setOnSubmit(true);
@@ -160,7 +253,7 @@ export default function RegisterSupplier() {
     };
 
     try {
-      await SubmitSupplier(supplierSubmit, setSupplier, supplierExist);
+      await SubmitSupplier(supplierSubmit, setSupplier, supplierExist); //api
     } finally {
       setOnSubmit(false);
     }
@@ -191,7 +284,10 @@ export default function RegisterSupplier() {
             {/* First Column */}
             <div className="flex flex-col items-center justify-center w-full h-full gap-5 text-violet-500 md:w-[80%] lg:w-[70%] xl:w-[60%] 2xl:w-[50%]">
               <p className="flex gap-1 text-lg font-bold">
-                <Truck className="stroke-3" /> Supplier Info
+                <Truck className="stroke-3" />{" "}
+                {id === "register"
+                  ? "Supplier Info"
+                  : `Edit ${fetchedSupplier?.suppliername ?? ""}`}
               </p>
 
               <div className="flex flex-col w-full h-full gap-5 px-5 lg:px-15 2xl:18 text-violet-500 md:w-full 2xl:gap-5">
@@ -202,7 +298,8 @@ export default function RegisterSupplier() {
                     placeholder={"Enter supplier"}
                     icons={TruckElectric}
                     validated={
-                      validInputs.suppliername && !supplierExist ? true : false
+                      (validInputs.suppliername && !supplierExist) ||
+                      supplier.suppliername === fetchedSupplier?.suppliername
                     }
                     onChange={(e) => {
                       HandleInputChange(e, "suppliername");
@@ -305,13 +402,24 @@ export default function RegisterSupplier() {
                 </div>
               </div>
               {/* Submit Button */}
-              <div className="flex justify-center items-center mt-5   w-[90%] sm:w-[60%] lg:w-[80%]">
+              <div className="flex justify-center items-center mt-5 gap-2   w-[90%] sm:w-[60%] lg:w-[80%]">
+                {id !== "register" ? (
+                  <motion.button
+                    onClick={() => HandleAssignInput()}
+                    disabled={onSubmit}
+                    className="bg-violet-500 flex text-white rounded-2xl justify-center w-15 py-[0.85rem] items-center"
+                  >
+                    <ListRestart size={21} />
+                  </motion.button>
+                ) : null}
                 <motion.button
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
                   disabled={onSubmit}
                   transition={{ duration: 0.2, ease: "easeInOut" }}
-                  onClick={HandleSubmitSupplier}
+                  onClick={
+                    id === "register" ? HandleSubmitSupplier : HandleEditSubmit
+                  }
                   className={` ${
                     onSubmit
                       ? "bg-gray-400 cursor-not-allowed"
@@ -340,7 +448,11 @@ export default function RegisterSupplier() {
                       ></path>
                     </svg>
                   )}
-                  {onSubmit ? "Submitting..." : "Register Supplier"}
+                  {onSubmit
+                    ? "Submitting..."
+                    : id === "register"
+                    ? "Register Supplier"
+                    : "Edit Supplier"}
                 </motion.button>
               </div>
             </div>

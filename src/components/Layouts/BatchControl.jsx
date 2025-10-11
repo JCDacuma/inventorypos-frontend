@@ -29,6 +29,7 @@ export default function BatchControl({ Buttons = [], Count, openBatchContol }) {
                   key={index}
                   whileTap={{ scale: 0.95 }}
                   whileHover={{ scale: 1.05 }}
+                  onClick={btn.function}
                   className={`${btn.color} ${
                     btn.padding || "py-2 px-4"
                   } flex items-center gap-2 text-white rounded-2xl shadow-md shadow-gray-500 cursor-pointer`}

@@ -54,6 +54,7 @@ export default function NavControl({
             {Buttons.map((btn, index) => {
               const btnControl = (
                 <motion.button
+                  key={index}
                   whileTap={{ scale: 0.92 }}
                   whileHover={{ scale: 1.05 }}
                   transition={{ duration: 0.09, ease: "easeInOut" }}

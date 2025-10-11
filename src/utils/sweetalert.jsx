@@ -49,7 +49,7 @@ export const SweetAlert = {
       text,
       showConfirmButton: true,
       confirmButtonColor: "#3b82f6",
-      width: "90%",
+      width: "100% md:40%",
       padding: "1.5em",
       backdrop: true,
       customClass: {

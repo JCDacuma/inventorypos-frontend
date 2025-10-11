@@ -68,7 +68,9 @@ export function Action({ buttons = [], disabled = false }) {
         );
 
         return btn.to && !isDisabled ? (
-          <Link to={btn.to}>{buttonContent}</Link>
+          <Link to={btn.to} key={index}>
+            {buttonContent}
+          </Link>
         ) : (
           buttonContent
         );
