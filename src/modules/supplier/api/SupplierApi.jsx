@@ -22,60 +22,82 @@ export async function FetchSupplier(Supplier) {
 }
 
 const HandleValidation = (supplier, supplierExist) => {
-  if (!validationField.suppliername.test(supplier.suppliername)) {
-    SweetAlert.error(
-      "Invalid Supplier Name",
-      "Please provide a valid and unique supplier name."
-    );
-    return false;
-  }
+  for (const key in supplier) {
+    const value = supplier[key];
 
-  if (supplierExist) {
-    SweetAlert.error(
-      "Supplier Already Exists",
-      "A supplier with this name is already registered. Please use a different name or update the existing supplier."
-    );
-    return false;
-  }
+    switch (key) {
+      case "suppliername":
+        if (!validationField.suppliername.test(value)) {
+          SweetAlert.error(
+            "Invalid Supplier Name",
+            "Please provide a valid and unique supplier name."
+          );
+          return false;
+        }
 
-  if (!validationField.address.test(supplier.supplier_address)) {
-    SweetAlert.error(
-      "Invalid Supplier Address",
-      "Please enter a valid supplier address before proceeding."
-    );
-    return false;
-  }
+        if (supplierExist) {
+          SweetAlert.error(
+            "Supplier Already Exists",
+            "A supplier with this name is already registered."
+          );
+          return false;
+        }
+        break;
 
-  if (!validationField.shippingFee.test(supplier.shipping_fee)) {
-    SweetAlert.error(
-      "Invalid Shipping Fee",
-      "Please enter a valid shipping fee amount before proceeding."
-    );
-    return false;
-  }
+      case "supplier_address":
+        if (!validationField.address.test(value)) {
+          SweetAlert.error(
+            "Invalid Supplier Address",
+            "Please enter a valid supplier address before proceeding."
+          );
+          return false;
+        }
+        break;
 
-  if (!validationField.boolean.test(supplier.vat_registered)) {
-    SweetAlert.error(
-      "VAT Registration Required",
-      "Please specify whether the supplier is VAT registered."
-    );
-    return false;
-  }
+      case "shipping_fee":
+        if (!validationField.shippingFee.test(value)) {
+          SweetAlert.error(
+            "Invalid Shipping Fee",
+            "Please enter a valid shipping fee amount before proceeding."
+          );
+          return false;
+        }
+        break;
 
-  if (!validationField.SelectedId.test(supplier.supplier_contact_id)) {
-    SweetAlert.error(
-      "No Contact Selected",
-      "Please select an existing contact for the supplier or add a new contact before proceeding."
-    );
-    return false;
-  }
+      case "vat_registered":
+        if (!validationField.boolean.test(value)) {
+          SweetAlert.error(
+            "VAT Registration Required",
+            "Please specify whether the supplier is VAT registered."
+          );
+          return false;
+        }
+        break;
 
-  if (!validationField.name.test(supplier.status)) {
-    SweetAlert.error(
-      "Status Required",
-      "Please select whether the supplier status is Active or Inactive."
-    );
-    return false;
+      case "supplier_contact_id":
+        if (!validationField.SelectedId.test(value)) {
+          SweetAlert.error(
+            "No Contact Selected",
+            "Please select an existing contact for the supplier or add a new contact before proceeding."
+          );
+          return false;
+        }
+        break;
+
+      case "status":
+        if (!validationField.name.test(value)) {
+          SweetAlert.error(
+            "Status Required",
+            "Please select whether the supplier status is Active or Inactive."
+          );
+          return false;
+        }
+        break;
+
+      default:
+        // Ignore other fields
+        break;
+    }
   }
 
   return true;
@@ -135,6 +157,26 @@ export async function SubmitEditSupplier(supplier, refetch) {
   }
 }
 
+export async function SubmitBulkEdit(id, request) {
+  if (!HandleValidation(request)) return;
+  if (id.length === 0) return;
+  const supplier = id.map((id) => ({ id, ...request }));
+  console.log(supplier);
+  try {
+    await api.patch("/supplier/bulk-update", { request: supplier });
+    SweetAlert.success(
+      "Bulk Update Successful",
+      "All selected suppliers have been updated."
+    );
+  } catch (err) {
+    console.log(`There is error: ${err}`);
+    SweetAlert.error(
+      "Bulk Update Failed",
+      "Something went wrong while updating the suppliers."
+    );
+  }
+}
+
 export async function FetchSupplierById(
   id,
   setSupllier,
@@ -142,6 +184,7 @@ export async function FetchSupplierById(
   HandleAssignInput
 ) {
   if (!id) return;
+
   try {
     const supplier = await api.post(`supplier/get-supplier?id=${id}`);
     setFound(true);
