@@ -509,17 +509,24 @@ export default function Inventory() {
           <MobileTable
             columns={columns}
             data={data}
+            selectedID={selectedID}
             setSelectedId={setSelectedID}
           />
         </div>
         <div className="hidden md:block">
-          <Table columns={columns} data={data} setSelectedId={setSelectedID} />
+          <Table
+            columns={columns}
+            data={data}
+            setSelectedId={setSelectedID}
+            selectedID={selectedID}
+          />
         </div>
       </div>
 
       {/* Batch Control (floating) */}
       <BatchControl
         Count={selectedID.length}
+        clearId={() => setSelectedID([])}
         openBatchContol={openBatchContol}
         Buttons={BatchControlBtn}
         className="fixed bottom-4 right-4"

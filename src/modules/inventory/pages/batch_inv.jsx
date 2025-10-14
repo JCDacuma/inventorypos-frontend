@@ -923,6 +923,7 @@ export default function BatchInventory() {
           <MobileTable
             columns={columns}
             data={filteredData}
+            selectedID={selectedID}
             setSelectedId={setSelectedID}
           />
         </div>
@@ -932,6 +933,7 @@ export default function BatchInventory() {
             columns={columns}
             data={filteredData}
             setSelectedId={setSelectedID}
+            selectedID={selectedID}
           />
         </div>
       </div>
@@ -939,6 +941,7 @@ export default function BatchInventory() {
       {/* Batch Contol */}
       <BatchControl
         Count={selectedID.length}
+        clearId={() => setSelectedID([])}
         openBatchContol={openBatchContol}
         Buttons={BatchControlBtn}
       />

@@ -28,8 +28,13 @@ import {
   ClipboardClock,
   PhoneCall,
 } from "lucide-react";
-import { FetchSupplier } from "@/modules/supplier/api/SupplierApi.jsx";
+import {
+  FetchSupplier,
+  SubmitEditSupplier,
+  SubmitBulkEdit,
+} from "@/modules/supplier/api/SupplierApi.jsx";
 import { FetchContact } from "@/modules/supplier/api/ContactApi.jsx";
+import { SweetAlert } from "@/utils/sweetalert.jsx";
 
 export default function Suppliers() {
   //Selected Id
@@ -42,6 +47,7 @@ export default function Suppliers() {
   const [supplier, setSupplier] = useState([]); //supplier fetched
   const [addContactModal, setContactModal] = useState(false);
   const [fetchedContact, setFectchedContact] = useState([]);
+  const [onSubmit, setOnsubmit] = useState(false);
   const navigation = useNavigate();
 
   //api fetch contact functionality
@@ -59,12 +65,46 @@ export default function Suppliers() {
     setBatchUpdateModal(true);
   };
 
-  const HandleBatchArchive = () => {};
+  const HandleBatchArchive = async () => {
+    if (onSubmit) return;
+    const result = await SweetAlert.Confirm(
+      `Batch Archieving supplier`,
+      `Are you sure you want to archieve all the selected supplier`
+    );
+    if (!result.isConfirmed) return;
+    setOnsubmit(true);
+    const request = {
+      status: "Archieved",
+    };
+    try {
+      await SubmitBulkEdit(selectedID, request, HandleFetchSupplier);
+    } finally {
+      setOnsubmit(false);
+    }
+  };
 
   //Active Table Button  ----------------------
 
   //Archiving functionality for selected id
-  const HandleArchieve = (id) => {};
+  const HandleArchieve = async (id, name) => {
+    if (onSubmit) return;
+    const result = await SweetAlert.Confirm(
+      `Archieving supplier`,
+      `Are you sure you want to archieve ${name}`
+    );
+    if (!result.isConfirmed) return;
+    setOnsubmit(true);
+    const request = {
+      id: id,
+      status: "Archieved",
+    };
+    try {
+      await SubmitEditSupplier(request, HandleFetchSupplier);
+      HandleFetchSupplier();
+    } finally {
+      setOnsubmit(false);
+    }
+  };
 
   //Edit functionality for selected id
   const HandleEdit = (id) => {
@@ -132,6 +172,7 @@ export default function Suppliers() {
       status: <SupplierStatus status={sup.status} />,
       Action: (
         <Action
+          disabled={onSubmit}
           buttons={[
             {
               onClick: () => HandleEdit(sup.id),
@@ -146,7 +187,7 @@ export default function Suppliers() {
               tooltip: "History",
             },
             {
-              onClick: () => HandleArchieve(sup.id),
+              onClick: () => HandleArchieve(sup.id, sup.supplierName),
               icon: Archive,
               iconSize: "h-[1.2rem] w-[1.2rem]",
               tooltip: "Archieve",
@@ -182,6 +223,7 @@ export default function Suppliers() {
           <MobileTable
             columns={columns}
             setSelectedId={setSelectedID}
+            selectedID={selectedID}
             data={fetchedSupplier}
           />
         </div>
@@ -189,14 +231,16 @@ export default function Suppliers() {
         <div className="hidden md:block">
           <Table
             columns={columns}
-            setSelectedId={setSelectedID}
             data={fetchedSupplier}
+            setSelectedId={setSelectedID}
+            selectedID={selectedID}
           />
         </div>
       </div>
 
       {/* Batch Contol */}
       <BatchControl
+        clearId={() => setSelectedID([])}
         Count={selectedID.length}
         openBatchContol={selectedID.length > 0}
         Buttons={BatchControlBtn}
@@ -215,6 +259,7 @@ export default function Suppliers() {
         id={selectedID}
         isOpen={batchUpdateModal}
         onClosed={() => setBatchUpdateModal(false)}
+        SupplierRefresh={HandleFetchSupplier}
         contact={fetchedContact}
       />
 

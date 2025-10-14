@@ -182,6 +182,7 @@ export default function SupplierHistory() {
             columns={columns}
             data={orderShowing}
             setSelectedId={null}
+            selectedID={null}
           />
         </div>
         <div className="hidden md:block">

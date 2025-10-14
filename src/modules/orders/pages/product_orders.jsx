@@ -264,6 +264,7 @@ export default function ProductOrders() {
             columns={columns}
             data={orderData}
             setSelectedId={setSelectedID}
+            selectedID={selectedID}
           />
         </div>
 
@@ -272,12 +273,14 @@ export default function ProductOrders() {
             columns={columns}
             data={orderData}
             setSelectedId={setSelectedID}
+            selectedID={selectedID}
           />
         </div>
       </div>
 
       {/* Batch Contol */}
       <BatchControl
+        clearId={() => setSelectedID([])}
         Count={selectedID.length}
         openBatchContol={openBatchContol}
         Buttons={BatchControlBtn}

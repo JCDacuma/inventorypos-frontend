@@ -1,46 +1,44 @@
 import { useMediaQuery } from "react-responsive";
 import { ChevronsRight } from "lucide-react";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback, useMemo } from "react";
 import { HorizontalSlider } from "@/utils/slider.jsx";
 
-export default function Table({ columns = [], data = [], setSelectedId }) {
+export default function Table({
+  columns = [],
+  data = [],
+  setSelectedId,
+  selectedID,
+}) {
   const isDesktop = useMediaQuery({ minWidth: 768 });
-  const isSmallDesktop = useMediaQuery({ maxWidth: 1168 });
 
-  //Selected Id
-  const [isChecked, setIsChecked] = useState([]);
   const [isAllChecked, setAllChecked] = useState(false);
-
-  //Passing Id
-  useEffect(() => {
-    if (columns.some((col) => col.key === "Select")) {
-      setSelectedId(isChecked);
-    }
-  }, [isChecked, setSelectedId]);
 
   //Select all checkbox state--------------------------
   const HandleAllSelect = () => {
     isAllChecked ? setAllChecked(false) : setAllChecked(true);
   };
-
   //Pass all id if select all checked------------------
   useEffect(() => {
-    isAllChecked ? setIsChecked(data.map((row) => row.id)) : setIsChecked([]);
+    const hasSelectColumn = columns.some((col) => col.key === "Select");
+    if (!hasSelectColumn) return;
+    isAllChecked ? setSelectedId(data.map((row) => row.id)) : setSelectedId([]);
   }, [isAllChecked]);
 
-  //Disabble select all------------------
+  //Disable select all------------------
   useEffect(() => {
-    if (isChecked.length === 0) {
+    const hasSelectColumn = columns.some((col) => col.key === "Select");
+    if (!hasSelectColumn) return;
+    if (selectedID.length === 0) {
       setAllChecked(false);
     }
-  }, [isChecked]);
+  }, [selectedID]);
 
   //ManualCheckBox State -----------------------------
   const HandleSelectItem = (id) => {
-    setIsChecked((prev) =>
+    setSelectedId((prev) =>
       prev.includes(id) ? prev.filter((data) => data !== id) : [...prev, id]
     );
-    if (isChecked.length <= 0) {
+    if (selectedID.length <= 0) {
       setAllChecked(false);
     }
   };
@@ -119,7 +117,7 @@ export default function Table({ columns = [], data = [], setSelectedId }) {
                                   type="checkbox"
                                   className="w-5 h-5 transition-all border rounded shadow appearance-none cursor-pointer peer hover:shadow-md border-slate-300 checked:bg-purple-600 checked:border-purple-600"
                                   id="check7"
-                                  checked={isChecked.includes(row.id)}
+                                  checked={selectedID.includes(row.id)}
                                   onChange={() => HandleSelectItem(row.id)}
                                 />
                                 <span className="absolute text-white transform -translate-x-1/2 -translate-y-1/2 opacity-0 peer-checked:opacity-100 top-1/2 left-1/2">

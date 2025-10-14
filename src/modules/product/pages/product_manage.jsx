@@ -103,236 +103,6 @@ export default function ProductManagement() {
         />
       ),
     },
-    {
-      id: 2,
-      product: "Wireless Mouse - Logitech M185",
-      category: "Electronics",
-      price: "₱900",
-      status: <ProductStatus status="Inactive" />,
-      action: (
-        <Action
-          buttons={[
-            {
-              onClick: () => HandleEdit("Wireless Mouse - Logitech M185", 2),
-              icon: SquarePen,
-              iconSize: "h-[1.2rem] w-[1.2rem]",
-            },
-            {
-              onClick: () => HandleRemove("Wireless Mouse - Logitech M185", 2),
-              icon: Trash2,
-              iconSize: "h-[1.2rem] w-[1.2rem]",
-            },
-          ]}
-        />
-      ),
-    },
-    {
-      id: 3,
-      product: "Smartphone - iPhone 14",
-      category: "Electronics",
-      price: "₱65000",
-      status: <ProductStatus status="Active" />,
-      action: (
-        <Action
-          buttons={[
-            {
-              onClick: () => HandleEdit("Smartphone - iPhone 14", 3),
-              icon: SquarePen,
-              iconSize: "h-[1.2rem] w-[1.2rem]",
-            },
-            {
-              onClick: () => HandleRemove("Smartphone - iPhone 14", 3),
-              icon: Trash2,
-              iconSize: "h-[1.2rem] w-[1.2rem]",
-            },
-          ]}
-        />
-      ),
-    },
-    {
-      id: 4,
-      product: "Rice - 5kg Bag",
-      category: "Grocery",
-      price: "₱500",
-      status: <ProductStatus status="Active" />,
-      action: (
-        <Action
-          buttons={[
-            {
-              onClick: () => HandleEdit("Rice - 5kg Bag", 4),
-              icon: SquarePen,
-              iconSize: "h-[1.2rem] w-[1.2rem]",
-            },
-            {
-              onClick: () => HandleRemove("Rice - 5kg Bag", 4),
-              icon: Trash2,
-              iconSize: "h-[1.2rem] w-[1.2rem]",
-            },
-          ]}
-        />
-      ),
-    },
-    {
-      id: 5,
-      product: "Cooking Oil - 1L Bottle",
-      category: "Grocery",
-      price: "₱120",
-      status: <ProductStatus status="Active" />,
-      action: (
-        <Action
-          buttons={[
-            {
-              onClick: () => HandleEdit("Cooking Oil - 1L Bottle", 5),
-              icon: SquarePen,
-              iconSize: "h-[1.2rem] w-[1.2rem]",
-            },
-            {
-              onClick: () => HandleRemove("Cooking Oil - 1L Bottle", 5),
-              icon: Trash2,
-              iconSize: "h-[1.2rem] w-[1.2rem]",
-            },
-          ]}
-        />
-      ),
-    },
-    {
-      id: 6,
-      product: "Bananas (1kg)",
-      category: "Grocery",
-      price: "₱120",
-      status: <ProductStatus status="Active" />,
-      action: (
-        <Action
-          buttons={[
-            {
-              onClick: () => HandleEdit("Bananas (1kg)", 6),
-              icon: SquarePen,
-              iconSize: "h-[1.2rem] w-[1.2rem]",
-            },
-            {
-              onClick: () => HandleRemove("Bananas (1kg)", 6),
-              icon: Trash2,
-              iconSize: "h-[1.2rem] w-[1.2rem]",
-            },
-          ]}
-        />
-      ),
-    },
-    {
-      id: 7,
-      product: "Office Chair - Ergonomic",
-      category: "Furniture",
-      price: "₱1500",
-      status: <ProductStatus status="Active" />,
-      action: (
-        <Action
-          buttons={[
-            {
-              onClick: () => HandleEdit("Office Chair - Ergonomic", 7),
-              icon: SquarePen,
-              iconSize: "h-[1.2rem] w-[1.2rem]",
-            },
-            {
-              onClick: () => HandleRemove("Office Chair - Ergonomic", 7),
-              icon: Trash2,
-              iconSize: "h-[1.2rem] w-[1.2rem]",
-            },
-          ]}
-        />
-      ),
-    },
-    {
-      id: 8,
-      product: "Dining Table - 6 Seater",
-      category: "Furniture",
-      price: "₱4500",
-      status: <ProductStatus status="Active" />,
-      action: (
-        <Action
-          buttons={[
-            {
-              onClick: () => HandleEdit("Dining Table - 6 Seater", 8),
-              icon: SquarePen,
-              iconSize: "h-[1.2rem] w-[1.2rem]",
-            },
-            {
-              onClick: () => HandleRemove("Dining Table - 6 Seater", 8),
-              icon: Trash2,
-              iconSize: "h-[1.2rem] w-[1.2rem]",
-            },
-          ]}
-        />
-      ),
-    },
-    {
-      id: 9,
-      product: "T-Shirt - Cotton (Large)",
-      category: "Clothing",
-      price: "₱220",
-      status: <ProductStatus status="Active" />,
-      action: (
-        <Action
-          buttons={[
-            {
-              onClick: () => HandleEdit("T-Shirt - Cotton (Large)", 9),
-              icon: SquarePen,
-              iconSize: "h-[1.2rem] w-[1.2rem]",
-            },
-            {
-              onClick: () => HandleRemove("T-Shirt - Cotton (Large)", 9),
-              icon: Trash2,
-              iconSize: "h-[1.2rem] w-[1.2rem]",
-            },
-          ]}
-        />
-      ),
-    },
-    {
-      id: 10,
-      product: "Jeans - Blue Denim",
-      category: "Clothing",
-      price: "₱345",
-      status: <ProductStatus status="Active" />,
-      action: (
-        <Action
-          buttons={[
-            {
-              onClick: () => HandleEdit("Jeans - Blue Denim", 10),
-              icon: SquarePen,
-              iconSize: "h-[1.2rem] w-[1.2rem]",
-            },
-            {
-              onClick: () => HandleRemove("Jeans - Blue Denim", 10),
-              icon: Trash2,
-              iconSize: "h-[1.2rem] w-[1.2rem]",
-            },
-          ]}
-        />
-      ),
-    },
-    {
-      id: 11,
-      product: "Jacket - Winter Coat",
-      category: "Clothing",
-      price: "₱590",
-      status: <ProductStatus status="Active" />,
-      action: (
-        <Action
-          buttons={[
-            {
-              onClick: () => HandleEdit("Jacket - Winter Coat", 11),
-              icon: SquarePen,
-              iconSize: "h-[1.2rem] w-[1.2rem]",
-            },
-            {
-              onClick: () => HandleRemove("Jacket - Winter Coat", 11),
-              icon: Trash2,
-              iconSize: "h-[1.2rem] w-[1.2rem]",
-            },
-          ]}
-        />
-      ),
-    },
   ];
 
   return (
@@ -352,16 +122,23 @@ export default function ProductManagement() {
           <MobileTable
             columns={columns}
             data={data}
+            selectedID={selectedID}
             setSelectedId={setSelectedID}
           />
         </div>
         <div className="hidden md:block">
-          <Table columns={columns} data={data} setSelectedId={setSelectedID} />
+          <Table
+            columns={columns}
+            data={data}
+            setSelectedId={setSelectedID}
+            selectedID={selectedID}
+          />
         </div>
       </div>
 
       {/* Batch Contol */}
       <BatchControl
+        clearId={() => setSelectedID([])}
         Count={selectedID.length}
         Buttons={BatchControlBtn}
         openBatchContol={openBatchContol}

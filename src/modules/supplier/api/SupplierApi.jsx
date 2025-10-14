@@ -126,48 +126,69 @@ export async function SubmitSupplier(supplier, setSupplier, supplierExist) {
   }
 }
 
+//update submitted
 export async function SubmitEditSupplier(supplier, refetch) {
   if (!supplier) return;
-  const request = {
-    suppliername: supplier.suppliername,
-    supplier_address: supplier.supplier_address,
-    shipping_fee: supplier.shipping_fee,
-    vat_registered: supplier.vat_registered,
-    supplier_contact_id: supplier.supplier_contact_id,
-    status: supplier.status,
-  };
+
+  const allowedKeys = [
+    "suppliername",
+    "supplier_address",
+    "shipping_fee",
+    "vat_registered",
+    "supplier_contact_id",
+    "status",
+  ];
+
+  const request = Object.keys(supplier).reduce((acc, key) => {
+    if (
+      allowedKeys.includes(key) &&
+      supplier[key] !== undefined &&
+      supplier[key] !== null
+    ) {
+      acc[key] = supplier[key];
+    }
+    return acc;
+  }, {});
+
+  console.log("Request being sent:", request);
 
   if (!HandleValidation(request, supplier.supplierExist)) return;
 
   try {
     await api.put(`supplier/${supplier.id}`, request);
+
     if (typeof refetch === "function") {
       await refetch();
     }
+
     SweetAlert.success(
-      `Successfull updated`,
-      `${request.suppliername} has been updated successfully`
+      "Successfully updated",
+      `${
+        request.suppliername || supplier.suppliername
+      } has been updated successfully`
     );
   } catch (err) {
-    console.log(`There is error: ${err}`);
+    console.log(`There is an error:`, err);
     SweetAlert.error(
       "Unable to update",
-      `There is a problem in network or server`
+      `There is a problem in the network or server`
     );
   }
 }
 
-export async function SubmitBulkEdit(id, request) {
+//bulk edit
+export async function SubmitBulkEdit(id, request, reset) {
   if (!HandleValidation(request)) return;
   if (id.length === 0) return;
   const supplier = id.map((id) => ({ id, ...request }));
-  console.log(supplier);
+
   try {
     await api.patch("/supplier/bulk-update", { request: supplier });
     SweetAlert.success(
       "Bulk Update Successful",
       "All selected suppliers have been updated."
     );
+    reset();
   } catch (err) {
     console.log(`There is error: ${err}`);
     SweetAlert.error(

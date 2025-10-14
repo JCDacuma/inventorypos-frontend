@@ -244,16 +244,23 @@ export default function PromoManagement() {
           <MobileTable
             columns={columns}
             data={data}
+            selectedID={selectedID}
             setSelectedId={setSelectedID}
           />
         </div>
         <div className="hidden md:block">
-          <Table columns={columns} data={data} setSelectedId={setSelectedID} />
+          <Table
+            columns={columns}
+            data={data}
+            setSelectedId={setSelectedID}
+            selectedID={selectedID}
+          />
         </div>
       </div>
 
       {/* Batch Contol */}
       <BatchControl
+        clearId={() => setSelectedID([])}
         Count={selectedID.length}
         openBatchContol={openBatchContol}
         Buttons={BatchControlBtn}

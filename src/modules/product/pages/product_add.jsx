@@ -25,7 +25,25 @@ import {
   ShoppingCart,
   Notebook,
 } from "lucide-react";
+import { CategoryFetch } from "@/modules/product/api/categoryApi.jsx";
+
 export default function AddProduct() {
+  const [productInfo, setProductInfo] = useState({
+    productImage: null,
+    productname: "",
+    category: {},
+    unit: "",
+    rawPrice: null,
+    markUpPrice: null,
+    sellingPrice: null,
+    isTaxable: null,
+    status: "",
+    selectedSupplier: {},
+    stockQuantity: null,
+    reorderLevel: null,
+    description: "",
+  });
+
   const [productImage, setProductImage] = useState(null);
   const imageRef = useRef(null);
 
@@ -45,74 +63,31 @@ export default function AddProduct() {
   const [reorderLevel, setReorder] = useState(null);
   const [description, setDescription] = useState("");
 
-  //const Taxable Option list
-  const taxableOption = [
-    { label: "yes", value: true },
-    { label: "no", value: false },
-  ];
+  //api
+  const [fetchedCategory, setFetchedCategory] = useState([]);
+
+  //fetching functionality
+  const HandleFetchCategory = () => {
+    CategoryFetch(setFetchedCategory);
+  };
+
+  useEffect(() => {
+    HandleFetchCategory();
+  }, []);
+
+  //Uploaded image preview
+  useEffect(() => {
+    if (productImage) {
+      const preview = URL.createObjectURL(productImage);
+      setImagePreview(preview);
+    }
+  }, [productImage]);
 
   //Sample data category
-  const categorySampleData = [
-    { id: 1, categoryName: "Electronics" },
-    { id: 2, categoryName: "Appliances" },
-    { id: 3, categoryName: "Clothing & Apparel" },
-    { id: 4, categoryName: "Footwear" },
-    { id: 5, categoryName: "Cosmetics & Personal Care" },
-    { id: 6, categoryName: "Groceries" },
-    { id: 7, categoryName: "Household Supplies" },
-    { id: 8, categoryName: "Beverages" },
-    { id: 9, categoryName: "Appetizers" },
-    { id: 10, categoryName: "Main Course" },
-    { id: 11, categoryName: "Desserts" },
-    { id: 12, categoryName: "Add-ons / Extras" },
-    { id: 13, categoryName: "Raw Materials" },
-    { id: 14, categoryName: "Finished Goods" },
-    { id: 15, categoryName: "Packaging Materials" },
-  ];
+  const categorySampleData = [];
 
   //Supplier sample data fetch
-  const supplier = [
-    {
-      id: 1,
-      suppliername: "Dell Supplier Inc.",
-      contactperson: "John Smith",
-      phonenumber: "+63 912 345 6789",
-      vatregistered: "Yes",
-      shippingfee: "₱2,500",
-    },
-    {
-      id: 2,
-      suppliername: "Tech Distributors Ltd.",
-      contactperson: "Emily Davis",
-      phonenumber: "+63 917 222 3344",
-      vatregistered: "No",
-      shippingfee: "₱1,800",
-    },
-    {
-      id: 3,
-      suppliername: "Logitech Distribution",
-      contactperson: "Michael Lee",
-      phonenumber: "+63 918 555 7788",
-      vatregistered: "Yes",
-      shippingfee: "₱1,200",
-    },
-    {
-      id: 4,
-      suppliername: "Apple Authorized Dist.",
-      contactperson: "Sophia Tan",
-      phonenumber: "+63 915 111 2233",
-      vatregistered: "Yes",
-      shippingfee: "₱3,000",
-    },
-    {
-      id: 5,
-      suppliername: "Samsung Electronics",
-      contactperson: "David Kim",
-      phonenumber: "+63 916 777 8899",
-      vatregistered: "No",
-      shippingfee: "₱2,200",
-    },
-  ];
+  const supplier = [];
 
   //category
   const categoryName = [
@@ -149,16 +124,15 @@ export default function AddProduct() {
     }
   };
 
+  //Option -------------
+  //const Taxable Option list
+  const taxableOption = [
+    { label: "yes", value: true },
+    { label: "no", value: false },
+  ];
+
   //itemStatus
   const Itemstatus = ["Active", "Inactive"];
-
-  //Uploaded image preview
-  useEffect(() => {
-    if (productImage) {
-      const preview = URL.createObjectURL(productImage);
-      setImagePreview(preview);
-    }
-  }, [productImage]);
 
   const HandleRemoveImage = () => {
     setProductImage(null);
@@ -168,6 +142,7 @@ export default function AddProduct() {
       imageRef.current.value = null;
     }
   };
+
   return (
     <Layout currentWebPage="Register Product">
       <div className="w-full h-full px-1 pt-16 pb-2 bg-white ">
@@ -348,6 +323,8 @@ export default function AddProduct() {
       <AddCategoryModal
         onClosed={() => setAddCategoryModal(false)}
         isOpen={isAddCategory}
+        refetch={HandleFetchCategory}
+        fetchedCategory={fetchedCategory}
       />
     </Layout>
   );
