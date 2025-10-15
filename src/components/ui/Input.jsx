@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 
 export function Input({
@@ -14,57 +14,82 @@ export function Input({
   OnClick,
   validated = true,
   disabled = false,
+  file,
 }) {
   const [focused, setFocused] = useState(false);
-
+  const [fileName, setFileName] = useState("");
   const InputIcon = icons;
   const ButtonIcon = buttonIcon;
 
   const HandleChange = (e) => {
-    if (disabled) return; // Block typing or file selection when disabled
+    if (disabled) return;
 
     if (type === "file") {
       const file = e.target.files?.[0];
-      onChange(file);
+      if (file) {
+        setFileName(file.name);
+        onChange(file);
+      } else {
+        setFileName("");
+        onChange(null);
+      }
     } else {
       onChange(e.target.value);
     }
   };
 
+  useEffect(() => {
+    if (type === "file" && !file) {
+      setFileName("");
+    }
+  }, [file, type]);
+
   return (
     <AnimatePresence>
       <div
-        className={`relative flex w-full gap-0 pt-3 ${
+        className={`relative flex w-full gap-0 pt-3  ${
           disabled ? "opacity-60 cursor-not-allowed select-none" : ""
         }`}
       >
-        <div className="w-full">
+        <div className={`w-full `}>
           <input
             type={type}
-            value={value ?? ""}
             ref={Ref}
-            onChange={HandleChange}
+            {
+              ...(type === "file"
+                ? { onChange: HandleChange } // uncontrolled for file
+                : { value: value || "", onChange: HandleChange }) // controlled for others
+            }
             onFocus={() => !disabled && setFocused(true)}
             onBlur={() => !disabled && setFocused(false)}
             placeholder={placeholder}
             disabled={disabled}
-            className={`w-full px-4 py-[1rem] lg:py-[1.05rem] text-sm text-gray-800 placeholder-transparent transition-all duration-200 ease-in-out bg-white border shadow-md select-none
-              ${haveBtn ? "rounded-l-2xl" : "rounded-2xl"}
-              ${
-                validated ||
-                value === null ||
-                value === undefined ||
-                value === ""
-                  ? "border-violet-300"
-                  : "border-red-700"
-              }
-              ${
-                disabled
-                  ? "bg-gray-100 cursor-not-allowed focus:ring-0 focus:border-gray-300"
-                  : "focus:border-violet-500 focus:ring-2 focus:ring-violet-400 focus:outline-none focus:shadow-lg"
-              }
-            `}
+            className={`w-full px-4 py-[1rem] lg:py-[1.05rem] ${
+              type === "file" ? "text-transparent" : ""
+            } text-sm text-gray-800 placeholder-transparent transition-all duration-200 ease-in-out bg-white border shadow-md select-none
+    ${haveBtn ? "rounded-l-2xl" : "rounded-2xl"}
+    ${
+      validated || value === null || value === undefined || value === ""
+        ? "border-violet-300"
+        : "border-red-700"
+    }
+    ${
+      disabled
+        ? "bg-gray-100 cursor-not-allowed focus:ring-0 focus:border-gray-300"
+        : "focus:border-violet-500 focus:ring-2 focus:ring-violet-400 focus:outline-none focus:shadow-lg"
+    }
+  `}
           />
+          {/* Custom display for file name or placeholder */}
+          {type === "file" && (
+            <span
+              className={`absolute top-10 left-4 -translate-y-1/2 text-sm ${
+                fileName ? "text-gray-800" : "text-gray-400"
+              }`}
+            >
+              {fileName || placeholder}
+            </span>
+          )}
 
           <motion.label
             initial={false}

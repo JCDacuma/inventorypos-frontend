@@ -1,12 +1,15 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useMemo } from "react";
 import { Layout } from "@/components/Layouts/Layout.jsx";
 import AddCategoryModal from "@/modules/product/components/Layouts/productCategoryModal.jsx";
 import { Input } from "@/components/ui/Input.jsx";
 import { RadioGroup } from "@/components/ui/radioGroup.jsx";
 import { DefaultDropDown } from "@/components/ui/dropdown.jsx";
 import { motion } from "framer-motion";
+import { ProductSubmit } from "@/modules/product/api/productApi.jsx";
+import { validationField } from "@/utils/validation.jsx";
+
 //icon
 import {
   Trash,
@@ -20,108 +23,200 @@ import {
   Banknote,
   HandCoins,
   CircleCheckBig,
-  Truck,
-  Warehouse,
   ShoppingCart,
   Notebook,
 } from "lucide-react";
 import { CategoryFetch } from "@/modules/product/api/categoryApi.jsx";
 
 export default function AddProduct() {
+  //input value
   const [productInfo, setProductInfo] = useState({
     productImage: null,
     productname: "",
-    category: {},
-    unit: "",
+    category: null,
     rawPrice: null,
     markUpPrice: null,
     sellingPrice: null,
     isTaxable: null,
     status: "",
-    selectedSupplier: {},
-    stockQuantity: null,
+    unit: "",
     reorderLevel: null,
     description: "",
   });
 
-  const [productImage, setProductImage] = useState(null);
+  const [inputValid, setInputValid] = useState({
+    productImage: true,
+    productname: true,
+    category: true,
+    rawPrice: true,
+    markUpPrice: true,
+    sellingPrice: true,
+    isTaxable: true,
+    status: true,
+    unit: true,
+    reorderLevel: true,
+    description: true,
+  });
+
   const imageRef = useRef(null);
-
   const [imagePreview, setImagePreview] = useState(null);
-  const [productname, setProductName] = useState("");
-  const [category, setCategory] = useState({});
-  const [unit, setUnit] = useState("");
-  const [rawPrice, setRawPrice] = useState("");
-  const [markUpPrice, setMarkupPrice] = useState(null);
-  const [sellingPrice, setSellingPrice] = useState(null);
-
-  //Second column
-  const [isTaxable, noTaxable] = useState(null);
-  const [status, setStatus] = useState("");
-  const [selectedSupplier, setSelectedSupplier] = useState({});
-  const [stockQuantity, setStock] = useState(null);
-  const [reorderLevel, setReorder] = useState(null);
-  const [description, setDescription] = useState("");
-
   //api
-  const [fetchedCategory, setFetchedCategory] = useState([]);
+  const [onSubmit, setOnsubmit] = useState(false); //submition state
+  const [fetchedCategory, setFetchedCategory] = useState([]); //category fetch
 
   //fetching functionality
   const HandleFetchCategory = () => {
     CategoryFetch(setFetchedCategory);
   };
 
+  //fetch category
   useEffect(() => {
     HandleFetchCategory();
   }, []);
 
+  //Input Change
+  const HandleInputChange = (value, field) => {
+    setProductInfo((prev) => ({
+      ...prev,
+      [field]: value,
+    }));
+  };
+
   //Uploaded image preview
   useEffect(() => {
-    if (productImage) {
-      const preview = URL.createObjectURL(productImage);
+    const file = productInfo.productImage;
+    if (file instanceof Blob) {
+      const preview = URL.createObjectURL(file);
       setImagePreview(preview);
-    }
-  }, [productImage]);
-
-  //Sample data category
-  const categorySampleData = [];
-
-  //Supplier sample data fetch
-  const supplier = [];
-
-  //category
-  const categoryName = [
-    ...new Set(categorySampleData.map((category) => category.categoryName)),
-  ];
-
-  //set Selected category
-  const selectedCategoryId = (value) => {
-    const selectedCategory = categorySampleData.find(
-      (category) => category.categoryName === value
-    );
-
-    if (selectedCategory) {
-      setCategory(selectedCategory);
+      return () => URL.revokeObjectURL(preview);
     } else {
-      setCategory({});
+      setImagePreview(null);
     }
+  }, [productInfo.productImage]);
+
+  //image remove
+  const HandleRemoveImage = (e, field) => {
+    HandleInputChange(e, field);
+    if (imageRef.current !== null || imageRef.current !== undefined) {
+      imageRef.current.value = null;
+    }
+  };
+
+  //reset input
+  const HandleReset = () => {
+    setProductInfo({
+      productname: "",
+      category: null,
+      rawPrice: null,
+      markUpPrice: null,
+      sellingPrice: null,
+      isTaxable: null,
+      status: "",
+      unit: "",
+      reorderLevel: null,
+      description: "",
+    });
+    HandleRemoveImage();
+  };
+
+  //Calculate selling price
+  const HandleCalculateSelling = (value) => {
+    let markupPercent = parseFloat(value);
+    let rawPrice = parseFloat(productInfo.rawPrice);
+
+    if (isNaN(markupPercent) || markupPercent < 0) markupPercent = 0;
+    if (isNaN(rawPrice) || rawPrice < 0) rawPrice = 0;
+
+    const sellingPrice = rawPrice + rawPrice * (markupPercent / 100);
+    const formattedSellingPrice = sellingPrice.toFixed(2);
+
+    // Update state
+    setProductInfo((prod) => ({
+      ...prod,
+      sellingPrice: formattedSellingPrice,
+    }));
+
+    //validate selling price
+    HandleInputStateValid(formattedSellingPrice, "sellingPrice");
+  };
+
+  useEffect(() => {
+    HandleCalculateSelling(
+      productInfo.markUpPrice === null ? 0 : productInfo.markUpPrice
+    );
+  }, [productInfo.rawPrice]);
+
+  const HandleInputStateValid = (value, fieldname) => {
+    setInputValid((input) => {
+      const update = { ...input };
+      const numValue = parseFloat(value);
+      const rawPrice = parseFloat(productInfo.rawPrice) || 0;
+
+      switch (fieldname) {
+        case "productname":
+          update[fieldname] = validationField.productname.test(value);
+          break;
+
+        case "category":
+          update[fieldname] = validationField.SelectedId.test(value);
+          break;
+
+        case "rawPrice":
+        case "markUpPrice":
+          update[fieldname] =
+            validationField.price.test(value) && numValue >= 0;
+          break;
+
+        case "sellingPrice":
+          update[fieldname] =
+            validationField.price.test(value) && numValue >= rawPrice;
+          break;
+
+        case "isTaxable":
+          update[fieldname] = validationField.boolean.test(value);
+          break;
+
+        case "status":
+          update[fieldname] = validationField.name.test(value);
+          break;
+
+        case "unit":
+          update[fieldname] = validationField.unit.test(value);
+          break;
+
+        case "reorderLevel":
+          update[fieldname] =
+            validationField.quantity.test(value) && numValue >= 0;
+          break;
+
+        case "description":
+          update[fieldname] = validationField.description.test(value);
+          break;
+
+        default:
+          break;
+      }
+
+      return update;
+    });
   };
 
   //open add category
   const [isAddCategory, setAddCategoryModal] = useState(false);
 
-  //supplier
-  const supplierOption = [...new Set(supplier.map((sup) => sup.suppliername))];
+  //category name display in dropdown
+  const categoryName = useMemo(
+    () => fetchedCategory?.map((categ) => categ.categoryName) || [],
+    [fetchedCategory]
+  );
 
-  //set selected supplier
-  const HandleSelectedSupplier = (value) => {
-    const Selectedsupplier = supplier.find((sup) => sup.suppliername === value);
-
-    if (Selectedsupplier) {
-      setSelectedSupplier(Selectedsupplier);
-    } else {
-      setSelectedSupplier({});
-    }
+  //category select convert to id
+  const HandleSelectCategory = (value, field) => {
+    const selected = fetchedCategory.find(
+      (categ) => categ.categoryName === value
+    );
+    HandleInputChange(selected.id, field);
+    HandleInputStateValid(selected.id, field);
   };
 
   //Option -------------
@@ -131,15 +226,32 @@ export default function AddProduct() {
     { label: "no", value: false },
   ];
 
-  //itemStatus
+  //itemStatus option
   const Itemstatus = ["Active", "Inactive"];
 
-  const HandleRemoveImage = () => {
-    setProductImage(null);
-    setImagePreview(null);
+  //register product
+  const HandleSubmit = async () => {
+    if (onSubmit) return;
+    setOnsubmit(true);
 
-    if (imageRef.current !== null || imageRef.current !== undefined) {
-      imageRef.current.value = null;
+    const request = {
+      productImage: productInfo.productImage,
+      productname: productInfo.productname,
+      category: productInfo.category,
+      rawPrice: productInfo.rawPrice,
+      markUpPrice: productInfo.markUpPrice,
+      sellingPrice: productInfo.sellingPrice,
+      isTaxable: productInfo.isTaxable,
+      status: productInfo.status,
+      unit: productInfo.unit,
+      reorderLevel: productInfo.reorderLevel,
+      description: productInfo.description,
+    };
+
+    try {
+      await ProductSubmit(request, HandleReset);
+    } finally {
+      setOnsubmit(false);
     }
   };
 
@@ -151,6 +263,7 @@ export default function AddProduct() {
             <div className="flex justify-start w-full sm:w-20">
               <Link to={"/product-management"}>
                 <motion.button
+                  disabled={onSubmit}
                   whileHover={{
                     backgroundColor: "#4E1CA6",
                     color: "#fff",
@@ -176,7 +289,8 @@ export default function AddProduct() {
             <div className="relative flex flex-col w-full h-full gap-3 py-5 lg:gap-5 lg:pr-5 xl:pl-10 2xl:pl-20">
               <div className="relative flex items-center justify-center gap-3 ">
                 <div className="items-center justify-center hidden h-32 p-1 border-2 border-dashed w-42 md:flex bg-violet-50 border-violet-300 rounded-2xl">
-                  {productImage === undefined || productImage === null ? (
+                  {productInfo.productImage === undefined ||
+                  productInfo.productImage === null ? (
                     <p className="text-xs font-medium text-center text-violet-500">
                       Image will appear here
                     </p>
@@ -189,63 +303,81 @@ export default function AddProduct() {
                 </div>
 
                 <Input
+                  disabled={onSubmit}
                   placeholder={"drop image here"}
-                  onChange={setProductImage}
+                  onChange={(e) => HandleInputChange(e, "productImage")}
                   type={"file"}
                   haveBtn={true}
                   buttonIcon={Trash}
                   icons={ImageDown}
-                  OnClick={HandleRemoveImage}
+                  OnClick={() => HandleRemoveImage(null, "productImage")}
                   Ref={imageRef}
+                  file={productInfo.productImage}
                 />
               </div>
               <div>
                 <Input
+                  disabled={onSubmit}
                   placeholder={"Enter item name"}
-                  onChange={setProductName}
+                  onChange={(e) => {
+                    HandleInputChange(e, "productname");
+                    HandleInputStateValid(e, "productname");
+                  }}
                   icons={PackageSearch}
-                  value={productname}
+                  value={productInfo.productname}
+                  validated={inputValid.productname}
                 />
               </div>
               <div className="mt-2">
                 <DefaultDropDown
+                  disabled={onSubmit}
                   placeholder={"Select category"}
-                  initialDisplay={"Choose category"}
-                  items={categoryName}
-                  SetSelected={selectedCategoryId}
                   icons={Group}
                   BtnIcons={Plus}
-                  selectedValue={category.categoryName}
+                  items={categoryName}
+                  validated={inputValid.category}
+                  SetSelected={(e) => {
+                    HandleSelectCategory(e, "category");
+                  }}
                   OnClick={() => setAddCategoryModal(true)}
                 />
               </div>
+
               <div>
                 <Input
-                  placeholder={"Enter item unit (eg. Kg)"}
-                  value={unit}
-                  onChange={setUnit}
-                  icons={Weight}
-                />
-              </div>
-              <div>
-                <Input
+                  disabled={onSubmit}
                   placeholder={"Enter raw price"}
-                  value={rawPrice}
-                  onChange={setRawPrice}
+                  value={productInfo.rawPrice}
+                  validated={inputValid.rawPrice}
+                  onChange={(e) => {
+                    HandleInputChange(e, "rawPrice");
+                    HandleInputStateValid(e, "rawPrice");
+                  }}
                   icons={PhilippinePeso}
                 />
               </div>
               <div className="flex flex-col items-center justify-center w-full gap-3 sm:gap-1 sm:flex-row ">
                 <Input
+                  disabled={onSubmit}
                   placeholder={"mark up price"}
-                  value={markUpPrice}
-                  onChange={setMarkupPrice}
+                  value={productInfo.markUpPrice}
+                  validated={inputValid.markUpPrice}
+                  onChange={(e) => {
+                    HandleInputChange(e, "markUpPrice");
+                    HandleInputStateValid(e, "markUpPrice");
+                    HandleCalculateSelling(e);
+                  }}
                   icons={Percent}
                 />
                 <Input
+                  disabled={onSubmit}
                   placeholder={"selling price"}
-                  value={sellingPrice}
-                  onChange={setSellingPrice}
+                  value={productInfo.sellingPrice}
+                  validated={inputValid.sellingPrice}
+                  onChange={(e) => {
+                    HandleInputChange(e, "sellingPrice");
+                    HandleInputStateValid(e, "sellingPrice");
+                  }}
                   icons={Banknote}
                 />
               </div>
@@ -258,61 +390,103 @@ export default function AddProduct() {
                 </div>
 
                 <RadioGroup
+                  disabled={onSubmit}
                   options={taxableOption}
-                  value={isTaxable}
-                  onChange={noTaxable}
-                  name={"taxable"}
+                  value={productInfo.isTaxable}
+                  validated={inputValid.isTaxable}
+                  onChange={(e) => {
+                    HandleInputChange(e, "isTaxable");
+                    HandleInputStateValid(e, "isTaxable");
+                  }}
                 />
               </div>
               <div className="mt-2">
                 <DefaultDropDown
+                  disabled={onSubmit}
                   placeholder={"Select status"}
                   items={Itemstatus}
-                  selectedValue={status}
-                  onChange={setStatus}
+                  selectedValue={productInfo.status}
+                  SetSelected={(e) => {
+                    HandleInputChange(e, "status");
+                    HandleInputStateValid(e, "status");
+                  }}
+                  validated={inputValid.status}
                   icons={CircleCheckBig}
                 />
               </div>
-              <div className="mt-2">
-                <DefaultDropDown
-                  placeholder={"Select supplier"}
-                  items={supplierOption}
-                  selectedValue={selectedSupplier.suppliername}
-                  SetSelected={setSelectedSupplier}
-                  icons={Truck}
+
+              <div>
+                <Input
+                  disabled={onSubmit}
+                  placeholder={"Enter item unit (eg. Kg)"}
+                  value={productInfo.unit}
+                  validated={inputValid.unit}
+                  onChange={(e) => {
+                    HandleInputChange(e, "unit");
+                    HandleInputStateValid(e, "unit");
+                  }}
+                  icons={Weight}
                 />
               </div>
               <div>
                 <Input
-                  placeholder={"Enter stock quantity"}
-                  value={stockQuantity}
-                  onChange={setStock}
-                  icons={Warehouse}
-                />
-              </div>
-              <div>
-                <Input
+                  disabled={onSubmit}
                   placeholder={"Enter reorder level"}
-                  value={reorderLevel}
-                  onChange={setReorder}
+                  value={productInfo.reorderLevel}
+                  validated={inputValid.reorderLevel}
+                  onChange={(e) => {
+                    HandleInputChange(e, "reorderLevel");
+                    HandleInputStateValid(e, "reorderLevel");
+                  }}
                   icons={ShoppingCart}
                 />
               </div>
+
               <div>
                 <Input
+                  disabled={onSubmit}
                   placeholder={"Enter description"}
-                  value={description}
-                  onChange={setDescription}
+                  value={productInfo.description}
+                  validated={inputValid.description}
+                  onChange={(e) => {
+                    HandleInputChange(e, "description");
+                    HandleInputStateValid(e, "description");
+                  }}
                   icons={Notebook}
                 />
               </div>
 
               <motion.button
+                onClick={() => HandleSubmit()}
                 whileHover={{ scale: 1.01, backgroundColor: "#562FA8" }}
                 whileTap={{ scale: 0.95 }}
                 transition={{ duration: 0.18, ease: "easeInOut" }}
-                className="w-full py-3 font-bold text-white cursor-pointer select-none bg-violet-500 rounded-2xl"
+                className={`flex ${
+                  onSubmit ? `bg-gray-400` : `bg-violet-500 cursor-pointer`
+                }  items-center justify-center w-full gap-2 py-3 font-bold text-white  select-none  rounded-2xl`}
               >
+                {onSubmit && (
+                  <svg
+                    className="w-5 h-5 text-white animate-spin"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                  >
+                    <circle
+                      className="opacity-25"
+                      cx="12"
+                      cy="12"
+                      r="10"
+                      stroke="currentColor"
+                      strokeWidth="4"
+                    ></circle>
+                    <path
+                      className="opacity-75"
+                      fill="currentColor"
+                      d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
+                    ></path>
+                  </svg>
+                )}
                 Register Product
               </motion.button>
             </div>
