@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { Link } from "react-router-dom";
 
 // Page Layout component
@@ -14,6 +14,7 @@ import TableHeader from "@/components/Layouts/tableHeader.jsx";
 import MobileTable from "@/components/ui/MobileTable.jsx";
 import { ProductStatus } from "@/modules/product/components/ui/productStatus.jsx";
 import { Action } from "@/components/ui/buttons.jsx";
+import { Image } from "@/components/Layouts/image.jsx";
 
 //Animation
 import { motion, AnimatePresence } from "framer-motion";
@@ -32,7 +33,7 @@ export default function ProductManagement() {
 
   //fetched product
   const [products, setProducts] = useState([]);
-
+  console.log(products);
   const isSmallMobile = useMediaQuery({ maxWidth: 375 });
 
   //fetch product
@@ -45,8 +46,8 @@ export default function ProductManagement() {
   }, [FetchProduct]);
 
   // Table Action functionality
-  const HandleEdit = (items, id) => {
-    alert(`Edit ${items} id: ${id}`);
+  const HandleEdit = (id) => {
+    alert(`Edit id: ${id}`);
   };
 
   const HandleRemove = (items, id) => {
@@ -72,9 +73,14 @@ export default function ProductManagement() {
   //Sample columns
   const columns = [
     { key: "Select", label: "" },
-    { key: "product", label: "Product" },
+    { key: "productimage", label: "Image" },
+    { key: "productcode", label: "Code" },
+    { key: "productname", label: "Name" },
     { key: "category", label: "Category" },
-    { key: "price", label: "Price" },
+    { key: "rawprice", label: "Raw Price" },
+    { key: "markupprice", label: "Mark up" },
+    { key: "sellingprice", label: "Selling Price" },
+    { key: "taxable", label: "tax" },
     { key: "status", label: "Status" },
     { key: "action", label: "Action" },
   ];
@@ -93,32 +99,37 @@ export default function ProductManagement() {
     },
   ];
 
-  // Sample fetch from database
-  const data = [
-    {
-      id: 1,
-      product: "Laptop - Dell Inspiron 15",
-      category: "Electronics",
-      price: "₱6000",
-      status: <ProductStatus status="Active" />,
+  //table data
+  const Tabledata = useMemo(() => {
+    return products.map((item) => ({
+      id: item.id,
+      productcode: item.product_code,
+      productimage: <Image src={item.product_image} />,
+      productname: item.productname,
+      category: item.category_name,
+      rawprice: `₱ ${item.raw_price}`,
+      markupprice: `% ${item.markup_price}`,
+      sellingprice: `₱ ${item.selling_price}`,
+      taxable: item.taxable ? "Yes" : "No",
+      status: <ProductStatus status={item.product_status} />,
       action: (
         <Action
           buttons={[
             {
-              onClick: () => HandleEdit("Laptop - Dell Inspiron 15", 1),
+              onClick: () => HandleEdit(item.id),
               icon: SquarePen,
               iconSize: "h-[1.2rem] w-[1.2rem]",
             },
             {
-              onClick: () => HandleRemove("Laptop - Dell Inspiron 15", 1),
+              onClick: () => HandleRemove(item.id, item.productname),
               icon: Trash2,
               iconSize: "h-[1.2rem] w-[1.2rem]",
             },
           ]}
         />
       ),
-    },
-  ];
+    }));
+  }, [products]);
 
   return (
     <Layout currentWebPage="Manage Product">
@@ -136,7 +147,7 @@ export default function ProductManagement() {
         <div className="block md:hidden">
           <MobileTable
             columns={columns}
-            data={data}
+            data={Tabledata}
             selectedID={selectedID}
             setSelectedId={setSelectedID}
           />
@@ -144,7 +155,7 @@ export default function ProductManagement() {
         <div className="hidden md:block">
           <Table
             columns={columns}
-            data={data}
+            data={Tabledata}
             setSelectedId={setSelectedID}
             selectedID={selectedID}
           />

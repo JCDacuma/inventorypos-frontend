@@ -15,9 +15,10 @@ export async function FetchProduct(setProduct) {
     const product = response.data.map((item) => ({
       id: item.id,
       product_code: item.product_code,
-      product_image: item.product_image,
+      product_image: item.product_image_url,
       productname: item.productname,
       category_id: item.category_id,
+      category_name: item.product_category,
       unit_id: item.unit_id,
       markup_price: item.markup_price,
       raw_price: item.raw_price,
