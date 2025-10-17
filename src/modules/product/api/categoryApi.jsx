@@ -1,7 +1,7 @@
 import api from "@/api/axiosInstance.js";
-import React from "react";
 import { SweetAlert } from "@/utils/sweetalert.jsx";
 import { validationField } from "@/utils/validation.jsx";
+import { ProductValidation } from "@/modules/product/utils/productValidation.jsx";
 
 export async function CategoryFetch(setCategory) {
   try {
@@ -23,46 +23,18 @@ export async function CategoryFetch(setCategory) {
   }
 }
 
-function CategoryValidation(category) {
-  for (const key in category) {
-    const value = String(category[key] ?? "").trim();
-
-    switch (key) {
-      case "categoryName":
-        if (!validationField.name.test(value)) {
-          SweetAlert.error(
-            "Invalid Category Name",
-            "Please enter a valid category name. It must be at least 2 characters long and may only contain letters, spaces, apostrophes, or hyphens."
-          );
-          return false;
-        }
-        break;
-
-      case "categoryDescription":
-        if (value.length > 0 && !validationField.description.test(value)) {
-          SweetAlert.error(
-            "Invalid Description",
-            "Please provide a valid description (3–150 characters). Only letters, numbers, spaces, and basic punctuation are allowed."
-          );
-          return false;
-        }
-        break;
-
-      default:
-        break;
-    }
-  }
-  return true;
-}
-
-//  Add Category
+// Add Category
 export async function CategoryAdd(category, Refetch, HandleReset) {
-  if (!category || !CategoryValidation(category)) return;
+  if (!category || !ProductValidation(category)) return;
 
   const payload = {
     categoryName: category.categoryName.trim(),
-    categoryDescription: category.categoryDescription.trim(),
+    category_status: "Active",
   };
+
+  if (category.description && category.description.trim() !== "") {
+    payload.categoryDescription = category.description.trim();
+  }
 
   try {
     const response = await api.post("category", payload);
@@ -74,7 +46,6 @@ export async function CategoryAdd(category, Refetch, HandleReset) {
 
     if (typeof Refetch === "function") await Refetch();
     if (typeof HandleReset === "function") HandleReset();
-
     return response.data;
   } catch (err) {
     console.error("Error adding category:", err);
@@ -88,17 +59,15 @@ export async function CategoryAdd(category, Refetch, HandleReset) {
 
 // Edit Category
 export async function CategoryEdit(category, Refetch, HandleReset) {
-  if (!category || !CategoryValidation(category)) return;
+  if (!category || !ProductValidation(category)) return;
 
   const payload = {
     categoryName: category.categoryName.trim(),
+    category_status: "Active",
   };
 
-  if (
-    category.categoryDescription &&
-    category.categoryDescription.trim() !== ""
-  ) {
-    payload.categoryDescription = category.categoryDescription.trim();
+  if (category.description && category.description.trim() !== "") {
+    payload.categoryDescription = category.description.trim();
   }
 
   try {
@@ -120,5 +89,27 @@ export async function CategoryEdit(category, Refetch, HandleReset) {
       "Failed to update the category. Please try again.";
 
     SweetAlert.error("Update Failed", errorMessage);
+  }
+}
+
+//delete category
+export async function CategorySoftDelete(request, Handlefetch) {
+  if (!request || !request.id) return;
+
+  const category = {
+    category_status: "Deleted",
+  };
+
+  try {
+    await api.patch(`productcategory-delete/${request.id}`, category);
+
+    SweetAlert.success(
+      `Successfully deleted ${request.categoryname || "category"}`
+    );
+
+    if (typeof Handlefetch === "function") Handlefetch();
+  } catch (err) {
+    console.error("Error deleting unit:", err);
+    SweetAlert.error("Failed to delete unit. Please try again.");
   }
 }

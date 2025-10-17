@@ -4,7 +4,9 @@ import React from "react";
 export const validationField = {
   name: /^[A-Za-zÀ-ÿ\s'-]{2,}$/, // Allows names with accents, spaces, apostrophes, hyphens
   productname: /^[A-Za-z0-9\s\-\_\.]{2,150}$/,
-  description: /^[A-Za-z0-9\s.,'’"()-]{5,255}$/,
+  unitname: /^[A-Za-z0-9\s\-\.\(\)]{1,20}$/,
+  symbol: /^[A-Za-z°%µ²³·\/\-]{1,6}$/,
+  description: /^[A-Za-z0-9\s.,'’"()-]{0,255}$/,
   suppliername: /^[A-Za-z0-9À-ÿ\s&.'-]{3,}$/,
   username: /^[A-Za-z0-9_]{4,}$/, // Min 4 chars, letters/numbers/underscore only
   email: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/, // Basic email structure

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 
 // Page Layout component
@@ -21,13 +21,28 @@ import { motion, AnimatePresence } from "framer-motion";
 //Icons
 import { SquarePen, Trash2, Megaphone, CirclePlus } from "lucide-react";
 
+//api
+import { FetchProduct } from "@/modules/product/api/productApi.jsx";
+
 export default function ProductManagement() {
   //Selected Id
   const [selectedID, setSelectedID] = useState([]);
   const openBatchContol = selectedID.length > 0; //Batch Contol Modal State
   const [pageControl, setPageControl] = useState(false); //Page control mobile state modal
 
+  //fetched product
+  const [products, setProducts] = useState([]);
+
   const isSmallMobile = useMediaQuery({ maxWidth: 375 });
+
+  //fetch product
+  const FetchProducts = async () => {
+    await FetchProduct(setProducts);
+  };
+
+  useEffect(() => {
+    FetchProducts();
+  }, [FetchProduct]);
 
   // Table Action functionality
   const HandleEdit = (items, id) => {

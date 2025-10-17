@@ -3,12 +3,19 @@ import { Link } from "react-router-dom";
 import { useState, useEffect, useRef, useMemo } from "react";
 import { Layout } from "@/components/Layouts/Layout.jsx";
 import AddCategoryModal from "@/modules/product/components/Layouts/productCategoryModal.jsx";
+import UnitModal from "@/modules/product/components/Layouts/productUnitModal.jsx";
 import { Input } from "@/components/ui/Input.jsx";
 import { RadioGroup } from "@/components/ui/radioGroup.jsx";
 import { DefaultDropDown } from "@/components/ui/dropdown.jsx";
 import { motion } from "framer-motion";
 import { ProductSubmit } from "@/modules/product/api/productApi.jsx";
-import { validationField } from "@/utils/validation.jsx";
+import { FetchUnit } from "@/modules/product/api/unitApi.jsx";
+
+//helper
+import { GenerateProductCode } from "@/utils/generatecode.jsx";
+import { CalculateSellingPrice } from "@/utils/calculator.jsx";
+import { ProductInputValidation } from "@/modules/product/utils/productValidation.jsx";
+import { HandleInputChange } from "@/utils/InputValueChange.jsx";
 
 //icon
 import {
@@ -25,6 +32,7 @@ import {
   CircleCheckBig,
   ShoppingCart,
   Notebook,
+  FolderOpen,
 } from "lucide-react";
 import { CategoryFetch } from "@/modules/product/api/categoryApi.jsx";
 
@@ -39,11 +47,18 @@ export default function AddProduct() {
     sellingPrice: null,
     isTaxable: null,
     status: "",
-    unit: "",
+    unit: null,
     reorderLevel: null,
     description: "",
   });
 
+  //dropdownSelected
+  const [selected, setSelected] = useState({
+    selectedUnit: null,
+    selectedCategory: null,
+  });
+
+  //input validation state
   const [inputValid, setInputValid] = useState({
     productImage: true,
     productname: true,
@@ -60,27 +75,30 @@ export default function AddProduct() {
 
   const imageRef = useRef(null);
   const [imagePreview, setImagePreview] = useState(null);
+  //open category modal
+  const [isAddCategory, setAddCategoryModal] = useState(false);
+  //open unit modal
+  const [unitModal, setUnitModal] = useState(false);
+
   //api
   const [onSubmit, setOnsubmit] = useState(false); //submition state
   const [fetchedCategory, setFetchedCategory] = useState([]); //category fetch
+  const [fetchedUnit, setFetchedUnit] = useState([]); //unit fetch
 
   //fetching functionality
   const HandleFetchCategory = () => {
     CategoryFetch(setFetchedCategory);
   };
 
+  const HandleFetchUnit = () => {
+    FetchUnit(setFetchedUnit);
+  };
+
   //fetch category
   useEffect(() => {
     HandleFetchCategory();
+    HandleFetchUnit();
   }, []);
-
-  //Input Change
-  const HandleInputChange = (value, field) => {
-    setProductInfo((prev) => ({
-      ...prev,
-      [field]: value,
-    }));
-  };
 
   //Uploaded image preview
   useEffect(() => {
@@ -96,8 +114,8 @@ export default function AddProduct() {
 
   //image remove
   const HandleRemoveImage = (e, field) => {
-    HandleInputChange(e, field);
-    if (imageRef.current !== null || imageRef.current !== undefined) {
+    HandleInputChange(e, field, setProductInfo);
+    if (imageRef.current !== null && imageRef.current !== undefined) {
       imageRef.current.value = null;
     }
   };
@@ -105,6 +123,7 @@ export default function AddProduct() {
   //reset input
   const HandleReset = () => {
     setProductInfo({
+      productImage: null,
       productname: "",
       category: null,
       rawPrice: null,
@@ -116,93 +135,38 @@ export default function AddProduct() {
       reorderLevel: null,
       description: "",
     });
-    HandleRemoveImage();
-  };
 
-  //Calculate selling price
-  const HandleCalculateSelling = (value) => {
-    let markupPercent = parseFloat(value);
-    let rawPrice = parseFloat(productInfo.rawPrice);
-
-    if (isNaN(markupPercent) || markupPercent < 0) markupPercent = 0;
-    if (isNaN(rawPrice) || rawPrice < 0) rawPrice = 0;
-
-    const sellingPrice = rawPrice + rawPrice * (markupPercent / 100);
-    const formattedSellingPrice = sellingPrice.toFixed(2);
-
-    // Update state
-    setProductInfo((prod) => ({
-      ...prod,
-      sellingPrice: formattedSellingPrice,
-    }));
-
-    //validate selling price
-    HandleInputStateValid(formattedSellingPrice, "sellingPrice");
-  };
-
-  useEffect(() => {
-    HandleCalculateSelling(
-      productInfo.markUpPrice === null ? 0 : productInfo.markUpPrice
-    );
-  }, [productInfo.rawPrice]);
-
-  const HandleInputStateValid = (value, fieldname) => {
-    setInputValid((input) => {
-      const update = { ...input };
-      const numValue = parseFloat(value);
-      const rawPrice = parseFloat(productInfo.rawPrice) || 0;
-
-      switch (fieldname) {
-        case "productname":
-          update[fieldname] = validationField.productname.test(value);
-          break;
-
-        case "category":
-          update[fieldname] = validationField.SelectedId.test(value);
-          break;
-
-        case "rawPrice":
-        case "markUpPrice":
-          update[fieldname] =
-            validationField.price.test(value) && numValue >= 0;
-          break;
-
-        case "sellingPrice":
-          update[fieldname] =
-            validationField.price.test(value) && numValue >= rawPrice;
-          break;
-
-        case "isTaxable":
-          update[fieldname] = validationField.boolean.test(value);
-          break;
-
-        case "status":
-          update[fieldname] = validationField.name.test(value);
-          break;
-
-        case "unit":
-          update[fieldname] = validationField.unit.test(value);
-          break;
-
-        case "reorderLevel":
-          update[fieldname] =
-            validationField.quantity.test(value) && numValue >= 0;
-          break;
-
-        case "description":
-          update[fieldname] = validationField.description.test(value);
-          break;
-
-        default:
-          break;
-      }
-
-      return update;
+    if (imageRef.current) {
+      imageRef.current.value = null;
+    }
+    setSelected({
+      selectedUnit: null,
+      selectedCategory: null,
     });
+    setImagePreview(null);
   };
 
-  //open add category
-  const [isAddCategory, setAddCategoryModal] = useState(false);
+  //calculate the selling price
+  useEffect(() => {
+    if (
+      productInfo.rawPrice === null &&
+      productInfo.markUpPrice === null &&
+      productInfo.sellingPrice === null
+    ) {
+      return;
+    }
+    CalculateSellingPrice(
+      productInfo.markUpPrice,
+      productInfo.rawPrice,
+      setProductInfo
+    );
+    ProductInputValidation(
+      productInfo.sellingPrice,
+      "sellingPrice",
+      setInputValid,
+      productInfo.rawPrice
+    );
+  }, [productInfo.rawPrice, productInfo.markUpPrice]);
 
   //category name display in dropdown
   const categoryName = useMemo(
@@ -210,13 +174,72 @@ export default function AddProduct() {
     [fetchedCategory]
   );
 
-  //category select convert to id
-  const HandleSelectCategory = (value, field) => {
-    const selected = fetchedCategory.find(
-      (categ) => categ.categoryName === value
-    );
-    HandleInputChange(selected.id, field);
-    HandleInputStateValid(selected.id, field);
+  const unitname = useMemo(
+    () => fetchedUnit?.map((unit) => unit.unitname) || [],
+    [fetchedUnit]
+  );
+
+  const HandleSelectChange = (value, field, setInputValid, rawPrice) => {
+    let selectedItem = null;
+
+    if (field === "unit") {
+      selectedItem = fetchedUnit?.find((unit) => unit.unitname === value);
+    } else if (field === "category") {
+      selectedItem = fetchedCategory?.find(
+        (categ) => categ.categoryName === value
+      );
+    }
+
+    if (!selectedItem) {
+      HandleInputChange(null, field, setProductInfo);
+      ProductInputValidation(null, field, setInputValid, rawPrice);
+
+      setSelected((prev) => ({
+        ...prev,
+        [field === "unit" ? "selectedUnit" : "selectedCategory"]: null,
+      }));
+
+      return;
+    }
+
+    // Update local dropdown display
+    setSelected((prev) => ({
+      ...prev,
+      [field === "unit" ? "selectedUnit" : "selectedCategory"]: value,
+    }));
+
+    // Update actual ID value in main state
+    HandleInputChange(selectedItem.id, field, setProductInfo);
+    ProductInputValidation(selectedItem.id, field, setInputValid, rawPrice);
+  };
+
+  //register product
+  const HandleSubmit = async () => {
+    if (onSubmit) return;
+    setOnsubmit(true);
+
+    const generatedCode = GenerateProductCode(productInfo.productname);
+
+    const request = {
+      generatedCode: generatedCode,
+      productImage: productInfo.productImage,
+      productname: productInfo.productname,
+      category: productInfo.category,
+      productunit: productInfo.unit,
+      rawPrice: productInfo.rawPrice,
+      markUpPrice: productInfo.markUpPrice,
+      sellingPrice: productInfo.sellingPrice,
+      isTaxable: productInfo.isTaxable,
+      status: productInfo.status,
+      reorderLevel: productInfo.reorderLevel,
+      description: productInfo.description,
+    };
+
+    try {
+      await ProductSubmit(request, HandleReset);
+    } finally {
+      setOnsubmit(false);
+    }
   };
 
   //Option -------------
@@ -228,32 +251,6 @@ export default function AddProduct() {
 
   //itemStatus option
   const Itemstatus = ["Active", "Inactive"];
-
-  //register product
-  const HandleSubmit = async () => {
-    if (onSubmit) return;
-    setOnsubmit(true);
-
-    const request = {
-      productImage: productInfo.productImage,
-      productname: productInfo.productname,
-      category: productInfo.category,
-      rawPrice: productInfo.rawPrice,
-      markUpPrice: productInfo.markUpPrice,
-      sellingPrice: productInfo.sellingPrice,
-      isTaxable: productInfo.isTaxable,
-      status: productInfo.status,
-      unit: productInfo.unit,
-      reorderLevel: productInfo.reorderLevel,
-      description: productInfo.description,
-    };
-
-    try {
-      await ProductSubmit(request, HandleReset);
-    } finally {
-      setOnsubmit(false);
-    }
-  };
 
   return (
     <Layout currentWebPage="Register Product">
@@ -305,7 +302,9 @@ export default function AddProduct() {
                 <Input
                   disabled={onSubmit}
                   placeholder={"drop image here"}
-                  onChange={(e) => HandleInputChange(e, "productImage")}
+                  onChange={(e) =>
+                    HandleInputChange(e, "productImage", setProductInfo)
+                  }
                   type={"file"}
                   haveBtn={true}
                   buttonIcon={Trash}
@@ -320,8 +319,13 @@ export default function AddProduct() {
                   disabled={onSubmit}
                   placeholder={"Enter item name"}
                   onChange={(e) => {
-                    HandleInputChange(e, "productname");
-                    HandleInputStateValid(e, "productname");
+                    HandleInputChange(e, "productname", setProductInfo);
+                    ProductInputValidation(
+                      e,
+                      "productname",
+                      setInputValid,
+                      productInfo.rawPrice
+                    );
                   }}
                   icons={PackageSearch}
                   value={productInfo.productname}
@@ -332,12 +336,18 @@ export default function AddProduct() {
                 <DefaultDropDown
                   disabled={onSubmit}
                   placeholder={"Select category"}
+                  selectedValue={selected.selectedCategory}
                   icons={Group}
-                  BtnIcons={Plus}
+                  BtnIcons={FolderOpen}
                   items={categoryName}
                   validated={inputValid.category}
                   SetSelected={(e) => {
-                    HandleSelectCategory(e, "category");
+                    HandleSelectChange(
+                      e,
+                      "category",
+                      setInputValid,
+                      productInfo.rawPrice
+                    );
                   }}
                   OnClick={() => setAddCategoryModal(true)}
                 />
@@ -350,8 +360,13 @@ export default function AddProduct() {
                   value={productInfo.rawPrice}
                   validated={inputValid.rawPrice}
                   onChange={(e) => {
-                    HandleInputChange(e, "rawPrice");
-                    HandleInputStateValid(e, "rawPrice");
+                    HandleInputChange(e, "rawPrice", setProductInfo);
+                    ProductInputValidation(
+                      e,
+                      "rawPrice",
+                      setInputValid,
+                      productInfo.rawPrice
+                    );
                   }}
                   icons={PhilippinePeso}
                 />
@@ -363,9 +378,13 @@ export default function AddProduct() {
                   value={productInfo.markUpPrice}
                   validated={inputValid.markUpPrice}
                   onChange={(e) => {
-                    HandleInputChange(e, "markUpPrice");
-                    HandleInputStateValid(e, "markUpPrice");
-                    HandleCalculateSelling(e);
+                    HandleInputChange(e, "markUpPrice", setProductInfo);
+                    ProductInputValidation(
+                      e,
+                      "markUpPrice",
+                      setInputValid,
+                      productInfo.rawPrice
+                    );
                   }}
                   icons={Percent}
                 />
@@ -375,8 +394,13 @@ export default function AddProduct() {
                   value={productInfo.sellingPrice}
                   validated={inputValid.sellingPrice}
                   onChange={(e) => {
-                    HandleInputChange(e, "sellingPrice");
-                    HandleInputStateValid(e, "sellingPrice");
+                    HandleInputChange(e, "sellingPrice", setProductInfo);
+                    ProductInputValidation(
+                      e,
+                      "sellingPrice",
+                      setInputValid,
+                      productInfo.rawPrice
+                    );
                   }}
                   icons={Banknote}
                 />
@@ -395,8 +419,13 @@ export default function AddProduct() {
                   value={productInfo.isTaxable}
                   validated={inputValid.isTaxable}
                   onChange={(e) => {
-                    HandleInputChange(e, "isTaxable");
-                    HandleInputStateValid(e, "isTaxable");
+                    HandleInputChange(e, "isTaxable", setProductInfo);
+                    ProductInputValidation(
+                      e,
+                      "isTaxable",
+                      setInputValid,
+                      productInfo.rawPrice
+                    );
                   }}
                 />
               </div>
@@ -407,8 +436,13 @@ export default function AddProduct() {
                   items={Itemstatus}
                   selectedValue={productInfo.status}
                   SetSelected={(e) => {
-                    HandleInputChange(e, "status");
-                    HandleInputStateValid(e, "status");
+                    HandleInputChange(e, "status", setProductInfo);
+                    ProductInputValidation(
+                      e,
+                      "status",
+                      setInputValid,
+                      productInfo.rawPrice
+                    );
                   }}
                   validated={inputValid.status}
                   icons={CircleCheckBig}
@@ -416,17 +450,26 @@ export default function AddProduct() {
               </div>
 
               <div>
-                <Input
-                  disabled={onSubmit}
-                  placeholder={"Enter item unit (eg. Kg)"}
-                  value={productInfo.unit}
-                  validated={inputValid.unit}
-                  onChange={(e) => {
-                    HandleInputChange(e, "unit");
-                    HandleInputStateValid(e, "unit");
-                  }}
-                  icons={Weight}
-                />
+                <div className="mt-2">
+                  <DefaultDropDown
+                    disabled={onSubmit}
+                    placeholder={"Select unit"}
+                    selectedValue={selected.selectedUnit}
+                    icons={Weight}
+                    BtnIcons={FolderOpen}
+                    items={unitname}
+                    validated={inputValid.unit}
+                    SetSelected={(e) => {
+                      HandleSelectChange(
+                        e,
+                        "unit",
+                        setInputValid,
+                        productInfo.rawPrice
+                      );
+                    }}
+                    OnClick={() => setUnitModal(true)}
+                  />
+                </div>
               </div>
               <div>
                 <Input
@@ -435,8 +478,13 @@ export default function AddProduct() {
                   value={productInfo.reorderLevel}
                   validated={inputValid.reorderLevel}
                   onChange={(e) => {
-                    HandleInputChange(e, "reorderLevel");
-                    HandleInputStateValid(e, "reorderLevel");
+                    HandleInputChange(e, "reorderLevel", setProductInfo);
+                    ProductInputValidation(
+                      e,
+                      "reorderLevel",
+                      setInputValid,
+                      productInfo.rawPrice
+                    );
                   }}
                   icons={ShoppingCart}
                 />
@@ -449,8 +497,13 @@ export default function AddProduct() {
                   value={productInfo.description}
                   validated={inputValid.description}
                   onChange={(e) => {
-                    HandleInputChange(e, "description");
-                    HandleInputStateValid(e, "description");
+                    HandleInputChange(e, "description", setProductInfo);
+                    ProductInputValidation(
+                      e,
+                      "description",
+                      setInputValid,
+                      productInfo.rawPrice
+                    );
                   }}
                   icons={Notebook}
                 />
@@ -499,6 +552,13 @@ export default function AddProduct() {
         isOpen={isAddCategory}
         refetch={HandleFetchCategory}
         fetchedCategory={fetchedCategory}
+      />
+
+      <UnitModal
+        onClosed={() => setUnitModal(false)}
+        isOpen={unitModal}
+        refetch={HandleFetchUnit}
+        FetchUnit={fetchedUnit}
       />
     </Layout>
   );
