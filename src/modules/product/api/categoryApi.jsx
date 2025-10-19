@@ -1,6 +1,5 @@
 import api from "@/api/axiosInstance.js";
 import { SweetAlert } from "@/utils/sweetalert.jsx";
-import { validationField } from "@/utils/validation.jsx";
 import { ProductValidation } from "@/modules/product/utils/productValidation.jsx";
 
 export async function CategoryFetch(setCategory) {
@@ -23,7 +22,7 @@ export async function CategoryFetch(setCategory) {
   }
 }
 
-// Add Category
+// ----------------------- Add Category ----------------------------
 export async function CategoryAdd(category, Refetch, HandleReset) {
   if (!category || !ProductValidation(category)) return;
 
@@ -35,10 +34,14 @@ export async function CategoryAdd(category, Refetch, HandleReset) {
   if (category.description && category.description.trim() !== "") {
     payload.categoryDescription = category.description.trim();
   }
-
+  SweetAlert.loading(
+    "Adding category...",
+    "Please wait, while Adding Category"
+  );
   try {
     const response = await api.post("category", payload);
 
+    SweetAlert.close();
     SweetAlert.success(
       "Category Added",
       `The category "${category.categoryName}" has been successfully created.`
@@ -48,6 +51,7 @@ export async function CategoryAdd(category, Refetch, HandleReset) {
     if (typeof HandleReset === "function") HandleReset();
     return response.data;
   } catch (err) {
+    SweetAlert.close();
     console.error("Error adding category:", err);
     const errorMessage =
       err?.response?.data?.message ||
@@ -57,7 +61,7 @@ export async function CategoryAdd(category, Refetch, HandleReset) {
   }
 }
 
-// Edit Category
+// ----------------------- Edit Category ----------------------------
 export async function CategoryEdit(category, Refetch, HandleReset) {
   if (!category || !ProductValidation(category)) return;
 
@@ -70,9 +74,14 @@ export async function CategoryEdit(category, Refetch, HandleReset) {
     payload.categoryDescription = category.description.trim();
   }
 
+  SweetAlert.loading(
+    "Editing category...",
+    "Please wait, while Editing Category"
+  );
   try {
     const response = await api.put(`category/${category.id}`, payload);
 
+    SweetAlert.close();
     SweetAlert.success(
       "Category Updated",
       "The category has been successfully updated."
@@ -83,6 +92,7 @@ export async function CategoryEdit(category, Refetch, HandleReset) {
 
     return response.data;
   } catch (err) {
+    SweetAlert.close();
     console.error("Error updating category:", err);
     const errorMessage =
       err?.response?.data?.message ||
@@ -100,15 +110,20 @@ export async function CategorySoftDelete(request, Handlefetch) {
     category_status: "Deleted",
   };
 
+  SweetAlert.loading(
+    "Deleting category...",
+    "Please wait, while Deleting Category"
+  );
   try {
     await api.patch(`productcategory-delete/${request.id}`, category);
-
+    SweetAlert.close();
     SweetAlert.success(
       `Successfully deleted ${request.categoryname || "category"}`
     );
 
     if (typeof Handlefetch === "function") Handlefetch();
   } catch (err) {
+    SweetAlert.close();
     console.error("Error deleting unit:", err);
     SweetAlert.error("Failed to delete unit. Please try again.");
   }

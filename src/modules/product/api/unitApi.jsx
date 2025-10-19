@@ -30,11 +30,15 @@ export async function registerUnit(request, HandleReset) {
     unitstatus: "Active",
   };
 
+  SweetAlert.loading("Adding Unit...", "Please wait, while Adding Unit");
   try {
     await api.post("productunit", form);
+
+    SweetAlert.close();
     SweetAlert.success("Success", "New unit has been registered successfully!");
     if (typeof HandleReset === "function") HandleReset();
   } catch (err) {
+    SweetAlert.close();
     console.error("Error registering unit:", err);
 
     if (err.response) {
@@ -82,11 +86,15 @@ export async function updateUnit(request, HandleReset) {
     unitstatus: "Active",
   };
 
+  SweetAlert.loading("Editing Unit...", "Please wait, while Editing Unit");
   try {
     await api.put(`productunit/${request.id}`, form);
+
+    SweetAlert.close();
     SweetAlert.success("Updated", "Unit details saved successfully.");
     if (typeof HandleReset === "function") HandleReset();
   } catch (err) {
+    SweetAlert.close();
     console.error("Update error:", err);
 
     if (err.response) {

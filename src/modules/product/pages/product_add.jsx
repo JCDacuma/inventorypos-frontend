@@ -1,47 +1,31 @@
 import React from "react";
-import { Link, useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { useState, useEffect, useRef, useMemo } from "react";
 import { Layout } from "@/components/Layouts/Layout.jsx";
 import AddCategoryModal from "@/modules/product/components/Layouts/productCategoryModal.jsx";
 import UnitModal from "@/modules/product/components/Layouts/productUnitModal.jsx";
-import { Input } from "@/components/ui/Input.jsx";
-import { RadioGroup } from "@/components/ui/radioGroup.jsx";
-import { DefaultDropDown } from "@/components/ui/dropdown.jsx";
 import { SweetAlert } from "@/utils/sweetalert.jsx";
-import { motion } from "framer-motion";
 import {
   ProductSubmit,
   FetchProductById,
   updateProduct,
 } from "@/modules/product/api/productApi.jsx";
 import { FetchUnit } from "@/modules/product/api/unitApi.jsx";
-
+import { ProductConfig } from "@/modules/product/components/ui/productConfig.jsx";
 //helper
 import { GenerateProductCode } from "@/utils/generatecode.jsx";
 import { CalculateSellingPrice } from "@/utils/calculator.jsx";
 import { ProductInputValidation } from "@/modules/product/utils/productValidation.jsx";
 import { HandleInputChange } from "@/utils/InputValueChange.jsx";
 
-//icon
-import {
-  Trash,
-  ImageDown,
-  PackageSearch,
-  Group,
-  ListRestart,
-  Weight,
-  PhilippinePeso,
-  Percent,
-  Banknote,
-  HandCoins,
-  CircleCheckBig,
-  ShoppingCart,
-  Notebook,
-  FolderOpen,
-} from "lucide-react";
 import { CategoryFetch } from "@/modules/product/api/categoryApi.jsx";
 
 export default function AddProduct() {
+  // ------------------------- Routing -------------------------
+  const { id } = useParams(); //id sendd via url string
+  const navigate = useNavigate(); //navigation to other page
+
+  // ------------------------- Form State ----------------------
   //input value
   const [productInfo, setProductInfo] = useState({
     productImage: null,
@@ -78,33 +62,10 @@ export default function AddProduct() {
     description: true,
   });
 
+  // ------------------------- Image Handling -------------------------
+
   const imageRef = useRef(null);
   const [imagePreview, setImagePreview] = useState(null);
-  //open category modal
-  const [isAddCategory, setAddCategoryModal] = useState(false);
-  //open unit modal
-  const [unitModal, setUnitModal] = useState(false);
-  const [loading, setLoading] = useState(true);
-  //api
-  const [onSubmit, setOnsubmit] = useState(false); //submition state
-
-  const [fetchedCategory, setFetchedCategory] = useState([]); //category fetch
-  const [fetchedUnit, setFetchedUnit] = useState([]); //unit fetch
-
-  //fetching functionality
-  const HandleFetchCategory = () => {
-    CategoryFetch(setFetchedCategory);
-  };
-
-  const HandleFetchUnit = () => {
-    FetchUnit(setFetchedUnit);
-  };
-
-  //fetch category
-  useEffect(() => {
-    HandleFetchCategory();
-    HandleFetchUnit();
-  }, []);
 
   //Uploaded image preview
   useEffect(() => {
@@ -125,6 +86,111 @@ export default function AddProduct() {
       imageRef.current.value = null;
     }
   };
+
+  // ------------------------- Dropdown & Data Fetching -------------------------
+
+  const [fetchedCategory, setFetchedCategory] = useState([]); //category fetch
+  const [fetchedUnit, setFetchedUnit] = useState([]); //unit fetch
+
+  //open category modal
+  const [isAddCategory, setAddCategoryModal] = useState(false);
+  //open unit modal
+  const [unitModal, setUnitModal] = useState(false);
+
+  //api
+  const [loading, setLoading] = useState(true);
+
+  //fetching functionality category
+  const HandleFetchCategory = () => {
+    CategoryFetch(setFetchedCategory);
+  };
+
+  //fetching functionality unit
+  const HandleFetchUnit = () => {
+    FetchUnit(setFetchedUnit);
+  };
+
+  //fetch category trigger
+  useEffect(() => {
+    HandleFetchCategory();
+    HandleFetchUnit();
+  }, []);
+
+  //categoryname display in dropdown list
+  const categoryName = useMemo(
+    () => fetchedCategory?.map((categ) => categ.categoryName) || [],
+    [fetchedCategory]
+  );
+
+  //unitname display in dropdown list
+  const unitname = useMemo(
+    () => fetchedUnit?.map((unit) => unit.unitname) || [],
+    [fetchedUnit]
+  );
+
+  // Handle dropdown selection (unit or category)
+  const HandleSelectChange = (value, field, setInputValid, rawPrice) => {
+    let selectedItem = null;
+
+    // Determine which list to search based on the field type
+    if (field === "unit") {
+      selectedItem = fetchedUnit?.find((unit) => unit.unitname === value);
+    } else if (field === "category") {
+      selectedItem = fetchedCategory?.find(
+        (categ) => categ.categoryName === value
+      );
+    }
+
+    // If no matching item is found
+    if (!selectedItem) {
+      HandleInputChange(null, field, setProductInfo);
+
+      ProductInputValidation(null, field, setInputValid, rawPrice);
+
+      setSelected((prev) => ({
+        ...prev,
+        [field === "unit" ? "selectedUnit" : "selectedCategory"]: null,
+      }));
+
+      return;
+    }
+
+    // If a valid item is selected:
+    setSelected((prev) => ({
+      ...prev,
+      [field === "unit" ? "selectedUnit" : "selectedCategory"]: value,
+    }));
+
+    HandleInputChange(selectedItem.id, field, setProductInfo);
+    ProductInputValidation(selectedItem.id, field, setInputValid, rawPrice);
+  };
+
+  // ------------------------- Price Auto Calculation -------------------------
+
+  //calculate the selling price
+  useEffect(() => {
+    if (
+      productInfo.rawPrice === null &&
+      productInfo.markUpPrice === null &&
+      productInfo.sellingPrice === null
+    ) {
+      return;
+    }
+    CalculateSellingPrice(
+      productInfo.markUpPrice,
+      productInfo.rawPrice,
+      setProductInfo
+    ); //calculate selling price functionality
+    ProductInputValidation(
+      productInfo.sellingPrice,
+      "sellingPrice",
+      setInputValid,
+      productInfo.rawPrice
+    ); //validate the changes
+  }, [productInfo.rawPrice, productInfo.markUpPrice]);
+
+  // ------------------------- Register Product -------------------------
+  const [onSubmit, setOnsubmit] = useState(false); //submition state
 
   //reset input functionality
   const HandleReset = () => {
@@ -150,85 +216,6 @@ export default function AddProduct() {
       selectedCategory: null,
     });
     setImagePreview(null);
-  };
-
-  //calculate the selling price
-  useEffect(() => {
-    if (
-      productInfo.rawPrice === null &&
-      productInfo.markUpPrice === null &&
-      productInfo.sellingPrice === null
-    ) {
-      return;
-    }
-    CalculateSellingPrice(
-      productInfo.markUpPrice,
-      productInfo.rawPrice,
-      setProductInfo
-    ); //calculate selling price functionality
-    ProductInputValidation(
-      productInfo.sellingPrice,
-      "sellingPrice",
-      setInputValid,
-      productInfo.rawPrice
-    ); //validate the changes
-  }, [productInfo.rawPrice, productInfo.markUpPrice]);
-
-  //categoryname display in dropdown list
-  const categoryName = useMemo(
-    () => fetchedCategory?.map((categ) => categ.categoryName) || [],
-    [fetchedCategory]
-  );
-
-  //unitname display in dropdown list
-  const unitname = useMemo(
-    () => fetchedUnit?.map((unit) => unit.unitname) || [],
-    [fetchedUnit]
-  );
-
-  // Handle dropdown selection changes for Unit or Category fields
-  const HandleSelectChange = (value, field, setInputValid, rawPrice) => {
-    let selectedItem = null;
-
-    // Determine which list to search based on the field type
-    if (field === "unit") {
-      selectedItem = fetchedUnit?.find((unit) => unit.unitname === value);
-    } else if (field === "category") {
-      selectedItem = fetchedCategory?.find(
-        (categ) => categ.categoryName === value
-      );
-    }
-
-    // If no matching item is found (e.g., user clears or invalid value)
-    if (!selectedItem) {
-      // Clear the corresponding field value in the main product state
-      HandleInputChange(null, field, setProductInfo);
-
-      // Run validation with null value to show error if needed
-      ProductInputValidation(null, field, setInputValid, rawPrice);
-
-      // Reset the selected display value in the dropdown UI
-      setSelected((prev) => ({
-        ...prev,
-        [field === "unit" ? "selectedUnit" : "selectedCategory"]: null,
-      }));
-
-      return;
-    }
-
-    // If a valid item is selected:
-
-    // Update the dropdown display value (for UI only)
-    setSelected((prev) => ({
-      ...prev,
-      [field === "unit" ? "selectedUnit" : "selectedCategory"]: value,
-    }));
-
-    // Update the actual ID value in the main product state (used for saving)
-    HandleInputChange(selectedItem.id, field, setProductInfo);
-
-    // Re-run validation using the selected item's ID
-    ProductInputValidation(selectedItem.id, field, setInputValid, rawPrice);
   };
 
   //register product to Api
@@ -261,20 +248,15 @@ export default function AddProduct() {
     }
   };
 
-  // -------------------------- Edit functionality ----------------------------
-  const { id } = useParams(); //id sendd via url string
-  const navigate = useNavigate(); //navigation to other page
-  const [productEdit, setProductEdit] = useState(null); //product data to be edit, object
+  // ------------------------- Edit Product -------------------------
   const parsedId = useMemo(() => parseInt(id), [id]); //id converted to integer
+  const [productEdit, setProductEdit] = useState(null); //product data to be edit, object
 
-  const BounceRedirectionNav = () => {
-    navigate("/product-management");
-  };
+  const BounceRedirectionNav = () => navigate("/product-management");
 
   //fetching product to be eddit
   const HandleFetchProduct = async () => {
     if (id === "register") return;
-
     if (isNaN(parsedId)) navigate("/product-management");
     await FetchProductById(parsedId, setProductEdit); //api fetching
   };
@@ -293,15 +275,8 @@ export default function AddProduct() {
     HandleInputAssign();
   }, [productEdit, id]);
 
-  //Edit product
-  const HandleEditSubmit = () => {
-    if (onSubmit) return;
-    setOnsubmit(true);
-  };
-
   //input assign base on fetched id product to be edit
   const HandleInputAssign = (data = productEdit) => {
-    //input
     setProductInfo({
       productname: data.productname,
       category: data.category_id,
@@ -315,7 +290,6 @@ export default function AddProduct() {
       description: data.description,
     });
 
-    //dropdown
     setSelected({
       selectedUnit: data.unit.unitname,
       selectedCategory: data.category.category_name,
@@ -374,379 +348,45 @@ export default function AddProduct() {
     }
   };
 
-  //Option ----------------------
-  //const Taxable Option list
-  const taxableOption = [
-    { label: "yes", value: true },
-    { label: "no", value: false },
-  ];
-
-  //itemStatus option
-  const Itemstatus = ["Active", "Inactive"];
-
+  // ------------------------- Render -------------------------
   return (
     <Layout currentWebPage="Register Product">
-      <div className="w-full h-full px-1 pt-16 pb-2 bg-white ">
-        <div className="flex flex-col items-center w-full h-full gap-2 px-3 py-4 overflow-auto sm:py-10 sm:px-10 ">
-          <div className="flex flex-col items-center justify-start w-full h-20 gap-5 sm:gap-0 sm:justify-center sm:flex-row ">
-            <div className="flex justify-start w-full sm:w-20">
-              <Link to={"/product-management"}>
-                <motion.button
-                  disabled={onSubmit}
-                  whileHover={{
-                    backgroundColor: "#4E1CA6",
-                    color: "#fff",
-                    scale: 1.05,
-                  }}
-                  whileTap={{ scale: 0.95 }}
-                  transition={{ duration: 0.15, ease: "easeInOut" }}
-                  className="relative z-10 px-5 py-2 text-sm font-semibold border border-gray-200 shadow-md cursor-pointer text-violet-600 rounded-xl hover:shadow-lg"
-                >
-                  Back
-                </motion.button>
-              </Link>
-            </div>
-            <div className="relative flex justify-center w-full mr-0 sm:mr-20 2xl:mr-30 ">
-              <div className="relative items-center justify-center hidden px-6 py-4 text-sm font-bold transition-all duration-300 ease-in-out border shadow-md cursor-pointer w-70 md:flex text-violet-700 bg-gradient-to-r from-violet-50 to-white border-violet-200 rounded-2xl hover:shadow-lg hover:scale-105 2xl:text-xl">
-                <label className="flex items-center justify-center text-[1rem] tracking-wide text-center">
-                  {id === "register"
-                    ? "Register Product"
-                    : `Edit ${productEdit?.productname ?? ""}`}
-                </label>
-              </div>
-            </div>
-          </div>
+      {/*product page show*/}
+      <ProductConfig
+        productInfo={productInfo}
+        inputValid={inputValid}
+        selected={selected}
+        categoryName={categoryName}
+        unitname={unitname}
+        onSubmit={onSubmit}
+        productEdit={productEdit}
+        parameterURL={id}
+        imagePreview={imagePreview}
+        imageRef={imageRef}
+        //functionality
+        HandleRemoveImage={HandleRemoveImage}
+        ProductInputValidation={ProductInputValidation}
+        HandleInputChange={HandleInputChange}
+        HandleSelectChange={HandleSelectChange}
+        HandleInputAssign={HandleInputAssign}
+        HandleSubmit={HandleSubmit}
+        EditProductSubmit={EditProductSubmit}
+        //modal
+        setAddCategoryModal={setAddCategoryModal}
+        setUnitModal={setUnitModal}
+        //input setter
+        setInputValid={setInputValid}
+        setProductInfo={setProductInfo}
+      />
 
-          <div className="relative flex flex-col items-center justify-center w-full gap-0 mt-0 md:mt-10 lg:gap-5 sm:mt-2 lg:flex-row">
-            <div className="relative flex items-center justify-center w-full px-6 py-4 text-lg font-bold transition-all duration-300 ease-in-out border shadow-md cursor-pointer md:hidden text-violet-700 bg-gradient-to-r from-violet-50 to-white border-violet-200 rounded-2xl hover:shadow-lg hover:scale-105 2xl:text-xl">
-              <label className="flex items-center justify-center text-sm tracking-wide text-center">
-                {id === "register"
-                  ? "Register Product"
-                  : `Edit ${productEdit?.productname ?? ""}`}
-              </label>
-            </div>
-
-            <div className="relative flex flex-col w-full h-full gap-3 py-5 lg:gap-5 lg:pr-5 xl:pl-10 2xl:pl-20">
-              <div className="relative flex flex-col items-center justify-center gap-3 sm:flex-row ">
-                <div className="relative flex items-center justify-center p-1 border-2 border-dashed h-25 md:h-32 w-38 md:w-42 bg-violet-50 border-violet-300 rounded-2xl">
-                  {!imagePreview ? (
-                    <p className="text-xs font-medium text-center text-violet-500">
-                      Image will appear here
-                    </p>
-                  ) : (
-                    <img
-                      src={imagePreview}
-                      className="object-cover w-full h-full rounded-xl"
-                    />
-                  )}
-                </div>
-                <Input
-                  disabled={onSubmit}
-                  placeholder={
-                    !productEdit
-                      ? "Click to upload product image"
-                      : "Click to change product image"
-                  }
-                  onChange={(e) =>
-                    HandleInputChange(e, "productImage", setProductInfo)
-                  }
-                  type={"file"}
-                  haveBtn={true}
-                  buttonIcon={Trash}
-                  icons={ImageDown}
-                  OnClick={() => HandleRemoveImage(null, "productImage")}
-                  Ref={imageRef}
-                  file={productInfo.productImage}
-                />
-              </div>
-              <div>
-                <Input
-                  disabled={onSubmit}
-                  placeholder={"Enter item name"}
-                  onChange={(e) => {
-                    HandleInputChange(e, "productname", setProductInfo);
-                    ProductInputValidation(
-                      e,
-                      "productname",
-                      setInputValid,
-                      productInfo.rawPrice
-                    );
-                  }}
-                  icons={PackageSearch}
-                  value={productInfo.productname}
-                  validated={inputValid.productname}
-                />
-              </div>
-              <div className="mt-2">
-                <DefaultDropDown
-                  disabled={onSubmit}
-                  placeholder={"Select category"}
-                  selectedValue={selected.selectedCategory}
-                  icons={Group}
-                  BtnIcons={FolderOpen}
-                  items={categoryName}
-                  validated={inputValid.category}
-                  SetSelected={(e) => {
-                    HandleSelectChange(
-                      e,
-                      "category",
-                      setInputValid,
-                      productInfo.rawPrice
-                    );
-                  }}
-                  OnClick={() => setAddCategoryModal(true)}
-                />
-              </div>
-
-              <div>
-                <Input
-                  disabled={onSubmit}
-                  placeholder={"Enter raw price"}
-                  value={productInfo.rawPrice}
-                  validated={inputValid.rawPrice}
-                  onChange={(e) => {
-                    HandleInputChange(e, "rawPrice", setProductInfo);
-                    ProductInputValidation(
-                      e,
-                      "rawPrice",
-                      setInputValid,
-                      productInfo.rawPrice
-                    );
-                  }}
-                  icons={PhilippinePeso}
-                />
-              </div>
-              <div className="flex flex-col items-center justify-center w-full gap-3 sm:gap-1 sm:flex-row ">
-                <Input
-                  disabled={onSubmit}
-                  placeholder={"mark up price"}
-                  value={productInfo.markUpPrice}
-                  validated={inputValid.markUpPrice}
-                  onChange={(e) => {
-                    HandleInputChange(e, "markUpPrice", setProductInfo);
-                    ProductInputValidation(
-                      e,
-                      "markUpPrice",
-                      setInputValid,
-                      productInfo.rawPrice
-                    );
-                  }}
-                  icons={Percent}
-                />
-                <Input
-                  disabled={onSubmit}
-                  placeholder={"selling price"}
-                  value={productInfo.sellingPrice}
-                  validated={inputValid.sellingPrice}
-                  onChange={(e) => {
-                    HandleInputChange(e, "sellingPrice", setProductInfo);
-                    ProductInputValidation(
-                      e,
-                      "sellingPrice",
-                      setInputValid,
-                      productInfo.rawPrice
-                    );
-                  }}
-                  icons={Banknote}
-                />
-              </div>
-            </div>
-            <div className="relative flex flex-col w-full h-full gap-3 py-5 lg:gap-5 lg:pl-5 xl:pr-10 2xl:pr-20 ">
-              <div className="flex flex-col w-full gap-2">
-                <div className="flex gap-1 text-violet-500">
-                  <HandCoins />
-                  <label>Taxable?</label>
-                </div>
-
-                <RadioGroup
-                  disabled={onSubmit}
-                  options={taxableOption}
-                  value={productInfo.isTaxable}
-                  validated={inputValid.isTaxable}
-                  onChange={(e) => {
-                    HandleInputChange(e, "isTaxable", setProductInfo);
-                    ProductInputValidation(
-                      e,
-                      "isTaxable",
-                      setInputValid,
-                      productInfo.rawPrice
-                    );
-                  }}
-                />
-              </div>
-              <div className="mt-2">
-                <DefaultDropDown
-                  disabled={onSubmit}
-                  placeholder={"Select status"}
-                  items={Itemstatus}
-                  selectedValue={productInfo.status}
-                  SetSelected={(e) => {
-                    HandleInputChange(e, "status", setProductInfo);
-                    ProductInputValidation(
-                      e,
-                      "status",
-                      setInputValid,
-                      productInfo.rawPrice
-                    );
-                  }}
-                  validated={inputValid.status}
-                  icons={CircleCheckBig}
-                />
-              </div>
-
-              <div>
-                <div className="mt-2">
-                  <DefaultDropDown
-                    disabled={onSubmit}
-                    placeholder={"Select unit"}
-                    selectedValue={selected.selectedUnit}
-                    icons={Weight}
-                    BtnIcons={FolderOpen}
-                    items={unitname}
-                    validated={inputValid.unit}
-                    SetSelected={(e) => {
-                      HandleSelectChange(
-                        e,
-                        "unit",
-                        setInputValid,
-                        productInfo.rawPrice
-                      );
-                    }}
-                    OnClick={() => setUnitModal(true)}
-                  />
-                </div>
-              </div>
-              <div>
-                <Input
-                  disabled={onSubmit}
-                  placeholder={"Enter reorder level"}
-                  value={productInfo.reorderLevel}
-                  validated={inputValid.reorderLevel}
-                  onChange={(e) => {
-                    HandleInputChange(e, "reorderLevel", setProductInfo);
-                    ProductInputValidation(
-                      e,
-                      "reorderLevel",
-                      setInputValid,
-                      productInfo.rawPrice
-                    );
-                  }}
-                  icons={ShoppingCart}
-                />
-              </div>
-
-              <div>
-                <Input
-                  disabled={onSubmit}
-                  placeholder={"Enter description"}
-                  value={productInfo.description}
-                  validated={inputValid.description}
-                  onChange={(e) => {
-                    HandleInputChange(e, "description", setProductInfo);
-                    ProductInputValidation(
-                      e,
-                      "description",
-                      setInputValid,
-                      productInfo.rawPrice
-                    );
-                  }}
-                  icons={Notebook}
-                />
-              </div>
-
-              {id === "register" ? (
-                <motion.button
-                  onClick={() => HandleSubmit()}
-                  whileHover={{ scale: 1.01, backgroundColor: "#562FA8" }}
-                  whileTap={{ scale: 0.95 }}
-                  transition={{ duration: 0.18, ease: "easeInOut" }}
-                  className={`flex ${
-                    onSubmit ? `bg-gray-400` : `bg-violet-500 cursor-pointer`
-                  }  items-center justify-center w-full gap-2 py-3 font-bold text-white  select-none  rounded-2xl`}
-                >
-                  {onSubmit && (
-                    <svg
-                      className="w-5 h-5 text-white animate-spin"
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                    >
-                      <circle
-                        className="opacity-25"
-                        cx="12"
-                        cy="12"
-                        r="10"
-                        stroke="currentColor"
-                        strokeWidth="4"
-                      ></circle>
-                      <path
-                        className="opacity-75"
-                        fill="currentColor"
-                        d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
-                      ></path>
-                    </svg>
-                  )}
-                  Register Product
-                </motion.button>
-              ) : (
-                <div className="flex justify-center w-full gap-3">
-                  <motion.button
-                    disabled={onSubmit}
-                    whileHover={{ scale: 1.03 }}
-                    whileTap={{ scale: 0.95 }}
-                    transition={{ duration: 0.2, ease: "easeInOut" }}
-                    onClick={() => HandleInputAssign()}
-                    className={`flex items-center cursor-pointer  justify-center bg-violet-500 hover:bg-violet-800 rounded-2xl text-white px-5`}
-                  >
-                    <ListRestart />
-                  </motion.button>
-                  <motion.button
-                    onClick={() => EditProductSubmit()}
-                    whileHover={{ scale: 1.01, backgroundColor: "#562FA8" }}
-                    whileTap={{ scale: 0.95 }}
-                    transition={{ duration: 0.18, ease: "easeInOut" }}
-                    className={`flex ${
-                      onSubmit ? `bg-gray-400` : `bg-violet-500 cursor-pointer`
-                    }  items-center justify-center w-full gap-2 py-3 font-bold text-white  select-none  rounded-2xl`}
-                  >
-                    {onSubmit && (
-                      <svg
-                        className="w-5 h-5 text-white animate-spin"
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                      >
-                        <circle
-                          className="opacity-25"
-                          cx="12"
-                          cy="12"
-                          r="10"
-                          stroke="currentColor"
-                          strokeWidth="4"
-                        ></circle>
-                        <path
-                          className="opacity-75"
-                          fill="currentColor"
-                          d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
-                        ></path>
-                      </svg>
-                    )}
-                    Edit Product
-                  </motion.button>
-                </div>
-              )}
-            </div>
-          </div>
-        </div>
-      </div>
-
+      {/*Category Modal*/}
       <AddCategoryModal
         onClosed={() => setAddCategoryModal(false)}
         isOpen={isAddCategory}
         refetch={HandleFetchCategory}
         fetchedCategory={fetchedCategory}
       />
-
+      {/*Unit Modal*/}
       <UnitModal
         onClosed={() => setUnitModal(false)}
         isOpen={unitModal}
