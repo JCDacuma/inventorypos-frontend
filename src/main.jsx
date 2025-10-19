@@ -55,7 +55,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
           path="/product-management"
           element={<ProductManagement />}
         ></Route>
-        <Route path="/product-add" element={<AddProduct />}></Route>
+        <Route path="/product-add/:id" element={<AddProduct />}></Route>
         <Route path="/promo-management" element={<PromoManagement />}></Route>
         <Route path="/point-of-sale" element={<PointofSale />}></Route>
         <Route path="/config-accounts" element={<ConfigAccount />}></Route>

@@ -1,5 +1,5 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useParams, useNavigate } from "react-router-dom";
 import { useState, useEffect, useRef, useMemo } from "react";
 import { Layout } from "@/components/Layouts/Layout.jsx";
 import AddCategoryModal from "@/modules/product/components/Layouts/productCategoryModal.jsx";
@@ -7,8 +7,13 @@ import UnitModal from "@/modules/product/components/Layouts/productUnitModal.jsx
 import { Input } from "@/components/ui/Input.jsx";
 import { RadioGroup } from "@/components/ui/radioGroup.jsx";
 import { DefaultDropDown } from "@/components/ui/dropdown.jsx";
+import { SweetAlert } from "@/utils/sweetalert.jsx";
 import { motion } from "framer-motion";
-import { ProductSubmit } from "@/modules/product/api/productApi.jsx";
+import {
+  ProductSubmit,
+  FetchProductById,
+  updateProduct,
+} from "@/modules/product/api/productApi.jsx";
 import { FetchUnit } from "@/modules/product/api/unitApi.jsx";
 
 //helper
@@ -23,7 +28,7 @@ import {
   ImageDown,
   PackageSearch,
   Group,
-  Plus,
+  ListRestart,
   Weight,
   PhilippinePeso,
   Percent,
@@ -79,9 +84,10 @@ export default function AddProduct() {
   const [isAddCategory, setAddCategoryModal] = useState(false);
   //open unit modal
   const [unitModal, setUnitModal] = useState(false);
-
+  const [loading, setLoading] = useState(true);
   //api
   const [onSubmit, setOnsubmit] = useState(false); //submition state
+
   const [fetchedCategory, setFetchedCategory] = useState([]); //category fetch
   const [fetchedUnit, setFetchedUnit] = useState([]); //unit fetch
 
@@ -120,7 +126,7 @@ export default function AddProduct() {
     }
   };
 
-  //reset input
+  //reset input functionality
   const HandleReset = () => {
     setProductInfo({
       productImage: null,
@@ -159,29 +165,32 @@ export default function AddProduct() {
       productInfo.markUpPrice,
       productInfo.rawPrice,
       setProductInfo
-    );
+    ); //calculate selling price functionality
     ProductInputValidation(
       productInfo.sellingPrice,
       "sellingPrice",
       setInputValid,
       productInfo.rawPrice
-    );
+    ); //validate the changes
   }, [productInfo.rawPrice, productInfo.markUpPrice]);
 
-  //category name display in dropdown
+  //categoryname display in dropdown list
   const categoryName = useMemo(
     () => fetchedCategory?.map((categ) => categ.categoryName) || [],
     [fetchedCategory]
   );
 
+  //unitname display in dropdown list
   const unitname = useMemo(
     () => fetchedUnit?.map((unit) => unit.unitname) || [],
     [fetchedUnit]
   );
 
+  // Handle dropdown selection changes for Unit or Category fields
   const HandleSelectChange = (value, field, setInputValid, rawPrice) => {
     let selectedItem = null;
 
+    // Determine which list to search based on the field type
     if (field === "unit") {
       selectedItem = fetchedUnit?.find((unit) => unit.unitname === value);
     } else if (field === "category") {
@@ -190,10 +199,15 @@ export default function AddProduct() {
       );
     }
 
+    // If no matching item is found (e.g., user clears or invalid value)
     if (!selectedItem) {
+      // Clear the corresponding field value in the main product state
       HandleInputChange(null, field, setProductInfo);
+
+      // Run validation with null value to show error if needed
       ProductInputValidation(null, field, setInputValid, rawPrice);
 
+      // Reset the selected display value in the dropdown UI
       setSelected((prev) => ({
         ...prev,
         [field === "unit" ? "selectedUnit" : "selectedCategory"]: null,
@@ -202,20 +216,25 @@ export default function AddProduct() {
       return;
     }
 
-    // Update local dropdown display
+    // If a valid item is selected:
+
+    // Update the dropdown display value (for UI only)
     setSelected((prev) => ({
       ...prev,
       [field === "unit" ? "selectedUnit" : "selectedCategory"]: value,
     }));
 
-    // Update actual ID value in main state
+    // Update the actual ID value in the main product state (used for saving)
     HandleInputChange(selectedItem.id, field, setProductInfo);
+
+    // Re-run validation using the selected item's ID
     ProductInputValidation(selectedItem.id, field, setInputValid, rawPrice);
   };
 
-  //register product
+  //register product to Api
   const HandleSubmit = async () => {
     if (onSubmit) return;
+    if (id !== "register") return;
     setOnsubmit(true);
 
     const generatedCode = GenerateProductCode(productInfo.productname);
@@ -236,13 +255,126 @@ export default function AddProduct() {
     };
 
     try {
-      await ProductSubmit(request, HandleReset);
+      await ProductSubmit(request, HandleReset); //Api functionality register
     } finally {
       setOnsubmit(false);
     }
   };
 
-  //Option -------------
+  // -------------------------- Edit functionality ----------------------------
+  const { id } = useParams(); //id sendd via url string
+  const navigate = useNavigate(); //navigation to other page
+  const [productEdit, setProductEdit] = useState(null); //product data to be edit, object
+  const parsedId = useMemo(() => parseInt(id), [id]); //id converted to integer
+
+  const BounceRedirectionNav = () => {
+    navigate("/product-management");
+  };
+
+  //fetching product to be eddit
+  const HandleFetchProduct = async () => {
+    if (id === "register") return;
+
+    if (isNaN(parsedId)) navigate("/product-management");
+    await FetchProductById(parsedId, setProductEdit); //api fetching
+  };
+
+  //trigger fetching functionality
+  useEffect(() => {
+    HandleFetchProduct();
+  }, [id]);
+
+  //page checking if register or edit page
+  useEffect(() => {
+    if (productEdit === null) return;
+    if (productEdit === false) {
+      navigate("/product-management");
+    }
+    HandleInputAssign();
+  }, [productEdit, id]);
+
+  //Edit product
+  const HandleEditSubmit = () => {
+    if (onSubmit) return;
+    setOnsubmit(true);
+  };
+
+  //input assign base on fetched id product to be edit
+  const HandleInputAssign = (data = productEdit) => {
+    //input
+    setProductInfo({
+      productname: data.productname,
+      category: data.category_id,
+      rawPrice: data.raw_price,
+      markUpPrice: data.markup_price,
+      sellingPrice: data.selling_price,
+      isTaxable: data.taxable,
+      status: data.product_status,
+      unit: data.unit_id,
+      reorderLevel: data.reorder_level,
+      description: data.description,
+    });
+
+    //dropdown
+    setSelected({
+      selectedUnit: data.unit.unitname,
+      selectedCategory: data.category.category_name,
+    });
+    setImagePreview(data.product_image_url);
+  };
+
+  const EditProductSubmit = async () => {
+    if (onSubmit) return;
+    if (productEdit === null || !productEdit) return;
+
+    if (
+      (productInfo.productImage === null ||
+        productInfo.productImage === undefined) &&
+      productInfo.productname === productEdit.productname &&
+      productInfo.category === productEdit.category_id &&
+      productInfo.rawPrice === productEdit.raw_price &&
+      productInfo.markUpPrice === productEdit.markup_price &&
+      productInfo.sellingPrice === productEdit.selling_price &&
+      productInfo.isTaxable === productEdit.taxable &&
+      productInfo.status === productEdit.product_status &&
+      productInfo.unit === productEdit.unit_id &&
+      productInfo.reorderLevel === productEdit.reorder_level &&
+      (productInfo.description?.trim() || "") ===
+        (productEdit.description?.trim() || "")
+    ) {
+      SweetAlert.info(
+        "No Changes Detected",
+        "Please make changes before you submit."
+      );
+      return;
+    }
+    setOnsubmit(true);
+
+    const request = {
+      id: productEdit.id,
+      productname: productInfo.productname,
+      category: productInfo.category,
+      productunit: productInfo.unit,
+      rawPrice: productInfo.rawPrice,
+      markUpPrice: productInfo.markUpPrice,
+      sellingPrice: productInfo.sellingPrice,
+      isTaxable: productInfo.isTaxable,
+      status: productInfo.status,
+      reorderLevel: productInfo.reorderLevel,
+      description: productInfo.description,
+    };
+    //conditional object
+    if (productInfo.productImage) {
+      request.productimage = productInfo.productImage;
+    }
+    try {
+      await updateProduct(request, BounceRedirectionNav);
+    } finally {
+      setOnsubmit(false);
+    }
+  };
+
+  //Option ----------------------
   //const Taxable Option list
   const taxableOption = [
     { label: "yes", value: true },
@@ -274,20 +406,30 @@ export default function AddProduct() {
                 </motion.button>
               </Link>
             </div>
-
-            <div className="flex justify-center w-full mr-0 sm:mr-20 2xl:mr-30 ">
-              <div className="flex items-center justify-center w-64 px-6 py-4 text-lg font-bold transition-all duration-300 ease-in-out border shadow-md cursor-pointer text-violet-700 bg-gradient-to-r from-violet-50 to-white border-violet-200 rounded-2xl hover:shadow-lg hover:scale-105 2xl:text-xl">
-                <label className="tracking-wide">Register Product</label>
+            <div className="relative flex justify-center w-full mr-0 sm:mr-20 2xl:mr-30 ">
+              <div className="relative items-center justify-center hidden px-6 py-4 text-sm font-bold transition-all duration-300 ease-in-out border shadow-md cursor-pointer w-70 md:flex text-violet-700 bg-gradient-to-r from-violet-50 to-white border-violet-200 rounded-2xl hover:shadow-lg hover:scale-105 2xl:text-xl">
+                <label className="flex items-center justify-center text-[1rem] tracking-wide text-center">
+                  {id === "register"
+                    ? "Register Product"
+                    : `Edit ${productEdit?.productname ?? ""}`}
+                </label>
               </div>
             </div>
           </div>
 
-          <div className="flex flex-col w-full gap-0 mt-10 lg:gap-5 sm:mt-2 lg:flex-row">
+          <div className="relative flex flex-col items-center justify-center w-full gap-0 mt-0 md:mt-10 lg:gap-5 sm:mt-2 lg:flex-row">
+            <div className="relative flex items-center justify-center w-full px-6 py-4 text-lg font-bold transition-all duration-300 ease-in-out border shadow-md cursor-pointer md:hidden text-violet-700 bg-gradient-to-r from-violet-50 to-white border-violet-200 rounded-2xl hover:shadow-lg hover:scale-105 2xl:text-xl">
+              <label className="flex items-center justify-center text-sm tracking-wide text-center">
+                {id === "register"
+                  ? "Register Product"
+                  : `Edit ${productEdit?.productname ?? ""}`}
+              </label>
+            </div>
+
             <div className="relative flex flex-col w-full h-full gap-3 py-5 lg:gap-5 lg:pr-5 xl:pl-10 2xl:pl-20">
-              <div className="relative flex items-center justify-center gap-3 ">
-                <div className="items-center justify-center hidden h-32 p-1 border-2 border-dashed w-42 md:flex bg-violet-50 border-violet-300 rounded-2xl">
-                  {productInfo.productImage === undefined ||
-                  productInfo.productImage === null ? (
+              <div className="relative flex flex-col items-center justify-center gap-3 sm:flex-row ">
+                <div className="relative flex items-center justify-center p-1 border-2 border-dashed h-25 md:h-32 w-38 md:w-42 bg-violet-50 border-violet-300 rounded-2xl">
+                  {!imagePreview ? (
                     <p className="text-xs font-medium text-center text-violet-500">
                       Image will appear here
                     </p>
@@ -298,10 +440,13 @@ export default function AddProduct() {
                     />
                   )}
                 </div>
-
                 <Input
                   disabled={onSubmit}
-                  placeholder={"drop image here"}
+                  placeholder={
+                    !productEdit
+                      ? "Click to upload product image"
+                      : "Click to change product image"
+                  }
                   onChange={(e) =>
                     HandleInputChange(e, "productImage", setProductInfo)
                   }
@@ -509,39 +654,87 @@ export default function AddProduct() {
                 />
               </div>
 
-              <motion.button
-                onClick={() => HandleSubmit()}
-                whileHover={{ scale: 1.01, backgroundColor: "#562FA8" }}
-                whileTap={{ scale: 0.95 }}
-                transition={{ duration: 0.18, ease: "easeInOut" }}
-                className={`flex ${
-                  onSubmit ? `bg-gray-400` : `bg-violet-500 cursor-pointer`
-                }  items-center justify-center w-full gap-2 py-3 font-bold text-white  select-none  rounded-2xl`}
-              >
-                {onSubmit && (
-                  <svg
-                    className="w-5 h-5 text-white animate-spin"
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
+              {id === "register" ? (
+                <motion.button
+                  onClick={() => HandleSubmit()}
+                  whileHover={{ scale: 1.01, backgroundColor: "#562FA8" }}
+                  whileTap={{ scale: 0.95 }}
+                  transition={{ duration: 0.18, ease: "easeInOut" }}
+                  className={`flex ${
+                    onSubmit ? `bg-gray-400` : `bg-violet-500 cursor-pointer`
+                  }  items-center justify-center w-full gap-2 py-3 font-bold text-white  select-none  rounded-2xl`}
+                >
+                  {onSubmit && (
+                    <svg
+                      className="w-5 h-5 text-white animate-spin"
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                    >
+                      <circle
+                        className="opacity-25"
+                        cx="12"
+                        cy="12"
+                        r="10"
+                        stroke="currentColor"
+                        strokeWidth="4"
+                      ></circle>
+                      <path
+                        className="opacity-75"
+                        fill="currentColor"
+                        d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
+                      ></path>
+                    </svg>
+                  )}
+                  Register Product
+                </motion.button>
+              ) : (
+                <div className="flex justify-center w-full gap-3">
+                  <motion.button
+                    disabled={onSubmit}
+                    whileHover={{ scale: 1.03 }}
+                    whileTap={{ scale: 0.95 }}
+                    transition={{ duration: 0.2, ease: "easeInOut" }}
+                    onClick={() => HandleInputAssign()}
+                    className={`flex items-center cursor-pointer  justify-center bg-violet-500 hover:bg-violet-800 rounded-2xl text-white px-5`}
                   >
-                    <circle
-                      className="opacity-25"
-                      cx="12"
-                      cy="12"
-                      r="10"
-                      stroke="currentColor"
-                      strokeWidth="4"
-                    ></circle>
-                    <path
-                      className="opacity-75"
-                      fill="currentColor"
-                      d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
-                    ></path>
-                  </svg>
-                )}
-                Register Product
-              </motion.button>
+                    <ListRestart />
+                  </motion.button>
+                  <motion.button
+                    onClick={() => EditProductSubmit()}
+                    whileHover={{ scale: 1.01, backgroundColor: "#562FA8" }}
+                    whileTap={{ scale: 0.95 }}
+                    transition={{ duration: 0.18, ease: "easeInOut" }}
+                    className={`flex ${
+                      onSubmit ? `bg-gray-400` : `bg-violet-500 cursor-pointer`
+                    }  items-center justify-center w-full gap-2 py-3 font-bold text-white  select-none  rounded-2xl`}
+                  >
+                    {onSubmit && (
+                      <svg
+                        className="w-5 h-5 text-white animate-spin"
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                      >
+                        <circle
+                          className="opacity-25"
+                          cx="12"
+                          cy="12"
+                          r="10"
+                          stroke="currentColor"
+                          strokeWidth="4"
+                        ></circle>
+                        <path
+                          className="opacity-75"
+                          fill="currentColor"
+                          d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
+                        ></path>
+                      </svg>
+                    )}
+                    Edit Product
+                  </motion.button>
+                </div>
+              )}
             </div>
           </div>
         </div>

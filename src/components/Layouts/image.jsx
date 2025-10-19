@@ -1,11 +1,11 @@
 import React from "react";
 
 export function Image({ src, alt = "Image", size = "3.5rem" }) {
-  const fallback = "https://via.placeholder.com/80x80.png?text=No+Image";
+  const fallback = "public/No_Image_Available.jpg";
 
   return (
     <div
-      className="flex items-center  justify-center rounded overflow-hidden border bg-gray-100"
+      className="flex items-center justify-center overflow-hidden bg-gray-100 border rounded"
       style={{ width: size, height: size }}
     >
       <img

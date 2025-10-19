@@ -74,4 +74,30 @@ export const SweetAlert = {
       cancelButtonText: "No",
     });
   },
+
+  //  Loading alert
+  loading: (title = "Processing...", text = "Please wait a moment") => {
+    return Swal.fire({
+      html: `
+      <div class="flex flex-col items-center justify-center">
+        <span class="loader mb-3"></span>
+        <h2 class="text-lg font-semibold text-green-800">${title}</h2>
+        <p class="text-sm text-gray-600">${text}</p>
+      </div>
+    `,
+      allowOutsideClick: false,
+      allowEscapeKey: false,
+      showConfirmButton: false,
+      backdrop: true,
+      width: "90% md:60%",
+      background: "rgba(255,255,255,0.95)",
+      customClass: {
+        popup: "rounded-2xl shadow-lg border border-green-200 bg-white/90",
+      },
+    });
+  },
+
+  close: () => {
+    Swal.close();
+  },
 };

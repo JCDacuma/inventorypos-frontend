@@ -1,5 +1,5 @@
 import { useState, useEffect, useMemo } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 // Page Layout component
 import { Layout } from "@/components/Layouts/Layout.jsx";
@@ -20,7 +20,13 @@ import { Image } from "@/components/Layouts/image.jsx";
 import { motion, AnimatePresence } from "framer-motion";
 
 //Icons
-import { SquarePen, Trash2, Megaphone, CirclePlus } from "lucide-react";
+import {
+  SquarePen,
+  Trash2,
+  Megaphone,
+  CirclePlus,
+  ArchiveRestore,
+} from "lucide-react";
 
 //api
 import { FetchProduct } from "@/modules/product/api/productApi.jsx";
@@ -33,8 +39,9 @@ export default function ProductManagement() {
 
   //fetched product
   const [products, setProducts] = useState([]);
-  console.log(products);
+
   const isSmallMobile = useMediaQuery({ maxWidth: 375 });
+  const navigation = useNavigate();
 
   //fetch product
   const FetchProducts = async () => {
@@ -46,13 +53,17 @@ export default function ProductManagement() {
   }, [FetchProduct]);
 
   // Table Action functionality
+  //edit prouct
   const HandleEdit = (id) => {
-    alert(`Edit id: ${id}`);
+    navigation(`/product-add/${id}`);
   };
 
+  //soft remove
   const HandleRemove = (items, id) => {
     alert(`remove ${items} id: ${id}`);
   };
+
+  const Archieved = () => {};
 
   //BatchControls
   const BatchControlBtn = [
@@ -90,7 +101,7 @@ export default function ProductManagement() {
     {
       BtnLabel: "Add Product",
       iconControl: CirclePlus,
-      to: "/product-add",
+      to: "/product-add/register",
     },
     {
       BtnLabel: "Promo",
@@ -118,6 +129,11 @@ export default function ProductManagement() {
             {
               onClick: () => HandleEdit(item.id),
               icon: SquarePen,
+              iconSize: "h-[1.2rem] w-[1.2rem]",
+            },
+            {
+              onClick: () => Archieved(),
+              icon: ArchiveRestore,
               iconSize: "h-[1.2rem] w-[1.2rem]",
             },
             {

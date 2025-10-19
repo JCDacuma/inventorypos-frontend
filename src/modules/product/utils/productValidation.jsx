@@ -74,13 +74,19 @@ export function ProductValidation(product) {
     const value = product[key];
 
     switch (key) {
+      case "productimage":
       case "productImage":
         if (!value) {
           SweetAlert.error("Missing Image", "Please upload a product image.");
           return false;
         }
 
-        const allowedTypes = ["image/jpeg", "image/jpg", "image/png"];
+        const allowedTypes = [
+          "image/jpeg",
+          "image/jpg",
+          "image/png",
+          "image/webp",
+        ];
         const maxSize = 2 * 1024 * 1024;
 
         if (!allowedTypes.includes(value.type)) {

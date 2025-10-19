@@ -52,38 +52,41 @@ export function Input({
         }`}
       >
         <div className={`w-full `}>
-          <input
+          <motion.input
+            whileHover={{ scale: 1.005 }}
+            transition={{ duration: 0.2, easeInOut: "easeInOut" }}
             type={type}
             ref={Ref}
-            {
-              ...(type === "file"
-                ? { onChange: HandleChange } // uncontrolled for file
-                : { value: value || "", onChange: HandleChange }) // controlled for others
-            }
+            {...(type === "file"
+              ? { onChange: HandleChange }
+              : { value: value || "", onChange: HandleChange })}
             onFocus={() => !disabled && setFocused(true)}
             onBlur={() => !disabled && setFocused(false)}
             placeholder={placeholder}
             disabled={disabled}
             className={`w-full px-4 py-[1rem] lg:py-[1.05rem] ${
               type === "file" ? "text-transparent" : ""
-            } text-sm text-gray-800 placeholder-transparent transition-all duration-200 ease-in-out bg-white border shadow-md select-none
-    ${haveBtn ? "rounded-l-2xl" : "rounded-2xl"}
-    ${
-      validated || value === null || value === undefined || value === ""
-        ? "border-violet-300"
-        : "border-red-700"
-    }
-    ${
-      disabled
-        ? "bg-gray-100 cursor-not-allowed focus:ring-0 focus:border-gray-300"
-        : "focus:border-violet-500 focus:ring-2 focus:ring-violet-400 focus:outline-none focus:shadow-lg"
-    }
-  `}
+            } text-sm text-gray-800 placeholder-transparent  transition-all duration-200 ease-in-out bg-white shadow-md hover: hover:shadow-lg select-none
+              ${haveBtn ? "rounded-l-2xl" : "rounded-2xl"}
+              ${
+                validated ||
+                value === null ||
+                value === undefined ||
+                value === ""
+                  ? "border-violet-200 focus:border-violet-500 focus:ring-2 hover:border-violet-700 focus:ring-violet-400 focus:outline-none"
+                  : "border-red-700 focus:border-red-100 focus:ring-1 hover:border-red-700 focus:ring-red-400 focus:outline-none"
+              }
+              ${
+                disabled
+                  ? "bg-gray-100 cursor-not-allowed focus:ring-0 focus:border-gray-300"
+                  : " border-1   focus:shadow-lg"
+              }
+            `}
           />
           {/* Custom display for file name or placeholder */}
           {type === "file" && (
             <span
-              className={`absolute top-10 left-4 -translate-y-1/2 text-sm ${
+              className={`absolute top-10 select-none cursor-pointer left-4 -translate-y-1/2 text-sm ${
                 fileName ? "text-gray-800" : "text-gray-400"
               }`}
             >

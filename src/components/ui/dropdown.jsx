@@ -67,8 +67,8 @@ export function DefaultDropDown({
       <div className="flex w-full">
         <div
           onClick={toggleDropdown}
-          className={`flex w-full items-center justify-between px-4 py-[0.7rem] lg:py-[0.85rem] bg-white select-none shadow-sm transition-colors duration-200
-            ${validated ? "border border-violet-300" : "border border-red-700"}
+          className={`flex w-full items-center hover:border-violet-700 justify-between px-4 py-[0.7rem] lg:py-[0.85rem] bg-white select-none shadow-sm transition-colors duration-200
+            ${validated ? "border border-violet-200" : "border border-red-700"}
             ${BtnIcons ? "rounded-l-2xl" : "rounded-2xl"}
             ${
               disabled

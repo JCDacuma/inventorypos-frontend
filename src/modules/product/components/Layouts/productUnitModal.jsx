@@ -233,7 +233,7 @@ export default function UnitModal({ isOpen, onClosed, FetchUnit, refetch }) {
                       <button
                         type="button"
                         onClick={() => HandleRemove(unt.id, unt.unitname)}
-                        className="p-2 text-orange-800 transition duration-200 rounded-full cursor-pointer hover:bg-orange-100  active:bg-violet-200"
+                        className="p-2 text-orange-800 transition duration-200 rounded-full cursor-pointer hover:bg-orange-100 active:bg-violet-200"
                         title="Edit Contact"
                       >
                         <Trash size={22} className="stroke-2" />
@@ -255,27 +255,28 @@ export default function UnitModal({ isOpen, onClosed, FetchUnit, refetch }) {
 
         {/* Add new Unit */}
         {openAdd && selectedId === null ? (
-          <div className="p-6 space-y-6">
+          <div className="flex flex-col justify-between h-full p-6 space-y-6">
             {/* Header */}
             <div className="flex items-center justify-center py-3 border-b-2 border-violet-500 bg-violet-50">
               <h4 className="text-xl font-bold tracking-wide uppercase text-violet-700">
                 Register Unit
               </h4>
             </div>
-
-            {inputs.map((input) => (
-              <div key={input.name}>
-                <Input
-                  disabled={onSubmit}
-                  placeholder={input.placeholder}
-                  onChange={(e) =>
-                    HandleInputChange(e, input.name, setInputUnit)
-                  }
-                  icons={input.icon}
-                  value={input.value}
-                />
-              </div>
-            ))}
+            <div className="flex flex-col w-full h-full gap-4">
+              {inputs.map((input) => (
+                <div key={input.name}>
+                  <Input
+                    disabled={onSubmit}
+                    placeholder={input.placeholder}
+                    onChange={(e) =>
+                      HandleInputChange(e, input.name, setInputUnit)
+                    }
+                    icons={input.icon}
+                    value={input.value}
+                  />
+                </div>
+              ))}
+            </div>
 
             {/* Action Buttons */}
             <div className="flex justify-end gap-3">
@@ -343,26 +344,27 @@ export default function UnitModal({ isOpen, onClosed, FetchUnit, refetch }) {
 
         {/* editunit */}
         {!openAdd && selectedId !== null ? (
-          <div className="p-6 space-y-6">
+          <div className="flex flex-col justify-between h-full p-6 space-y-6">
             <div className="flex items-center justify-center py-3 border-b-2 border-violet-500 bg-violet-50">
               <h4 className="text-xl font-bold tracking-wide uppercase text-violet-700">
                 Edit Unit
               </h4>
             </div>
-
-            {inputs.map((input) => (
-              <div key={input.name}>
-                <Input
-                  disabled={onSubmit}
-                  placeholder={input.placeholder}
-                  onChange={(e) =>
-                    HandleInputChange(e, input.name, setInputUnit)
-                  }
-                  icons={input.icon}
-                  value={input.value}
-                />
-              </div>
-            ))}
+            <div className="flex flex-col items-baseline w-full h-full gap-4 justify-baseline">
+              {inputs.map((input) => (
+                <div key={input.name} className="w-full ">
+                  <Input
+                    disabled={onSubmit}
+                    placeholder={input.placeholder}
+                    onChange={(e) =>
+                      HandleInputChange(e, input.name, setInputUnit)
+                    }
+                    icons={input.icon}
+                    value={input.value}
+                  />
+                </div>
+              ))}
+            </div>
 
             {/* Action Buttons */}
             <div className="flex justify-end gap-3">

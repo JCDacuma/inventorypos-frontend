@@ -211,7 +211,6 @@ export async function FetchSupplierById(
     setFound(true);
     HandleAssignInput(supplier.data);
     setSupllier(supplier.data);
-    console.log("fteched");
   } catch (err) {
     console.log(`There is error: ${err}`);
     setFound(false);

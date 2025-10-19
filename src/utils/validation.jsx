@@ -3,7 +3,7 @@ import React from "react";
 // validation
 export const validationField = {
   name: /^[A-Za-zÀ-ÿ\s'-]{2,}$/, // Allows names with accents, spaces, apostrophes, hyphens
-  productname: /^[A-Za-z0-9\s\-\_\.]{2,150}$/,
+  productname: /^[A-Za-z0-9\s\-\_\.&|]{2,50}$/,
   unitname: /^[A-Za-z0-9\s\-\.\(\)]{1,20}$/,
   symbol: /^[A-Za-z°%µ²³·\/\-]{1,6}$/,
   description: /^[A-Za-z0-9\s.,'’"()-]{0,255}$/,
