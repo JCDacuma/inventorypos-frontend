@@ -2,8 +2,8 @@ import React from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useState, useEffect, useRef, useMemo } from "react";
 import { Layout } from "@/components/Layouts/Layout.jsx";
-import AddCategoryModal from "@/modules/product/components/Layouts/productCategoryModal.jsx";
-import UnitModal from "@/modules/product/components/Layouts/productUnitModal.jsx";
+import AddCategoryModal from "@/modules/product/components/ui/productCategoryModal.jsx";
+import UnitModal from "@/modules/product/components/ui/productUnitModal.jsx";
 import { SweetAlert } from "@/utils/sweetalert.jsx";
 import {
   ProductSubmit,
@@ -11,7 +11,7 @@ import {
   updateProduct,
 } from "@/modules/product/api/productApi.jsx";
 import { FetchUnit } from "@/modules/product/api/unitApi.jsx";
-import { ProductConfig } from "@/modules/product/components/ui/productConfig.jsx";
+import { ProductConfig } from "@/modules/product/components/Layouts/productConfig.jsx";
 //helper
 import { GenerateProductCode } from "@/utils/generatecode.jsx";
 import { CalculateSellingPrice } from "@/utils/calculator.jsx";
@@ -97,7 +97,7 @@ export default function AddProduct() {
   //open unit modal
   const [unitModal, setUnitModal] = useState(false);
 
-  //api
+  //page loading state
   const [loading, setLoading] = useState(true);
 
   //fetching functionality category

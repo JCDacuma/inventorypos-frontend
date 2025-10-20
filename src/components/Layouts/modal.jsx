@@ -1,4 +1,4 @@
-import { motion, AnimatePresence, scale } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { useMediaQuery } from "react-responsive";
 
 export function Modal({

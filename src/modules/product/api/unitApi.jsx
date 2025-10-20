@@ -2,7 +2,7 @@ import api from "@/api/axiosInstance.js";
 import { SweetAlert } from "@/utils/sweetalert.jsx";
 import { ProductValidation } from "@/modules/product/utils/productValidation.jsx";
 
-//fetch unit
+//-------------------- Fetch unit -------------------------
 export async function FetchUnit(setUnit) {
   try {
     const respond = await api.get("productunit");
@@ -19,7 +19,7 @@ export async function FetchUnit(setUnit) {
   }
 }
 
-//register new unit
+//-------------------- Register unit -------------------------
 export async function registerUnit(request, HandleReset) {
   if (!request || !ProductValidation(request)) return;
 
@@ -75,7 +75,7 @@ export async function registerUnit(request, HandleReset) {
     }
   }
 }
-//update unit
+//-------------------- Update unit -------------------------
 export async function updateUnit(request, HandleReset) {
   if (!request || !ProductValidation(request)) return;
 
@@ -120,7 +120,7 @@ export async function updateUnit(request, HandleReset) {
   }
 }
 
-//delete unit
+//-------------------- Delete unit -------------------------
 export async function DeleteUnit(request, HandleReset) {
   if (!request || !request.id) return;
 
@@ -128,13 +128,17 @@ export async function DeleteUnit(request, HandleReset) {
     unitstatus: "Deleted",
   };
 
+  SweetAlert.loading("Deleting Unit...", "Please wait, while Deleting Unit");
+
   try {
     await api.patch(`productunit-delete/${request.id}`, unit);
 
+    SweetAlert.close();
     SweetAlert.success(`Successfully deleted ${request.unitname || "unit"}`);
 
     if (typeof HandleReset === "function") HandleReset();
   } catch (err) {
+    SweetAlert.close();
     console.error("Error deleting unit:", err);
     SweetAlert.error("Failed to delete unit. Please try again.");
   }

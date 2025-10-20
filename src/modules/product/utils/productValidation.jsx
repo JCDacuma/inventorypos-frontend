@@ -113,6 +113,8 @@ export function ProductValidation(product) {
         }
         break;
 
+      case "unit_id":
+      case "category_id":
       case "category":
         if (!validationField.SelectedId.test(value)) {
           SweetAlert.error(
@@ -160,6 +162,7 @@ export function ProductValidation(product) {
         }
         break;
 
+      case "taxable":
       case "isTaxable":
         if (!validationField.boolean.test(value)) {
           SweetAlert.error(
@@ -169,7 +172,7 @@ export function ProductValidation(product) {
           return false;
         }
         break;
-
+      case "product_status":
       case "status":
         if (!validationField.name.test(value)) {
           SweetAlert.error("Invalid Status", "Please enter a valid status.");

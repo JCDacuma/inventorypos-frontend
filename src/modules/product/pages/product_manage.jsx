@@ -1,12 +1,14 @@
 import { useState, useEffect, useMemo } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { SweetAlert } from "@/utils/sweetalert.jsx";
 
 // Page Layout component
 import { Layout } from "@/components/Layouts/Layout.jsx";
-import ButtonLayout from "@/components/Layouts/pageControlButtons.jsx";
-import { useMediaQuery } from "react-responsive";
 import BatchControl from "@/components/Layouts/BatchControl.jsx";
 import NavControl from "@/components/Layouts/pageControlsMobile.jsx";
+import BatchEditProduct from "@/modules/product/components/ui/productBatchEditModal.jsx";
+import AddCategoryModal from "@/modules/product/components/ui/productCategoryModal.jsx";
+import UnitModal from "@/modules/product/components/ui/productUnitModal.jsx";
 
 //Table Layout component
 import Table from "@/components/Layouts/table.jsx";
@@ -15,9 +17,6 @@ import MobileTable from "@/components/ui/MobileTable.jsx";
 import { ProductStatus } from "@/modules/product/components/ui/productStatus.jsx";
 import { Action } from "@/components/ui/buttons.jsx";
 import { Image } from "@/components/Layouts/image.jsx";
-
-//Animation
-import { motion, AnimatePresence } from "framer-motion";
 
 //Icons
 import {
@@ -29,18 +28,20 @@ import {
 } from "lucide-react";
 
 //api
-import { FetchProduct } from "@/modules/product/api/productApi.jsx";
+import {
+  FetchProduct,
+  updateProduct,
+  BulkEditProduct,
+} from "@/modules/product/api/productApi.jsx";
+import { CategoryFetch } from "@/modules/product/api/categoryApi.jsx";
+import { FetchUnit } from "@/modules/product/api/unitApi.jsx";
 
 export default function ProductManagement() {
-  //Selected Id
-  const [selectedID, setSelectedID] = useState([]);
-  const openBatchContol = selectedID.length > 0; //Batch Contol Modal State
   const [pageControl, setPageControl] = useState(false); //Page control mobile state modal
-
   //fetched product
   const [products, setProducts] = useState([]);
+  const [onSubmit, setOnSubmit] = useState(false);
 
-  const isSmallMobile = useMediaQuery({ maxWidth: 375 });
   const navigation = useNavigate();
 
   //fetch product
@@ -57,29 +58,6 @@ export default function ProductManagement() {
   const HandleEdit = (id) => {
     navigation(`/product-add/${id}`);
   };
-
-  //soft remove
-  const HandleRemove = (items, id) => {
-    alert(`remove ${items} id: ${id}`);
-  };
-
-  const Archieved = () => {};
-
-  //BatchControls
-  const BatchControlBtn = [
-    {
-      btnLabel: "Edit",
-      color: "bg-violet-500 ",
-      icon: SquarePen,
-      padding: "py-2 px-6",
-    },
-    {
-      btnLabel: "Remove",
-      color: "bg-[#910B0B]/[0.69]",
-      icon: Trash2,
-      padding: "py-2 px-6",
-    },
-  ];
 
   //Sample columns
   const columns = [
@@ -132,12 +110,14 @@ export default function ProductManagement() {
               iconSize: "h-[1.2rem] w-[1.2rem]",
             },
             {
-              onClick: () => Archieved(),
+              onClick: () =>
+                HandleArchivedDelete(item.id, "singleFn", "Archive"),
               icon: ArchiveRestore,
               iconSize: "h-[1.2rem] w-[1.2rem]",
             },
             {
-              onClick: () => HandleRemove(item.id, item.productname),
+              onClick: () =>
+                HandleArchivedDelete(item.id, "singleFn", "Delete"),
               icon: Trash2,
               iconSize: "h-[1.2rem] w-[1.2rem]",
             },
@@ -147,6 +127,126 @@ export default function ProductManagement() {
     }));
   }, [products]);
 
+  // ---------------Fetching Functionality -------------------
+  const [modalCategory, setModalCategory] = useState(false);
+  const [modalUnit, setModalUnit] = useState(false);
+
+  const [category, setCategory] = useState([]);
+  const [units, setUnits] = useState([]);
+
+  const FetchCategoryApi = async () => {
+    await CategoryFetch(setCategory);
+  };
+
+  const FetchUnitApi = async () => {
+    await FetchUnit(setUnits);
+  };
+
+  //---------------- Batch functionality --------------------
+  const [selectedID, setSelectedID] = useState([]); //batch edit selected id
+  const openBatchContol = selectedID.length > 0; //Batch Contol Modal State
+  const [openEditBatch, setOpenEditBatch] = useState(false);
+
+  //BatchControls
+  const BatchControlBtn = [
+    {
+      btnLabel: "Edit",
+      color: "bg-violet-500 ",
+      icon: SquarePen,
+      padding: "py-2 px-6",
+      function: () => setOpenEditBatch(true),
+    },
+    {
+      btnLabel: "Archieve",
+      color: "bg-[#B36401]/[0.69]",
+      icon: ArchiveRestore,
+      padding: "py-2 px-6",
+      function: () => HandleArchivedDelete(selectedID, "groupFn", "Archive"),
+    },
+    {
+      btnLabel: "Delete",
+      color: "bg-[#910B0B]/[0.69]",
+      icon: Trash2,
+      padding: "py-2 px-6",
+      function: () => HandleArchivedDelete(selectedID, "groupFn", "Delete"),
+    },
+  ];
+
+  // --------------- Archive and Delete -------------------
+  const HandleArchivedDelete = async (id, fnType, actionType) => {
+    if (onSubmit) return;
+
+    const isArchive = actionType === "Archive";
+    const actionText = isArchive ? "archive" : "delete";
+    const actionTitle = isArchive ? "Archiving" : "Deleting";
+    const isPlural = id.length > 1 ? "s" : "";
+
+    // Confirm Action
+    const result = await SweetAlert.Confirm(
+      `${actionTitle} Product${isPlural}`,
+      `Are you sure you want to ${actionText} the selected product${isPlural} ?`
+    );
+    if (!result.isConfirmed) return;
+
+    // Group Function (Bulk)
+    if (fnType === "groupFn") {
+      if (!Array.isArray(id) || id.length === 0) {
+        SweetAlert.info(
+          "No Products Selected",
+          `Please select at least one product to ${actionText}.`
+        );
+        return;
+      }
+
+      const request = {
+        product_status: isArchive ? "Archived" : "Deleted",
+      };
+
+      setOnSubmit(true);
+      try {
+        await BulkEditProduct(id, request, FetchProducts);
+        SweetAlert.success(
+          isArchive ? "Archived" : "Deleted",
+          `Selected product${isPlural} have been ${
+            isArchive ? "archived" : "deleted"
+          } successfully.`
+        );
+      } finally {
+        setOnSubmit(false);
+      }
+      return;
+    }
+
+    // Single Function
+    if (fnType === "singleFn") {
+      const request = {
+        id,
+        status: isArchive ? "Archived" : "Deleted",
+      };
+
+      setOnSubmit(true);
+      try {
+        await updateProduct(request, FetchProducts);
+        SweetAlert.success(
+          `Successfully ${isArchive ? "archived" : "deleted"} product`,
+          `The product has been ${
+            isArchive ? "archived" : "deleted"
+          } successfully.`
+        );
+      } finally {
+        setOnSubmit(false);
+      }
+      return;
+    }
+
+    //  Unknown Function or Action Type
+    SweetAlert.info(
+      "Invalid Action",
+      "Unknown function or action type. Please try again."
+    );
+  };
+
+  // --------------- Rendering Functionality -------------------
   return (
     <Layout currentWebPage="Manage Product">
       <div className="relative flex flex-col w-full px-5 pt-20 overflow-auto">
@@ -186,12 +286,54 @@ export default function ProductManagement() {
         openBatchContol={openBatchContol}
       />
 
+      <BatchEditProduct
+        isOpen={openEditBatch}
+        onClosed={() => setOpenEditBatch(false)}
+        //functionality
+        FetchProducts={FetchProducts}
+        FetchCategory={FetchCategoryApi}
+        FetchUnit={FetchUnitApi}
+        setOpenUnit={() => {
+          setOpenEditBatch(false);
+          setModalUnit(true);
+        }}
+        setOpenCategory={() => {
+          setOpenEditBatch(false);
+          setModalCategory(true);
+        }}
+        //Data
+        selectedId={selectedID}
+        category={category}
+        units={units}
+      />
+
       {/* Page Controls (Mobile Layout only) */}
       <NavControl
         onClosed={() => setPageControl(false)}
         isOpen={pageControl}
         hasExport={true}
         Buttons={PageBtnControls}
+      />
+
+      {/* Modal Unit and Category */}
+      <AddCategoryModal
+        onClosed={() => {
+          setModalCategory(false);
+          setOpenEditBatch(true);
+        }}
+        isOpen={modalCategory}
+        refetch={FetchCategoryApi}
+        fetchedCategory={category}
+      />
+
+      <UnitModal
+        onClosed={() => {
+          setModalUnit(false);
+          setOpenEditBatch(true);
+        }}
+        isOpen={modalUnit}
+        refetch={FetchUnitApi}
+        FetchUnit={units}
       />
     </Layout>
   );

@@ -1,7 +1,5 @@
 import api from "@/api/axiosInstance.js";
-import React from "react";
 import { SweetAlert } from "@/utils/sweetalert.jsx";
-import { validationField } from "@/utils/validation.jsx";
 import { ProductValidation } from "@/modules/product/utils/productValidation.jsx";
 
 export async function FetchProduct(setProduct) {
@@ -100,21 +98,27 @@ export async function ProductSubmit(request, reset) {
 }
 
 //product update/edit
-export async function updateProduct(request, BounceRedirectionNav) {
+export async function updateProduct(request, AfterAction) {
   if (!request || !ProductValidation(request)) return;
 
   const form = new FormData();
   form.append("_method", "PUT");
-  form.append("productname", request.productname);
-  form.append("category", request.category);
-  form.append("unit", request.productunit);
-  form.append("rawprice", request.rawPrice);
-  form.append("markupprice", request.markUpPrice);
-  form.append("sellingprice", request.sellingPrice);
-  form.append("istaxable", request.isTaxable ? "1" : "0");
-  form.append("status", request.status);
-  form.append("reorderlevel", request.reorderLevel);
-  form.append("description", request.description);
+
+  if (request.productname) form.append("productname", request.productname);
+  if (request.category) form.append("category", request.category);
+  if (request.productunit) form.append("unit", request.productunit);
+  if (request.rawPrice !== undefined && request.rawPrice !== null)
+    form.append("rawprice", request.rawPrice);
+  if (request.markUpPrice !== undefined && request.markUpPrice !== null)
+    form.append("markupprice", request.markUpPrice);
+  if (request.sellingPrice !== undefined && request.sellingPrice !== null)
+    form.append("sellingprice", request.sellingPrice);
+  if (typeof request.isTaxable !== "undefined")
+    form.append("istaxable", request.isTaxable ? "1" : "0");
+  if (request.status) form.append("status", request.status);
+  if (request.reorderLevel !== undefined && request.reorderLevel !== null)
+    form.append("reorderlevel", request.reorderLevel);
+  if (request.description) form.append("description", request.description);
 
   if (request.productimage instanceof File) {
     form.append("productimage", request.productimage);
@@ -139,7 +143,7 @@ export async function updateProduct(request, BounceRedirectionNav) {
         "Product Updated",
         `${response.data.data.productname} has been successfully updated!`
       ).then(() => {
-        BounceRedirectionNav();
+        if (typeof AfterAction === "function") AfterAction();
       });
     }
   } catch (err) {
@@ -190,5 +194,47 @@ export async function FetchProductById(id, setProduct) {
   } catch (err) {
     console.error("Failed to fetch product:", err);
     setProduct(false);
+  }
+}
+
+// ---------------------- Bulk Edit -------------------------
+export async function BulkEditProduct(ids = [], request = {}, handleRefetch) {
+  if (!Array.isArray(ids) || ids.length === 0) return;
+  if (!request || !ProductValidation(request)) return;
+
+  const payload = ids.map((productId) => ({
+    id: productId,
+    ...request,
+  }));
+
+  SweetAlert.loading(
+    "Updating Products...",
+    "Please wait while products are being updated."
+  );
+
+  try {
+    await api.patch(
+      "product-batchupdate",
+      { request: payload },
+      { timeout: 30000 }
+    );
+
+    SweetAlert.close();
+    SweetAlert.success(
+      "Products Updated",
+      "All selected products have been successfully updated."
+    );
+
+    if (typeof handleRefetch === "function") {
+      await handleRefetch();
+    }
+  } catch (error) {
+    SweetAlert.close();
+    console.error("BulkEditProduct error:", error);
+
+    SweetAlert.error(
+      "Update Failed",
+      "Something went wrong while updating products. Please try again."
+    );
   }
 }
