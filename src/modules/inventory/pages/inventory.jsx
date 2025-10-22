@@ -31,8 +31,6 @@ export default function Inventory() {
   const openBatchContol = selectedID.length > 0; //Batch Contol Modal State
   const [pageControl, setPageControl] = useState(false); //Page control mobile state modal
 
-  const isSmallMobile = useMediaQuery({ maxWidth: 668 });
-
   //Action Table functionality
   const HandleStockIn = (items, id) => {
     alert(`addStock ${items} ${id}`);
@@ -57,7 +55,7 @@ export default function Inventory() {
       padding: "py-2 px-6",
     },
     {
-      btnLabel: "Remove",
+      btnLabel: "Delete",
       color: "bg-[#910B0B]/[0.69]",
       icon: Trash2,
       padding: "py-2 px-6",
@@ -494,6 +492,21 @@ export default function Inventory() {
   const EditBatch = () => {
     alert("clicked edit batch");
   };
+
+  //Page Controls
+  const PageBtnControls = [
+    {
+      BtnLabel: "Stock In",
+      iconControl: PackagePlus,
+      to: "/product-add/register",
+    },
+    {
+      BtnLabel: "Stock Out",
+      iconControl: PackageMinus,
+      to: "/product-add/register",
+    },
+  ];
+
   return (
     <Layout currentWebPage="Inventory">
       <div className="relative flex flex-col w-full px-5 pt-20 overflow-auto">
@@ -502,6 +515,7 @@ export default function Inventory() {
           setPageControl={() => setPageControl(true)}
           hasFilter={true}
           hasExport={true}
+          Buttons={PageBtnControls}
         />
 
         {/* Table Section */}

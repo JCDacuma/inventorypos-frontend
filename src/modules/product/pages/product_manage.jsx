@@ -9,6 +9,7 @@ import NavControl from "@/components/Layouts/pageControlsMobile.jsx";
 import BatchEditProduct from "@/modules/product/components/ui/productBatchEditModal.jsx";
 import AddCategoryModal from "@/modules/product/components/ui/productCategoryModal.jsx";
 import UnitModal from "@/modules/product/components/ui/productUnitModal.jsx";
+import ProductSupplierModal from "@/modules/product/components/ui/productSupplierModal.jsx";
 
 //Table Layout component
 import Table from "@/components/Layouts/table.jsx";
@@ -22,9 +23,9 @@ import { Image } from "@/components/Layouts/image.jsx";
 import {
   SquarePen,
   Trash2,
-  Megaphone,
   CirclePlus,
   ArchiveRestore,
+  Truck,
 } from "lucide-react";
 
 //api
@@ -81,11 +82,6 @@ export default function ProductManagement() {
       iconControl: CirclePlus,
       to: "/product-add/register",
     },
-    {
-      BtnLabel: "Promo",
-      iconControl: Megaphone,
-      to: "/promo-management",
-    },
   ];
 
   //table data
@@ -107,18 +103,27 @@ export default function ProductManagement() {
             {
               onClick: () => HandleEdit(item.id),
               icon: SquarePen,
+              tooltip: "Edit product",
+              iconSize: "h-[1.2rem] w-[1.2rem]",
+            },
+            {
+              onClick: () => HandleOpenSupplier(item.id, item.productname),
+              icon: Truck,
+              tooltip: "Assign supplier",
               iconSize: "h-[1.2rem] w-[1.2rem]",
             },
             {
               onClick: () =>
                 HandleArchivedDelete(item.id, "singleFn", "Archive"),
               icon: ArchiveRestore,
+              tooltip: "Archive product",
               iconSize: "h-[1.2rem] w-[1.2rem]",
             },
             {
               onClick: () =>
                 HandleArchivedDelete(item.id, "singleFn", "Delete"),
               icon: Trash2,
+              tooltip: "Delete product",
               iconSize: "h-[1.2rem] w-[1.2rem]",
             },
           ]}
@@ -127,7 +132,7 @@ export default function ProductManagement() {
     }));
   }, [products]);
 
-  // ---------------Fetching Functionality -------------------
+  // ---------- Fetching category and unit Functionality ------------
   const [modalCategory, setModalCategory] = useState(false);
   const [modalUnit, setModalUnit] = useState(false);
 
@@ -167,6 +172,7 @@ export default function ProductManagement() {
       btnLabel: "Delete",
       color: "bg-[#910B0B]/[0.69]",
       icon: Trash2,
+
       padding: "py-2 px-6",
       function: () => HandleArchivedDelete(selectedID, "groupFn", "Delete"),
     },
@@ -244,6 +250,22 @@ export default function ProductManagement() {
       "Invalid Action",
       "Unknown function or action type. Please try again."
     );
+  };
+
+  // ------------ Product Supplier Functionality -----------------
+  const [supplierModal, setOpenSupplierModal] = useState(false);
+  const [selectedProductId, setProductId] = useState({
+    id: null,
+    productname: "",
+  });
+
+  //open product supplier modal
+  const HandleOpenSupplier = (id, productname) => {
+    setProductId({
+      id: id,
+      productname: productname,
+    });
+    setOpenSupplierModal(true);
   };
 
   // --------------- Rendering Functionality -------------------
@@ -334,6 +356,13 @@ export default function ProductManagement() {
         isOpen={modalUnit}
         refetch={FetchUnitApi}
         FetchUnit={units}
+      />
+
+      {/* --------------  Supplier Modal  ------------------ */}
+      <ProductSupplierModal
+        onClosed={() => setOpenSupplierModal(false)}
+        isOpen={supplierModal}
+        productId={selectedProductId}
       />
     </Layout>
   );

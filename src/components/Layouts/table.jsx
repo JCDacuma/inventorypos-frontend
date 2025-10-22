@@ -107,7 +107,7 @@ export default function Table({
                       {columns.map((col) => (
                         <td
                           key={col.key}
-                          className="px-4 py-4  text-center whitespace-nowrap"
+                          className="px-4 py-4 text-center whitespace-nowrap"
                         >
                           {/* If it's the Select column, render a checkbox */}
                           {col.key === "Select" ? (
@@ -139,9 +139,9 @@ export default function Table({
                               </label>
                             </div>
                           ) : (
-                            <td className="flex justify-center items-center">
+                            <div className="flex items-center justify-center">
                               {row[col.key]}
-                            </td>
+                            </div>
                           )}
                         </td>
                       ))}

@@ -61,7 +61,7 @@ const menuItems = [
         title: "Manage Product",
         icon: Boxes,
         path: "/product-management",
-        secondPath: ["/promo-management", "/product-add"],
+        secondPath: ["/product-add"],
       },
       {
         title: "Inventory",
