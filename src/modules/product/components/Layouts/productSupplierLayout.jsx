@@ -7,12 +7,13 @@ export function LayoutProductSupplier({
   openAssign,
   setAssign,
   assignedSupplier,
+  HandleLinkUnlink,
   supplier,
   productname,
 }) {
   const notFound = assignedSupplier === false;
+  const noSupplier = supplier === false;
   const headerTitle = openAssign ? "Supplier List" : "Assigned Suppliers";
-
   const headerBtnTitle = openAssign ? "Current" : "Assign";
 
   const modalNavFunction = openAssign
@@ -33,54 +34,9 @@ export function LayoutProductSupplier({
         </button>
       </div>
 
-      {assignedSupplier ? (
-        openAssign ? (
-          // ================= Supplier List =================
-          <section className="flex flex-col gap-3 h-[calc(100vh-300px)]  2xl:h-[calc(100vh-400px)] overflow-auto">
-            <div className="space-y-3">
-              {supplier?.length ? (
-                supplier.map((supplier) => (
-                  <div
-                    key={supplier.id}
-                    className="flex items-center justify-between px-6 py-6 transition-all duration-200 bg-white border border-gray-200 shadow-lg rounded-2xl hover:bg-violet-50"
-                  >
-                    <div className="flex flex-col">
-                      <strong className="text-base font-medium text-violet-800">
-                        {supplier.supplierName}
-                      </strong>
-                      <div className="flex flex-col text-sm text-violet-500 sm:flex-row sm:items-center sm:gap-1">
-                        <span>{supplier.supplier_address}</span>
-                        <span className="hidden sm:flex"> / </span>
-                        <span className="text-sm text-violet-500">
-                          Shipping Fee: {supplier.shipping_fee}
-                        </span>
-                      </div>
-
-                      <span className="text-sm text-violet-300">
-                        Contact: {supplier.name_contact}
-                      </span>
-                    </div>
-
-                    <button
-                      onClick={() => handleAssignSupplier(supplier.id)}
-                      className="p-2 transition-all duration-200 rounded-full shadow-sm bg-violet-100 hover:bg-violet-600 hover:text-white"
-                      title="Assign Supplier"
-                    >
-                      <DiamondPlus size={22} />
-                    </button>
-                  </div>
-                ))
-              ) : (
-                <EmptyStateDefault
-                  title="No suppliers available"
-                  message="Please add suppliers to assign."
-                  icon="FolderX"
-                />
-              )}
-            </div>
-          </section>
-        ) : (
-          // ================= Current Assigned Suppliers =================
+      {!openAssign ? (
+        // ================= Currently Assigned Suppliers =================
+        assignedSupplier ? (
           <section className="flex flex-col gap-3 h-[calc(100vh-300px)]  2xl:h-[calc(100vh-400px)] overflow-auto">
             <div className="space-y-3">
               {assignedSupplier.map((assigned) => (
@@ -105,7 +61,13 @@ export function LayoutProductSupplier({
                   </div>
 
                   <button
-                    onClick={() => handleUnlinkSupplier(assigned.id)}
+                    onClick={() =>
+                      HandleLinkUnlink(
+                        assigned.id,
+                        "Unnasign",
+                        assigned.suppliername
+                      )
+                    }
                     className="p-2 transition-all duration-200 bg-orange-100 rounded-full shadow-sm hover:bg-orange-600 hover:text-white"
                     title="Remove Supplier"
                   >
@@ -115,19 +77,80 @@ export function LayoutProductSupplier({
               ))}
             </div>
           </section>
+        ) : (
+          // ================= Empty / Loading State =================
+          <EmptyStateDefault
+            title={notFound ? "No supplier found" : "Finding supplier..."}
+            message={
+              notFound
+                ? "There are no suppliers assigned to this product."
+                : "Please wait while we find the supplier."
+            }
+            icon={notFound ? "FolderX" : "FolderSearch"}
+          />
         )
-      ) : (
-        // ================= Empty / Loading State =================
-        <EmptyStateDefault
-          title={notFound ? "No supplier found" : "Finding supplier..."}
-          message={
-            notFound
-              ? "There are no suppliers assigned to this product."
-              : "Please wait while we find the supplier."
-          }
-          icon={notFound ? "FolderX" : "FolderSearch"}
-        />
-      )}
+      ) : null}
+
+      {openAssign ? (
+        // ================= All Supplier List =================
+        <section className="flex flex-col gap-3 h-[calc(100vh-300px)]  2xl:h-[calc(100vh-400px)] overflow-auto">
+          <div className="space-y-3">
+            {supplier?.length ? (
+              supplier.map((supplier) => (
+                <div
+                  key={supplier.id}
+                  className="flex items-center justify-between px-6 py-6 transition-all duration-200 bg-white border border-gray-200 shadow-lg rounded-2xl hover:bg-violet-50"
+                >
+                  <div className="flex flex-col">
+                    <strong className="text-base font-medium text-violet-800">
+                      {supplier.suppliername}
+                    </strong>
+                    <div className="flex flex-col text-sm text-violet-500 sm:flex-row sm:items-center sm:gap-1">
+                      <span>{supplier.address}</span>
+                      <span className="hidden sm:flex"> / </span>
+                      <span className="text-sm text-violet-500">
+                        Shipping Fee: {supplier.shipping_fee}
+                      </span>
+                    </div>
+
+                    <span className="text-sm text-violet-300">
+                      Contact: {supplier.contact}
+                    </span>
+                  </div>
+
+                  <button
+                    onClick={() =>
+                      HandleLinkUnlink(
+                        supplier.id,
+                        "Assign",
+                        supplier.supplierName
+                      )
+                    }
+                    className="p-2 transition-all duration-200 rounded-full shadow-sm bg-violet-100 hover:bg-violet-600 hover:text-white"
+                    title="Assign Supplier"
+                  >
+                    <DiamondPlus size={22} />
+                  </button>
+                </div>
+              ))
+            ) : (
+              <EmptyStateDefault
+                title={
+                  noSupplier
+                    ? "No supplier Available"
+                    : "Finding Available Supplier..."
+                }
+                message={
+                  noSupplier
+                    ? "Please try to refresh or try again later"
+                    : "please wait while we get supplier for you"
+                }
+                icon="FolderX"
+              />
+            )}
+          </div>
+        </section>
+      ) : null}
     </main>
   );
 }

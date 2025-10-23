@@ -10,7 +10,7 @@ import BatchEditProduct from "@/modules/product/components/ui/productBatchEditMo
 import AddCategoryModal from "@/modules/product/components/ui/productCategoryModal.jsx";
 import UnitModal from "@/modules/product/components/ui/productUnitModal.jsx";
 import ProductSupplierModal from "@/modules/product/components/ui/productSupplierModal.jsx";
-
+import BatchAssignSupplierModal from "@/modules/product/components/ui/productBatchAssign.jsx";
 //Table Layout component
 import Table from "@/components/Layouts/table.jsx";
 import TableHeader from "@/components/Layouts/tableHeader.jsx";
@@ -107,7 +107,8 @@ export default function ProductManagement() {
               iconSize: "h-[1.2rem] w-[1.2rem]",
             },
             {
-              onClick: () => HandleOpenSupplier(item.id, item.productname),
+              onClick: () =>
+                HandleOpenSupplier(item.id, item.productname, "SingleAssign"),
               icon: Truck,
               tooltip: "Assign supplier",
               iconSize: "h-[1.2rem] w-[1.2rem]",
@@ -161,6 +162,14 @@ export default function ProductManagement() {
       padding: "py-2 px-6",
       function: () => setOpenEditBatch(true),
     },
+    {
+      btnLabel: "Assign",
+      color: "bg-[#2596be]/[0.69]",
+      icon: Truck,
+      padding: "py-2 px-6",
+      function: () => HandleOpenSupplier(selectedID, "Products", "GroupAssign"),
+    },
+
     {
       btnLabel: "Archieve",
       color: "bg-[#B36401]/[0.69]",
@@ -254,18 +263,27 @@ export default function ProductManagement() {
 
   // ------------ Product Supplier Functionality -----------------
   const [supplierModal, setOpenSupplierModal] = useState(false);
+  const [batchSupplierModal, setBatchSupplierModal] = useState(false);
   const [selectedProductId, setProductId] = useState({
     id: null,
     productname: "",
   });
 
   //open product supplier modal
-  const HandleOpenSupplier = (id, productname) => {
+  const HandleOpenSupplier = (id, productname, assignType) => {
+    if (!["SingleAssign", "GroupAssign"].includes(assignType)) return;
+
     setProductId({
       id: id,
       productname: productname,
+      actionType: assignType,
     });
-    setOpenSupplierModal(true);
+
+    if (assignType === "SingleAssign") {
+      setOpenSupplierModal(true);
+    } else if (assignType === "GroupAssign") {
+      setBatchSupplierModal(true);
+    }
   };
 
   // --------------- Rendering Functionality -------------------
@@ -363,6 +381,12 @@ export default function ProductManagement() {
         onClosed={() => setOpenSupplierModal(false)}
         isOpen={supplierModal}
         productId={selectedProductId}
+      />
+
+      <BatchAssignSupplierModal
+        onClosed={() => setBatchSupplierModal(false)}
+        isOpen={batchSupplierModal}
+        product={selectedProductId}
       />
     </Layout>
   );

@@ -2,11 +2,11 @@ import { validationField } from "@/utils/validation.jsx";
 import { SweetAlert } from "@/utils/sweetalert.jsx";
 import api from "@/api/axiosInstance.js";
 
-export async function FetchSupplier(Supplier) {
+export async function FetchSupplier(setSupplier) {
   try {
     const response = await api.get("/supplier");
     const supplierData = response.data.map((res) => ({
-      id: res.id,
+      id: res.supplier_id || res.id,
       supplierName: res.suppliername,
       supplier_address: res.supplier_address,
       shipping_fee: res.shipping_fee,
@@ -15,8 +15,15 @@ export async function FetchSupplier(Supplier) {
       status: res.status,
       name_contact: res.name_contact,
     }));
-    Supplier(supplierData);
+    if (typeof setSupplier === "function") {
+      if (supplierData.length > 0) {
+        setSupplier(supplierData);
+      } else {
+        setSupplier(false);
+      }
+    }
   } catch (err) {
+    setSupplier(false);
     console.log(`There is error: ${err}`);
   }
 }

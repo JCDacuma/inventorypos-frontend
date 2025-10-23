@@ -18,10 +18,10 @@ export default function BatchControl({
           animate={{ y: 0, opacity: 1 }}
           exit={{ y: -10, opacity: 0 }}
           transition={{ duration: 0.3 }}
-          className="fixed inset-0 z-30 flex items-end justify-center px-2 pointer-events-none"
+          className="fixed inset-0 z-30 flex items-end justify-center pointer-events-none"
         >
           {/* Floating Action Card */}
-          <div className="relative flex flex-wrap  justify-center items-center gap-3 w-80 sm:w-auto bg-[#FCF2FF] border border-gray-300 rounded-2xl shadow-lg shadow-gray-400 mb-14 pointer-events-auto px-3 sm:px-8 py-4">
+          <div className="relative flex  justify-center items-center gap-3 ml-0 sm:ml-15 w-auto bg-[#FCF2FF] border border-gray-300 rounded-2xl shadow-lg shadow-gray-400 mb-14 pointer-events-auto px-3 sm:px-8 py-4">
             {/* Count bubble */}
             <div className="absolute bottom-11 left-0 bg-[#E9B3FF] text-white w-7 h-7 rounded-full flex justify-center items-center text-sm font-semibold shadow">
               {Count}
@@ -54,7 +54,7 @@ export default function BatchControl({
                   onClick={btn.function}
                   className={`${btn.color} ${
                     btn.padding || "py-2 px-4"
-                  } cursor-pointer flex items-center gap-2 text-white rounded-2xl shadow-md shadow-gray-500 transition`}
+                  } cursor-pointer flex text-xs items-center gap-2 text-white rounded-2xl shadow-md shadow-gray-500 transition`}
                 >
                   <span className="hidden text-sm sm:flex">{btn.btnLabel}</span>
                   {Icon && (
