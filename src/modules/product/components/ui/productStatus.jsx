@@ -44,3 +44,25 @@ export function PromoStatus({ status }) {
     />
   );
 }
+
+export function SupplierChips({ counts }) {
+  const statuskey = counts <= 0 ? "NoSupplier" : "HaveSuppliers";
+  const status = counts <= 0 ? "No supplier" : `${counts} Supplier`;
+
+  const variants = {
+    NoSupplier: {
+      bg: "bg-red-100",
+      text: "text-red-700",
+      dot: "bg-red-500",
+    },
+    HaveSuppliers: {
+      bg: "bg-green-100",
+      text: "text-green-700",
+      dot: "bg-green-500",
+    },
+  };
+
+  return (
+    <ChipStatus status={status} variants={variants} variantKey={statuskey} />
+  );
+}

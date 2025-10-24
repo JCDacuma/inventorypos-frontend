@@ -10,7 +10,7 @@ export async function FetchProduct(setProduct) {
       throw new Error("Invalid server response");
     }
 
-    const product = response.data.map((item) => ({
+    const products = response.data.map((item) => ({
       id: item.id,
       product_code: item.product_code,
       product_image: item.product_image_url,
@@ -18,6 +18,7 @@ export async function FetchProduct(setProduct) {
       category_id: item.category_id,
       category_name: item.product_category,
       unit_id: item.unit_id,
+      supplierCount: item.active_supplier_count,
       markup_price: item.markup_price,
       raw_price: item.raw_price,
       selling_price: item.selling_price,
@@ -27,7 +28,7 @@ export async function FetchProduct(setProduct) {
       description: item.description,
     }));
 
-    setProduct(product);
+    setProduct(products);
   } catch (err) {
     console.log("Error Catching categories:", err);
   }

@@ -2,6 +2,7 @@ import api from "@/api/axiosInstance.js";
 import { SweetAlert } from "@/utils/sweetalert.jsx";
 import { ProductValidation } from "@/modules/product/utils/productValidation.jsx";
 
+/* =========================== Fetching ========================= */
 export async function UnnasignedSupplierFetch(id, setValue) {
   if (!id) return;
   try {
@@ -64,6 +65,34 @@ export async function BulkProductAssignedSupplier(request, setValue) {
   }
 }
 
+//all supplier
+export async function FetchAllSupplier(setValue) {
+  try {
+    const response = await api.get("/supplier");
+    const supplierData = response.data.map((res) => ({
+      id: res.supplier_id || res.id,
+      suppliername: res.suppliername,
+      address: res.supplier_address,
+      shipping_fee: res.shipping_fee,
+      tax: res.vat_registered,
+      status: res.status,
+      contact: res.name_contact,
+    }));
+
+    if (typeof setValue === "function") {
+      if (supplierData.length > 0) {
+        setValue(supplierData);
+      } else {
+        setValue(false);
+      }
+    }
+  } catch (err) {
+    setValue(false);
+    console.log(`There is error: ${err}`);
+  }
+}
+
+/* =========================== Assigning ========================= */
 export async function productSupplierFetch(id, setValue) {
   if (!id) return;
   try {
@@ -125,8 +154,6 @@ export async function handleProductSupplierAssignment(request, refetch) {
         actionType === "Assign" ? "assigned" : "unassigned"
       } successfully!`
     );
-
-    if (typeof refetch === "function") await refetch();
   } catch (err) {
     SweetAlert.close();
     console.error("Supplier assignment error:", err);
@@ -136,7 +163,39 @@ export async function handleProductSupplierAssignment(request, refetch) {
         actionType === "Assign" ? "assign" : "unassign"
       } supplier. Please try again.`
     );
+  } finally {
+    if (typeof refetch === "function") await refetch();
   }
 }
 
-export async function BulkUpdate(requestId) {}
+export async function BulkAssigning(request, refetch) {
+  if (!request) return;
+
+  const payload = request.productIds.map((id) => ({
+    product_id: id,
+    supplier_id: request.supplierId,
+  }));
+
+  SweetAlert.loading(
+    "Assigning Supplier...",
+    "Hang tight! We're assigning the supplier to your products."
+  );
+  try {
+    if (request.actionType === "Assign") {
+      await api.post("bulk/supplier-assign", { request: payload });
+      SweetAlert.close();
+      SweetAlert.success("Done!", "Your supplier has been assigned.");
+    } else if (request.actionType === "Unnasign") {
+      await api.post("bulk-supplier-unnasign", { request: payload });
+      SweetAlert.close();
+      SweetAlert.success("Done!", "Selected supplier has been unnasigned.");
+    }
+  } catch (err) {
+    SweetAlert.close();
+    console.log(`error:`, err);
+  } finally {
+    if (typeof refetch === "function") {
+      await refetch();
+    }
+  }
+}

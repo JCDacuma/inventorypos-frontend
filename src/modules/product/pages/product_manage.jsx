@@ -11,11 +11,15 @@ import AddCategoryModal from "@/modules/product/components/ui/productCategoryMod
 import UnitModal from "@/modules/product/components/ui/productUnitModal.jsx";
 import ProductSupplierModal from "@/modules/product/components/ui/productSupplierModal.jsx";
 import BatchAssignSupplierModal from "@/modules/product/components/ui/productBatchAssign.jsx";
+
 //Table Layout component
 import Table from "@/components/Layouts/table.jsx";
 import TableHeader from "@/components/Layouts/tableHeader.jsx";
 import MobileTable from "@/components/ui/MobileTable.jsx";
-import { ProductStatus } from "@/modules/product/components/ui/productStatus.jsx";
+import {
+  ProductStatus,
+  SupplierChips,
+} from "@/modules/product/components/ui/productStatus.jsx";
 import { Action } from "@/components/ui/buttons.jsx";
 import { Image } from "@/components/Layouts/image.jsx";
 
@@ -67,8 +71,8 @@ export default function ProductManagement() {
     { key: "productcode", label: "Code" },
     { key: "productname", label: "Name" },
     { key: "category", label: "Category" },
+    { key: "suppliercount", label: "Total Suppliers" },
     { key: "rawprice", label: "Raw Price" },
-    { key: "markupprice", label: "Mark up" },
     { key: "sellingprice", label: "Selling Price" },
     { key: "taxable", label: "tax" },
     { key: "status", label: "Status" },
@@ -92,6 +96,7 @@ export default function ProductManagement() {
       productimage: <Image src={item.product_image} />,
       productname: item.productname,
       category: item.category_name,
+      suppliercount: <SupplierChips counts={item.supplierCount} />,
       rawprice: `₱ ${item.raw_price}`,
       markupprice: `% ${item.markup_price}`,
       sellingprice: `₱ ${item.selling_price}`,
@@ -381,12 +386,14 @@ export default function ProductManagement() {
         onClosed={() => setOpenSupplierModal(false)}
         isOpen={supplierModal}
         productId={selectedProductId}
+        fetchProducts={FetchProducts}
       />
 
       <BatchAssignSupplierModal
         onClosed={() => setBatchSupplierModal(false)}
         isOpen={batchSupplierModal}
         product={selectedProductId}
+        fetchProducts={FetchProducts}
       />
     </Layout>
   );

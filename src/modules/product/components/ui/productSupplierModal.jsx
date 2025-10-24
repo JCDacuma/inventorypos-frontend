@@ -8,7 +8,12 @@ import {
   productSupplierFetch,
   UnnasignedSupplierFetch,
 } from "@/modules/product/api/productSupplierApi.jsx";
-export default function ProductSupplierModal({ isOpen, onClosed, productId }) {
+export default function ProductSupplierModal({
+  isOpen,
+  onClosed,
+  productId,
+  fetchProducts,
+}) {
   const [assigned, setAssigned] = useState(null);
   const [supplier, setSupplier] = useState(null);
   const [openAssign, setOpenAssign] = useState(false);
@@ -26,6 +31,7 @@ export default function ProductSupplierModal({ isOpen, onClosed, productId }) {
   const refetch = useMemo(
     () => async () => {
       if (productId?.id) {
+        setOpenAssign(false);
         await productSupplierFetch(productId.id, setAssigned);
         if (openAssign) {
           await UnnasignedSupplierFetch(productId.id, setSupplier);
@@ -35,11 +41,12 @@ export default function ProductSupplierModal({ isOpen, onClosed, productId }) {
     [productId?.id, openAssign]
   );
 
-  const HandleCloseModal = () => {
+  const HandleCloseModal = async () => {
     onClosed();
     setSupplier(null);
     setOpenAssign(false);
     setAssigned(null);
+    await fetchProducts();
   };
 
   const handleLinkUnlinkSupplier = async (

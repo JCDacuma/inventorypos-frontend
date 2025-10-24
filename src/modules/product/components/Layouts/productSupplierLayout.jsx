@@ -68,7 +68,7 @@ export function LayoutProductSupplier({
                         assigned.suppliername
                       )
                     }
-                    className="p-2 transition-all duration-200 bg-orange-100 rounded-full shadow-sm hover:bg-orange-600 hover:text-white"
+                    className="p-2 transition-all cursor-pointer duration-200 bg-orange-100 rounded-full shadow-sm hover:bg-orange-600 hover:text-white"
                     title="Remove Supplier"
                   >
                     <Unlink size={22} />
@@ -126,7 +126,7 @@ export function LayoutProductSupplier({
                         supplier.supplierName
                       )
                     }
-                    className="p-2 transition-all duration-200 rounded-full shadow-sm bg-violet-100 hover:bg-violet-600 hover:text-white"
+                    className="p-2 transition-all cursor-pointer duration-200 rounded-full shadow-sm bg-violet-100 hover:bg-violet-600 hover:text-white"
                     title="Assign Supplier"
                   >
                     <DiamondPlus size={22} />

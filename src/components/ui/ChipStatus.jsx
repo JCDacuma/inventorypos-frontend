@@ -1,8 +1,8 @@
 //  Generic Chip Status Component
 import React from "react";
 
-export default function ChipStatus({ status, variants = {} }) {
-  const variant = variants[status] || null;
+export default function ChipStatus({ status, variants = {}, variantKey }) {
+  const variant = variants[variantKey] || variants[status] || null;
 
   if (!variant) return null;
 
