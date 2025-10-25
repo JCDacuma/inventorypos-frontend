@@ -44,7 +44,7 @@ export default function Suppliers() {
   const [pageControl, setPageControl] = useState(false); //Page control mobile state modal
   //BatchUpdate modal state
   const [batchUpdateModal, setBatchUpdateModal] = useState(false);
-  const [supplier, setSupplier] = useState([]); //supplier fetched
+  const [supplier, setSupplier] = useState(null); //supplier fetched
   const [addContactModal, setContactModal] = useState(false);
   const [fetchedContact, setFectchedContact] = useState([]);
   const [onSubmit, setOnsubmit] = useState(false);
@@ -160,43 +160,51 @@ export default function Suppliers() {
     { key: "Action", label: "Action" },
   ];
 
-  //supplier data table
+  // supplier data table
   const fetchedSupplier = useMemo(() => {
-    return supplier.map((sup) => ({
-      id: sup.id,
-      suppliername: sup.supplierName,
-      contactperson: sup.name_contact,
-      Address: sup.supplier_address,
-      vatregistered: sup.vat_registered ? "Yes" : "No",
-      shippingfee: ` ₱ ${sup.shipping_fee}`,
-      status: <SupplierStatus status={sup.status} />,
-      Action: (
-        <Action
-          disabled={onSubmit}
-          buttons={[
-            {
-              onClick: () => HandleEdit(sup.id),
-              icon: SquarePen,
-              iconSize: "h-[1.2rem] w-[1.2rem]",
-              tooltip: "Edit",
-            },
-            {
-              to: "/order-history/8",
-              icon: ClipboardClock,
-              iconSize: "h-[1.2rem] w-[1.2rem]",
-              tooltip: "History",
-            },
-            {
-              onClick: () => HandleArchieve(sup.id, sup.supplierName),
-              icon: Archive,
-              iconSize: "h-[1.2rem] w-[1.2rem]",
-              tooltip: "Archieve",
-            },
-          ]}
-        />
-      ),
-    }));
-  }, [supplier]);
+    if (supplier === null) {
+      return null;
+    } else if (Array.isArray(supplier) && supplier.length > 0) {
+      return supplier.map((sup) => ({
+        id: sup.id,
+        suppliername: sup.supplierName,
+        contactperson: sup.name_contact,
+        Address: sup.supplier_address,
+        vatregistered: sup.vat_registered ? "Yes" : "No",
+        shippingfee: ` ₱ ${sup.shipping_fee}`,
+        status: <SupplierStatus status={sup.status} />,
+        Action: (
+          <Action
+            disabled={onSubmit}
+            buttons={[
+              {
+                onClick: () => HandleEdit(sup.id),
+                icon: SquarePen,
+                iconSize: "h-[1.2rem] w-[1.2rem]",
+                tooltip: "Edit",
+              },
+              {
+                to: `/order-history/${sup.id}`,
+                icon: ClipboardClock,
+                iconSize: "h-[1.2rem] w-[1.2rem]",
+                tooltip: "History",
+              },
+              {
+                onClick: () => HandleArchieve(sup.id, sup.supplierName),
+                icon: Archive,
+                iconSize: "h-[1.2rem] w-[1.2rem]",
+                tooltip: "Archieve",
+              },
+            ]}
+          />
+        ),
+      }));
+    } else if (supplier === false) {
+      return false;
+    } else {
+      return false;
+    }
+  }, [supplier, onSubmit]);
 
   const HandleFetchSupplier = () => {
     FetchSupplier(setSupplier);

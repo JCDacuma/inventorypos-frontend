@@ -15,14 +15,6 @@ export function InventoryStatus({ status, reorderLevel }) {
     computedStatus = "In Stock";
   }
 
-  console.log(computedStatus);
-
-  const keyStatus = {
-    "In Stock": computedStatus === "In Stock",
-    "Low Stock": computedStatus === "Low Stock",
-    "Out of Stock": computedStatus === "Out of Stock",
-  };
-
   return (
     <ChipStatus
       status={computedStatus}

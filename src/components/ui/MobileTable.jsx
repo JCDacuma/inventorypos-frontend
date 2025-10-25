@@ -24,7 +24,17 @@ export default function MobileTable({
       {isMobile ? (
         <div className="flex flex-col gap-2 py-3 ">
           <div className="flex flex-col h-full gap-2 ">
-            {data.length > 0 ? (
+            {data === null ? (
+              <div className="p-4 bg-white border shadow-sm rounded-2xl border-slate-200">
+                <p className="text-center text-slate-500">Finding data...</p>
+              </div>
+            ) : data === false ? (
+              <div className="p-4 bg-white border shadow-sm rounded-2xl border-slate-200">
+                <p className="text-center text-slate-500">
+                  There is no data found
+                </p>
+              </div>
+            ) : Array.isArray(data) && data.length > 0 ? (
               data.map((row, i) => {
                 const hasSelectColumn = columns.some(
                   (col) => col.key === "Select"

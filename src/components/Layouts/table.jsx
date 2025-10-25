@@ -100,7 +100,7 @@ export default function Table({
               </thead>
 
               {/* Table Body */}
-              <tbody>
+              <tbody className="select-none">
                 {data === null ? (
                   <tr>
                     <td
