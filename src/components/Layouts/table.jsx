@@ -2,7 +2,7 @@ import { useMediaQuery } from "react-responsive";
 import { ChevronsRight } from "lucide-react";
 import { useState, useEffect, useCallback, useMemo } from "react";
 import { HorizontalSlider } from "@/utils/slider.jsx";
-
+import { EmptyStateDefault } from "@/components/ui/emptyState.jsx";
 export default function Table({
   columns = [],
   data = [],
@@ -101,7 +101,25 @@ export default function Table({
 
               {/* Table Body */}
               <tbody>
-                {data.length > 0 ? (
+                {data === null ? (
+                  <tr>
+                    <td
+                      colSpan={columns.length}
+                      className="px-4 py-6 text-center text-slate-500"
+                    >
+                      Finding data...
+                    </td>
+                  </tr>
+                ) : data === false ? (
+                  <tr>
+                    <td
+                      colSpan={columns.length}
+                      className="px-4 py-6 text-center text-slate-500"
+                    >
+                      There is no data found
+                    </td>
+                  </tr>
+                ) : Array.isArray(data) && data.length > 0 ? (
                   data.map((row, i) => (
                     <tr key={i} className="odd:bg-white even:bg-violet-100 ">
                       {columns.map((col) => (

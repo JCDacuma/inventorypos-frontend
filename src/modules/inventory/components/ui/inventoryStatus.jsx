@@ -2,10 +2,30 @@ import React from "react";
 import ChipStatus from "@/components/ui/ChipStatus.jsx";
 
 // Inventory Status
-export function InventoryStatus({ status }) {
+export function InventoryStatus({ status, reorderLevel }) {
+  const stock = Number(status);
+  const reorder = Number(reorderLevel);
+  let computedStatus = "";
+
+  if (stock < reorder && stock !== 0) {
+    computedStatus = "Low Stock";
+  } else if (stock === 0) {
+    computedStatus = "Out of Stock";
+  } else {
+    computedStatus = "In Stock";
+  }
+
+  console.log(computedStatus);
+
+  const keyStatus = {
+    "In Stock": computedStatus === "In Stock",
+    "Low Stock": computedStatus === "Low Stock",
+    "Out of Stock": computedStatus === "Out of Stock",
+  };
+
   return (
     <ChipStatus
-      status={status}
+      status={computedStatus}
       variants={{
         "In Stock": {
           bg: "bg-green-100",
